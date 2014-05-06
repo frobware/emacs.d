@@ -1,0 +1,3 @@
+#!/bin/sh
+
+git archive HEAD --prefix=emacs.d/ --format=tgz > emacs-d.tar.gz
