@@ -1,11 +1,11 @@
-(require 'flymake-go)
+;(require 'flymake-go)
 (require 'go-mode)
 (require 'company-go)
 
 (setq gofmt-command "goimports")
 (add-to-list 'load-path (expand-file-name "~/.gotools/bin"))
 
-(require 'go-mode-load)
+;; (require 'go-mode-load)
 (add-hook 'before-save-hook 'gofmt-before-save)
 
 (add-hook 'go-mode-hook
@@ -18,7 +18,7 @@
   (interactive)
   (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
 
-;;(require 'go-direx) ;; Don't need to require, if you install by package.el
+(require 'go-direx) ;; Don't need to require, if you install by package.el
 
 (add-hook 'go-mode-hook
 	  (lambda ()

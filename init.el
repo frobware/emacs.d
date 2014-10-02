@@ -1,191 +1,257 @@
 (fset 'yes-or-no-p 'y-or-n-p)
-(setq vc-follow-symlinks t)
-(setq inhibit-startup-screen t)	     ; Don't show startup screen
-(blink-cursor-mode -1)		     ; blink off!
-(line-number-mode -1)		     ; have line numbers and
-(column-number-mode 1)		     ; column numbers in the mode line
-(tool-bar-mode -1)		     ; no tool bar with icons
-(scroll-bar-mode -1)		     ; no scroll bars
-(global-linum-mode -1)		     ; add line numbers on the left
-(setq echo-keystrokes 0.02)	     ; Show keystrokes
-(setq mouse-yank-at-point t)
 
-(setq aim/is-darwin (eq system-type 'darwin)
-      aim/is-linux (eq system-type 'gnu/linux))
+(put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'set-goal-column 'disabled nil)
 
-;; Load all packages
+;; Store all backup and autosave files in the tmp dir
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
 
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
+;; When saving files, set execute permission if #! is in first line.
+(add-hook 'after-save-hook
+	  'executable-make-buffer-file-executable-if-script-p)
+
+(defvar aim/is-darwin (eq system-type 'darwin))
+(defvar aim/is-linux (eq system-type 'gnu/linux))
+
+(defun aim/add-to-load-path (path)
+  (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
+
+(setq inhibit-splash-screen t)
+(setq inhibit-startup-message t)
+(setq inhibit-startup-echo-area-message t)
+(setq initial-scratch-message nil)
+
+;; Turn off 3d mode line
+(set-face-attribute 'mode-line nil :box nil)
+
+(setq vc-follow-symlinks t
+      inhibit-startup-screen t
+      ring-bell-function #'ignore
+      mouse-yank-at-point t)
+
+(mapc (lambda (mode)
+	(when (fboundp mode)
+	  (apply mode '(-1))))
+      '(blink-cursor-mode
+	column-number-mode
+	global-linum-mode
+	line-number-mode
+	scroll-bar-mode
+	tool-bar-mode))
+
+(aim/add-to-load-path "vendor/use-package")
+
+(require 'use-package)
 (require 'package)
 
-;; MELPA
-;;
-;; Up-to-date packages built on our servers from upstream source
-;; Installable in any recent Emacs using "package.el" - no need to
-;; install svn/cvs/hg/bzr/git/darcs etc. Curated - no obsolete,
-;; renamed, forked or randomly hacked packages Comprehensive - more
-;; packages than any other archive Automatic updates - new commits
-;; result in new packages Extensible - contribute recipes via github,
-;; and we'll build the packages
-
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
-
-(add-to-list 'package-archives
-	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(mapc (lambda(p)
+	(push p package-archives))
+      '(("melpa" . "http://melpa.milkbox.net/packages/")
+	("org" . "http://orgmode.org/elpa/")))
 
 (package-initialize)
 
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(defvar required-packages
-  '(s dash rfringe popup php-mode mmm-mode js2-mode sml-mode
-    ob-sml clojure-mode coffee-mode color-theme haml-mode
-    ack-and-a-half haskell-mode magit markdown-mode mustache-mode
-    notify paredit scala-mode yaml-mode yasnippet
-    yasnippet-bundle j-mode ace-jump-mode expand-region
-    zenburn-theme ido-ubiquitous smooth-scroll flx-ido
-    python-mode go-mode nrepl color-theme-solarized git-messenger
-    flycheck multiple-cursors powerline projectile
-    flymake-go company-go ag)
-  "Packages which should be installed upon launch")
+(use-package dired-x
+  :init (global-set-key (kbd "C-x C-j") 'dired-jump))
 
-(dolist (pkg required-packages)
-  (when (not (package-installed-p pkg))
-    (package-install pkg)))
+(use-package cmake-mode
+  :defer t
+  :mode ("\\.cmake$" . cmake-mode)
+  :ensure t)
 
-(defun color-theme-undo ()
-  (interactive)
-  (color-theme-reset-faces)
-  (color-theme-snapshot))
+(use-package exec-path-from-shell
+  :config
+  (progn
+    (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+      (add-to-list 'exec-path-from-shell-variables var))
+    (exec-path-from-shell-initialize)))
 
-(require 'color-theme)
+(use-package ag
+  :ensure t
+  :commands (ag ag-files ag-regexp ag-project ag-project-files ag-project-regexp)
+  :config
+  (progn
+    (setq ag-highlight-search t
+	  ag-reuse-buffers t)))
 
-;; backup current color theme
-(fset 'color-theme-snapshot (color-theme-make-snapshot))
+(use-package magit
+  :bind ("C-c i" . magit-status)
+  :commands magit-status
+  :ensure t)
 
-(add-to-list 'load-path (concat user-emacs-directory "vendor/base16-emacs"))
-(add-to-list 'load-path (concat user-emacs-directory "lisp"))
-(add-to-list 'load-path (concat user-emacs-directory))
+(use-package markdown-mode
+  :mode ("\\.\\(m\\(ark\\)?down\\|md\\)$" . markdown-mode)
+  :config)
 
-(defun color-theme-for-window-sys (frame)
-  (let ((color-theme-is-global nil))
-    (select-frame frame)
-    (if (window-system frame)
-	(message "doing nothing for window system")
-      (global-font-lock-mode -1))))
+(use-package smex
+  :ensure t
+  :bind (("M-x" . smex)
+	 ("M-X" . smex-major-mode-commands))
+  :commands smex
+  :config
+  (progn
+    (smex-initialize)))
 
-;; hook on after-make-frame-functions
-(add-hook 'after-make-frame-functions 'color-theme-for-window-sys)
+;; (use-package company
+;;   :ensure company)
 
-(require 'edebug)
+;; (use-package company-go
+;;   :ensure company-go
+;;   :init (add-to-list 'company-backends 'company-go))
 
-(setq aim/is-darwin (eq system-type 'darwin)
-      aim/is-linux (eq system-type 'gnu/linux))
+(use-package cmake-mode
+  :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
+	 ("\\.cmake\\'" . cmake-mode)))
 
-(when (or aim/is-linux (not window-system))
-  (menu-bar-mode -1))
+(use-package yaml-mode
+  :ensure yaml-mode
+  :mode "\\.ya?ml\\'")
 
-(require 'dired-x)
-(setq-default dired-omit-files-p t) ; this is buffer-local variable
-(global-set-key (kbd "C-x C-j") 'dired-jump)
+;; (use-package flycheck
+;;   :defer t
+;;   :config
+;;   (progn
+;;     (set-face-underline 'flycheck-error nil)
+;;     (set-face-background 'flycheck-error nil)
+;;     (set-face-underline 'flycheck-warning nil)))
 
-(require 'ibuffer)
+(use-package browse-url
+  :ensure t)
 
-(require 'epa-file)
-(epa-file-enable)
+(use-package company
+  :ensure company)
 
-(require 'ffap)
-(ffap-bindings)
+;;; go
 
-;; Git
-(require 'magit nil 'noerror)
-(eval-after-load 'magit
-  (progn '(global-set-key (kbd "C-c i") 'magit-status)))
+(use-package go-mode
+  :ensure go-mode
+  :mode "\\.go\\'"
+  :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
+  :init
+  (progn
+    (setq gofmt-command "goimports")
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    (add-hook 'go-mode-hook 'company-mode))
+  :config
+  (progn
+    (bind-key "C-c C-f" 'gofmt go-mode-map)
+    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
+    (bind-key "C-c C-k" 'godoc go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
+    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+    (bind-key "M-." 'godef-jump go-mode-map)
+    (bind-key "M-/" 'company-complete go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
-;; flx-ido completion system, recommended by Projectile
-(require 'flx-ido)
-(flx-ido-mode 1)
-;; change it if you have a fast processor.
-(setq flx-ido-threshhold 1000)
+(use-package go-eldoc
+  :ensure go-eldoc
+  :commands go-eldoc-setup
+  :init (add-hook 'go-mode-hook 'go-eldoc-setup))
 
-;; Project management
-(require 'ack-and-a-half)
-(require 'projectile)
-(projectile-global-mode)
+(use-package golint
+  :ensure golint)
 
-(setq mac-command-modifier 'meta)
-(setq mac-option-modifier 'none)
+(use-package company-go
+  :ensure company-go
+  :init (add-to-list 'company-backends 'company-go))
 
-(require 'edebug)
+(use-package flycheck
+  :ensure t
+  :config
+  (progn
+    (setq flycheck-highlighting-mode 'lines)
+    (set-face-underline 'flycheck-error nil)
+    (set-face-background 'flycheck-error nil)
+    (set-face-underline 'flycheck-warning nil)))
 
-;; frame-based visualization
-(blink-cursor-mode -1)		     ; blink off!
-(line-number-mode -1)		     ; have line numbers and
-(column-number-mode 1)		     ; column numbers in the mode line
-(tool-bar-mode -1)		     ; no tool bar with icons
-(scroll-bar-mode -1)		     ; no scroll bars
-;;(global-hl-line-mode)		     ; highlight current line
-(global-linum-mode -1)		     ; add line numbers on the left
+(require 'dedicated) ;; sticky windows
 
-(when (or aim/is-linux (not window-system))
-  (menu-bar-mode -1))
+(use-package ibuffer
+  :config 
+  (progn
+    (global-set-key (kbd "C-x C-b") 'electric-buffer-list)))
 
-(setq vc-follow-symlinks t)
-
-(require 'dired-x)
-(setq-default dired-omit-files-p t) ; this is buffer-local variable
-(global-set-key (kbd "C-x C-j") 'dired-jump)
-
-(require 'ibuffer)
-
-(require 'epa-file)
-(epa-file-enable)
-
-(require 'ffap)
-(ffap-bindings)
+(aim/add-to-load-path "lisp")
 
 (require 'aim-functions)
-
-(when aim/is-darwin
-  (aim/set-exec-path-from-shell-PATH))
-
-(require 'aim-customize)
-(require 'aim-frame)
-(require 'aim-recentf)
-(require 'aim-uniquify)
 (require 'aim-global-keybindings)
-(require 'aim-whatever)
-;;(require 'aim-color-theme)
-(require 'aim-go)
-(require 'server)
+(require 'aim-hippie-expand)
 
-(unless (server-running-p)
-  (server-start))
+(use-package iswitchb
+  :init
+  (iswitchb-mode 1))
 
-(defvar short-system-name
-  (car (split-string (system-name) "\\."))
-  "Returns the short form of (system-name)")
+(use-package server
+  :init
+  (unless (server-running-p)
+    (server-start)))
 
-(require 'company)
+(use-package uniquify
+  :init
+  (progn
+    (setq uniquify-buffer-name-style 'reverse)
+    (setq uniquify-separator "|")
+    (setq uniquify-after-kill-buffer-p t)
+    (setq uniquify-ignore-buffers-re "^\\*")))
 
-(setq company-tooltip-limit 20)                      ; bigger popup window
-(setq company-minimum-prefix-length 0)               ; autocomplete right after '.'
-(setq company-idle-delay .5)                         ; shorter delay before autocompletion popup
-(setq company-echo-delay 0)                          ; removes annoying blinking
-(setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+	(backward-char 1)
+	(if (looking-at "->") t nil)))))
 
-(add-to-list 'company-backends 'company-dabbrev t)
-(add-to-list 'company-backends 'company-ispell t)
+(defun do-yas-expand ()
+  (let ((yas/fallback-behavior 'return-nil))
+    (yas/expand)))
 
-(and (fboundp 'company-aspell)
-     (add-to-list 'company-backends 'company-aspell t))
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas/minor-mode)
+	    (null (do-yas-expand)))
+	(if (check-expansion)
+	    (company-complete-common)
+	  (indent-for-tab-command)))))
 
-(and (fboundp 'company-ispell)
-     (add-to-list 'company-backends 'company-ispell t))
+(setq company-idle-delay 0.3)
+(setq company-tooltip-limit 20)
+(setq company-minimum-prefix-length 2)
+(setq company-echo-delay 0)
+(setq company-auto-complete nil)
 
-(add-to-list 'company-backends 'company-files t)
+(add-hook 'lisp-mode #'(complete-mode 1))
 
-(global-company-mode 1)
+(defun indent-or-complete ()
+  (interactive)
+  (if (looking-at "\\_>")
+      (company-complete-common)
+    (indent-according-to-mode)))
 
-(require 'autopair nil 'noerror)
+(defun complete-or-indent ()
+    (interactive)
+    (if (company-manual-begin)
+        (company-complete-common)
+      (indent-according-to-mode)))
+
+(defadvice kill-line (before check-position activate)
+  (if (and (eolp) (not (bolp)))
+      (progn (forward-char 1)
+	     (just-one-space 0)
+             (backward-char 1))))
+
+
+(electric-indent-mode 1)
+
+;;(global-set-key [tab] 'indent-or-complete)

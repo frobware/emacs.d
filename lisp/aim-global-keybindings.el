@@ -10,7 +10,6 @@
 	  ("\C-xC"         . compile)
 	  ("\C-xg"         . goto-line)
 	  ("\C-x\C-g"      . goto-line)
-	  ("\C-ci"         . magit-status)
 	  ))
 
 (when aim/is-linux
