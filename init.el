@@ -175,8 +175,6 @@
     (set-face-background 'flycheck-error nil)
     (set-face-underline 'flycheck-warning nil)))
 
-(require 'dedicated) ;; sticky windows
-
 (use-package ibuffer
   :config 
   (progn
