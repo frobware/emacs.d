@@ -43,6 +43,7 @@
 	global-linum-mode
 	line-number-mode
 	scroll-bar-mode
+	menu-bar-mode
 	tool-bar-mode))
 
 (aim/add-to-load-path "vendor/use-package")
@@ -202,6 +203,9 @@
     (setq uniquify-separator "|")
     (setq uniquify-after-kill-buffer-p t)
     (setq uniquify-ignore-buffers-re "^\\*")))
+
+(use-package dockerfile-mode
+  :ensure t)
 
 (defun check-expansion ()
   (save-excursion
