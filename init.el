@@ -1,3 +1,21 @@
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(menu-bar-mode nil))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(cursor ((t (:background "yellow"))))
+ '(fringe ((t (:background "grey10"))))
+ '(highlight ((t (:background "grey10"))))
+ '(hl-line ((t (:inherit highlight))))
+ '(mode-line ((t (:background "grey15" :foreground "green" :inverse-video nil :box nil)))))
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (put 'narrow-to-region 'disabled nil)
@@ -69,14 +87,15 @@
   :mode ("\\.cmake$" . cmake-mode)
   :ensure t)
 
-(use-package exec-path-from-shell
-  :ensure t
-  :init
-  (progn
-    (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
-      (add-to-list 'exec-path-from-shell-variables var)))
-  :config
-  (exec-path-from-shell-initialize))
+;; (use-package exec-path-from-shell
+;;   :ensure t
+;;   :defer nil
+;;   :init
+;;   (progn
+;;     (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+;;       (add-to-list 'exec-path-from-shell-variables var)))
+;;   :config
+;;   (exec-path-from-shell-initialize))
 
 (use-package ag
   :ensure t
@@ -177,7 +196,7 @@
     (set-face-underline 'flycheck-warning nil)))
 
 (use-package ibuffer
-  :config 
+  :config
   (progn
     (global-set-key (kbd "C-x C-b") 'electric-buffer-list)))
 
@@ -244,18 +263,56 @@
     (indent-according-to-mode)))
 
 (defun complete-or-indent ()
-    (interactive)
-    (if (company-manual-begin)
-        (company-complete-common)
-      (indent-according-to-mode)))
+  (interactive)
+  (if (company-manual-begin)
+      (company-complete-common)
+    (indent-according-to-mode)))
 
 (defadvice kill-line (before check-position activate)
   (if (and (eolp) (not (bolp)))
       (progn (forward-char 1)
 	     (just-one-space 0)
-             (backward-char 1))))
-
+	     (backward-char 1))))
 
 (electric-indent-mode 1)
 
-;;(global-set-key [tab] 'indent-or-complete)
+(use-package lisp-mode
+  :config
+  (progn
+    (bind-key "M-/" 'company-complete emacs-lisp-mode-map)
+    (add-hook 'emacs-lisp-mode-hook 'company-mode t)))
+
+(use-package ffap
+  :config (ffap-bindings))
+
+(setq exec-path-from-shell-debug t)
+
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (progn
+    (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+      (add-to-list 'exec-path-from-shell-variables var)))
+  :idle (exec-path-from-shell-initialize))
+
+;; (use-package exec-path-from-shell
+;;   :ensure t
+;;   :defer nil
+;;   :init
+;;   (progn
+;;     (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
+;;       (add-to-list 'exec-path-from-shell-variables var)))
+;;   :idle
+;;   (exec-path-from-shell-initialize))
+
+(defun aim/run-go-buffer ()
+  (interactive)
+  (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
+
+(use-package git-gutter-fringe
+  :ensure t)
+
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode +1))
