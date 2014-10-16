@@ -1,15 +1,7 @@
 (custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(menu-bar-mode nil))
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "yellow"))))
  '(fringe ((t (:background "grey10"))))
  '(highlight ((t (:background "grey10"))))
@@ -316,3 +308,6 @@
   :ensure t
   :config
   (global-git-gutter-mode +1))
+
+(use-package markdown-mode
+  :ensure t)
