@@ -320,3 +320,7 @@
 
 (use-package markdown-mode
   :ensure markdown-mode)
+
+(use-package ace-jump-mode
+  :ensure ace-jump-mode
+  :bind ("C-x SPC" . ace-jump-mode))
