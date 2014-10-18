@@ -7,16 +7,11 @@
  '(menu-bar-mode nil))
 
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "yellow"))))
  '(fringe ((t (:background "grey10"))))
  '(highlight ((t (:background "grey10"))))
  '(hl-line ((t (:inherit highlight))) t)
- '(isearch ((t (:inverse-video t))))
- '(mode-line ((t (:background "grey15" :foreground "green" :inverse-video nil :box nil)))))
+ '(mode-line ((t (:background "grey15" :foreground "green" :box nil)))))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -328,8 +323,8 @@
 
 (defun isearch-face-settings ()
   (interactive)
-  (set-face-foreground 'isearch "yellow")
-  (set-face-background 'isearch "black")
+  (set-face-foreground 'isearch "black")
+  (set-face-background 'isearch "yellow")
   (set-face-foreground 'lazy-highlight "black")
   (set-face-background 'lazy-highlight "grey50")
   (custom-set-faces '(isearch-fail ((((class color)) (:background "red"))))))
