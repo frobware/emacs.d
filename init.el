@@ -15,6 +15,7 @@
  '(fringe ((t (:background "grey10"))))
  '(highlight ((t (:background "grey10"))))
  '(hl-line ((t (:inherit highlight))) t)
+ '(isearch ((t (:inverse-video t))))
  '(mode-line ((t (:background "grey15" :foreground "green" :inverse-video nil :box nil)))))
 
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -324,3 +325,14 @@
 (use-package ace-jump-mode
   :ensure ace-jump-mode
   :bind ("C-x SPC" . ace-jump-mode))
+
+(defun isearch-face-settings ()
+  (interactive)
+  (set-face-foreground 'isearch "yellow")
+  (set-face-background 'isearch "black")
+  (set-face-foreground 'lazy-highlight "black")
+  (set-face-background 'lazy-highlight "grey50")
+  (custom-set-faces '(isearch-fail ((((class color)) (:background "red"))))))
+
+(eval-after-load "isearch"
+  `(isearch-face-settings))
