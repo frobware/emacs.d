@@ -3,8 +3,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(jira-url "https://cards.linaro.org/rpc/xmlrpc")
- '(menu-bar-mode nil))
+ '(jira-url "https://cards.linaro.org/rpc/xmlrpc"))
 
 (custom-set-faces
  '(cursor ((t (:background "yellow"))))
@@ -168,7 +167,7 @@
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
     (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
     (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "M-/" 'company-complete go-mode-map)
+    (bind-key "<tab>" 'company-complete go-mode-map)
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
 (use-package go-eldoc
