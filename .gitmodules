@@ -1,6 +1,3 @@
-[submodule "vendor/base16-emacs"]
-	path = vendor/base16-emacs
-	url = https://github.com/neil477/base16-emacs
 [submodule "vendor/use-package"]
 	path = vendor/use-package
 	url = git@github.com:jwiegley/use-package.git

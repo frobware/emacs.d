@@ -3,13 +3,20 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("90e0447c82dd161963f5d22408ad6b088b1bf613839a95080c232f9d5dfe4c6a" "8f7e1668dd3a097964e6016c26d36822ab2e48fc3e9a3a2e2634224a5ca728c8" default)))
  '(jira-url "https://cards.linaro.org/rpc/xmlrpc"))
 
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "yellow"))))
+ '(font-lock-keyword-face ((t (:foreground "white" :weight bold))))
  '(fringe ((t (:background "grey10"))))
  '(highlight ((t (:background "grey10"))))
  '(hl-line ((t (:inherit highlight))) t)
+ '(isearch-fail ((((class color)) (:background "red"))))
  '(mode-line ((t (:background "grey15" :foreground "green" :box nil)))))
 
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -61,6 +68,7 @@
 	tool-bar-mode))
 
 (aim/add-to-load-path "vendor/use-package")
+(aim/add-to-load-path "vendor/base16-emacs")
 
 (require 'use-package)
 (require 'package)
