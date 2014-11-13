@@ -83,8 +83,8 @@
 (mapc (lambda(p)
 	(push p package-archives))
       '(("melpa" . "http://melpa.milkbox.net/packages/")
+	("marmalade" . "http://marmalade-repo.org/packages/")
 	("org" . "http://orgmode.org/elpa/")))
-
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -378,3 +378,28 @@
 	  try-complete-lisp-symbol-partially
 	  try-complete-lisp-symbol))  
   :bind ("M-/" . hippie-expand))
+
+(and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
+     (add-to-list 'load-path "~/repos/xml-rpc"))
+
+(and (file-exists-p "~/repos/lava-mode/lava-mode.el")
+     (progn
+       (use-package json-mode
+	 :defer nil
+	 :ensure t)
+       (use-package log4j-mode
+	 :defer nil
+	 :ensure t)
+       (use-package popup
+	 :defer nil
+	 :ensure t)
+       (add-to-list 'load-path "~/repos/lava-mode")
+       (require 'lava-mode)))
+
+(defun aim/sj ()
+  (interactive)
+  (with-output-to-temp-buffer "*sj*"
+    (shell-command (format "sj --show-job %s" (buffer-file-name (current-buffer))) "*sj*")
+    (save-excursion
+      (pop-to-buffer "*sj*")
+      (lava-mode-submit-job nil))))
