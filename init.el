@@ -336,7 +336,7 @@
   (set-face-foreground 'isearch "black")
   (set-face-background 'isearch "yellow")
   (set-face-foreground 'lazy-highlight "black")
-  (set-face-background 'lazy-highlight "grey50")
+  (set-face-background 'lazy-highlight "orange")
   (custom-set-faces '(isearch-fail ((((class color)) (:background "red"))))))
 
 (eval-after-load "isearch"
