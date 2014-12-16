@@ -22,6 +22,9 @@
  '(isearch-fail ((((class color)) (:background "red"))))
  '(mode-line ((t (:background "grey15" :foreground "green" :box nil)))))
 
+(and (string-equal "darwin" system-type)
+     (set-default-font "-*-Source Code Pro-light-normal-normal-*-18-*-*-*-m-0-iso10646-1" nil nil))
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (put 'narrow-to-region 'disabled nil)
