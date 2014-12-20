@@ -355,3 +355,10 @@
 (defun aim/occur-go-public-functions ()
   (interactive)
   (occur "^func [A-Z]"))
+
+(use-package cc-mode
+  :mode (("\\.h\\'"    . c-mode)
+         ("\\.c\\'"    . c-mode)
+         ("\\.cpp\\'"  . c++-mode)
+         ("\\.mm\\'"   . objc-mode)
+         ("\\.java\\'" . java-mode)))
