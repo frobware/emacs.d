@@ -217,7 +217,6 @@
 
 (require 'aim-functions)
 (require 'aim-global-keybindings)
-(require 'aim-hippie-expand)
 
 (use-package iswitchb
   :init
@@ -362,3 +361,18 @@
          ("\\.cpp\\'"  . c++-mode)
          ("\\.mm\\'"   . objc-mode)
          ("\\.java\\'" . java-mode)))
+
+(use-package "hippie-exp"
+  :config
+  (setq hippie-expand-try-functions-list
+	'(try-expand-dabbrev
+	  try-expand-dabbrev-all-buffers
+	  try-expand-dabbrev-from-kill
+	  try-complete-file-name-partially
+	  try-complete-file-name
+	  try-expand-all-abbrevs
+	  try-expand-list
+	  try-expand-line
+	  try-complete-lisp-symbol-partially
+	  try-complete-lisp-symbol))  
+  :bind ("M-/" . hippie-expand))
