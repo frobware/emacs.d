@@ -398,8 +398,8 @@
 
 (defun aim/sj ()
   (interactive)
-  (with-output-to-temp-buffer "*sj*"
-    (shell-command (format "sj --show-job %s" (buffer-file-name (current-buffer))) "*sj*")
-    (save-excursion
+  (save-excursion
+    (with-output-to-temp-buffer "*sj*"
+      (shell-command (format "sj --show-job %s" (buffer-file-name (current-buffer))) "*sj*")
       (pop-to-buffer "*sj*")
       (lava-mode-submit-job nil))))
