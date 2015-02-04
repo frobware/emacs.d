@@ -299,7 +299,7 @@
 (use-package ffap
   :config (ffap-bindings))
 
-(setq exec-path-from-shell-debug t)
+;;(setq exec-path-from-shell-debug t)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -359,10 +359,10 @@
 
 (use-package cc-mode
   :mode (("\\.h\\'"    . c-mode)
-         ("\\.c\\'"    . c-mode)
-         ("\\.cpp\\'"  . c++-mode)
-         ("\\.mm\\'"   . objc-mode)
-         ("\\.java\\'" . java-mode)))
+	 ("\\.c\\'"    . c-mode)
+	 ("\\.cpp\\'"  . c++-mode)
+	 ("\\.mm\\'"   . objc-mode)
+	 ("\\.java\\'" . java-mode)))
 
 (use-package "hippie-exp"
   :config
@@ -376,7 +376,7 @@
 	  try-expand-list
 	  try-expand-line
 	  try-complete-lisp-symbol-partially
-	  try-complete-lisp-symbol))  
+	  try-complete-lisp-symbol))
   :bind ("M-/" . hippie-expand))
 
 (and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
@@ -403,3 +403,38 @@
       (shell-command (format "sj --show-job %s" (buffer-file-name (current-buffer))) "*sj*")
       (pop-to-buffer "*sj*")
       (lava-mode-submit-job nil))))
+
+(defmacro with-x-environment (&rest body)
+  `(let ((process-environment
+	  (cons (concat "DISPLAY=" (getenv "DISPLAY" (selected-frame)))
+		process-environment)))
+     (if (getenv "XAUTHORITY" (selected-frame))
+	 (setq process-environment
+	       (cons (concat "XAUTHORITY=" (getenv "XAUTHORITY" (selected-frame)))
+		     process-environment)))
+     ,@body))
+
+(defun x-terminal-copy (text)
+  (with-temp-buffer
+    (insert text)
+    (with-x-environment
+     (call-process-region (point-min) (point-max) "xsel" nil nil nil "-bi"))))
+
+(defadvice x-select-text
+    (before x-select-text-in-tty activate)
+  "Use xsel to copy to the X clipboard when running in a terminal under X."
+  (when (and (eq (framep (selected-frame)) t)
+	     (getenv "DISPLAY" (selected-frame)))
+    (x-terminal-copy text)))
+
+(defun x-terminal-paste ()
+  (with-temp-buffer
+    (with-x-environment
+     (call-process "xsel" nil t nil "-bo"))))
+
+(defadvice x-cut-buffer-or-selection-value
+    (before x-cut-buffer-or-selection-value-in-tty activate)
+  "Use xsel to paste from the X clipboard when running in a terminal under X."
+  (when (and (eq (framep (selected-frame)) t)
+	     (getenv "DISPLAY" (selected-frame)))
+    (x-terminal-paste text)))
