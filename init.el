@@ -92,7 +92,9 @@
   :defer t)
 
 (use-package dired-x
-  :init (global-set-key (kbd "C-x C-j") 'dired-jump))
+  :init (progn
+	  (global-set-key (kbd "C-x C-j") 'dired-jump)
+	  (setq-default dired-omit-mode t)))
 
 (use-package cmake-mode
   :defer t
