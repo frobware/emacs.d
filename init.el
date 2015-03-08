@@ -446,4 +446,8 @@
 	     (getenv "DISPLAY" (selected-frame)))
     (x-terminal-paste text)))
 
+(setq x-select-enable-clipboard t
+      x-select-enable-primary t
+      save-interprogram-paste-before-kill t)
+	
 (setq sentence-end-double-space nil)
