@@ -451,3 +451,8 @@
       save-interprogram-paste-before-kill t)
 	
 (setq sentence-end-double-space nil)
+
+(autoload 'zap-up-to-char "misc"
+  "Kill up to, but not including ARGth occurrence of CHAR." t)
+
+(global-set-key (kbd "M-z") 'zap-up-to-char)
