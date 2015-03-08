@@ -80,7 +80,7 @@
 
 (mapc (lambda(p)
 	(push p package-archives))
-      '(("melpa" . "http://melpa.milkbox.net/packages/")
+      '(("melpa" . "http://melpa.org/packages/")
 	("marmalade" . "http://marmalade-repo.org/packages/")
 	("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
@@ -379,6 +379,13 @@
 	  try-complete-lisp-symbol))
   :bind ("M-/" . hippie-expand))
 
+(use-package tramp
+  :defer nil
+  :config
+  (progn
+    (set-default 'tramp-default-method "scp")
+    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))))
+
 (and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
      (add-to-list 'load-path "~/repos/xml-rpc"))
 
@@ -438,3 +445,5 @@
   (when (and (eq (framep (selected-frame)) t)
 	     (getenv "DISPLAY" (selected-frame)))
     (x-terminal-paste text)))
+
+(setq sentence-end-double-space nil)
