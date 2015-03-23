@@ -461,5 +461,7 @@
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(load-theme 'base16-default t)
+(and (progn
+       (load-theme 'badger t)
+       (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
 (put 'scroll-left 'disabled nil)
