@@ -327,13 +327,13 @@
   (interactive)
   (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
 
-(use-package git-gutter-fringe
-  :ensure t)
-
 (use-package git-gutter
   :ensure t
   :config
   (global-git-gutter-mode +1))
+
+(use-package git-gutter-fringe
+  :ensure t)
 
 (use-package markdown-mode
   :ensure markdown-mode)
@@ -463,7 +463,12 @@
 
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
-(and (progn
-       (load-theme 'badger t)
-       (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
+
+(use-package badger-theme
+  :ensure t
+  :config
+  (progn
+    (load-theme 'badger t)
+    (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
+
 (put 'scroll-left 'disabled nil)
