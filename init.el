@@ -121,6 +121,19 @@
     (setq ag-highlight-search t
 	  ag-reuse-buffers t)))
 
+(use-package magit-gerrit
+  :ensure t
+  :config
+  (progn
+    (setq-default magit-gerrit-remote "gerrit")))
+
+;;; An example of making magit-gerrit work.
+
+;; ((magit-mode
+;;   (magit-gerrit-remote . "ssh://frobware@review.openstack.org:29418/stackforge/rally.git"))
+;;  ("indent-tabs-mode"
+;;   (indent-tabs-mode)))
+
 (use-package magit
   :bind ("C-c i" . magit-status)
   :commands magit-status
