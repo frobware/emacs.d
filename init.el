@@ -471,7 +471,4 @@
     (load-theme 'badger t)
     (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
 
-(use-package magit-gerrit
-  :ensure t)
-
 (put 'scroll-left 'disabled nil)
