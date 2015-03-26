@@ -401,7 +401,12 @@
   :config
   (progn
     (set-default 'tramp-default-method "scp")
-    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))))
+    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+    (setq tramp-ssh-controlmaster-options
+                (concat
+                  "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+                  "-o ControlMaster=auto -o ControlPersist=yes"))))
+
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
 	      vc-ignore-dir-regexp
