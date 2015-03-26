@@ -402,6 +402,10 @@
   (progn
     (set-default 'tramp-default-method "scp")
     (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))))
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+	      vc-ignore-dir-regexp
+	      tramp-file-name-regexp))
 
 (and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
      (add-to-list 'load-path "~/repos/xml-rpc"))
