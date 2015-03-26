@@ -397,6 +397,11 @@
 	  try-complete-lisp-symbol))
   :bind ("M-/" . hippie-expand))
 
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+	      vc-ignore-dir-regexp
+	      tramp-file-name-regexp))
+
 (use-package tramp
   :defer nil
   :config
@@ -407,11 +412,6 @@
                 (concat
                   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
                   "-o ControlMaster=auto -o ControlPersist=yes"))))
-
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-	      vc-ignore-dir-regexp
-	      tramp-file-name-regexp))
 
 (and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
      (add-to-list 'load-path "~/repos/xml-rpc"))
