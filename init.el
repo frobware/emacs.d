@@ -409,9 +409,9 @@
     (set-default 'tramp-default-method "scp")
     (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
-                (concat
-                  "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-                  "-o ControlMaster=auto -o ControlPersist=yes"))))
+	  (concat
+	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+	   "-o ControlMaster=auto -o ControlPersist=yes"))))
 
 (and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
      (add-to-list 'load-path "~/repos/xml-rpc"))
