@@ -407,6 +407,7 @@
   :config
   (progn
     (set-default 'tramp-default-method "scp")
+    (set-default 'tramp-default-method "ssh")
     (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
 	  (concat
