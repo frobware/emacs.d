@@ -437,7 +437,7 @@
   "Use xsel to paste from the X clipboard when running in a terminal under X."
   (when (and (eq (framep (selected-frame)) t)
 	     (getenv "DISPLAY" (selected-frame)))
-    (x-terminal-paste text)))
+    (x-terminal-paste)))
 
 (setq x-select-enable-clipboard t
       x-select-enable-primary t
