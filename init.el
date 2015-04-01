@@ -153,13 +153,6 @@
   (progn
     (smex-initialize)))
 
-;; (use-package company
-;;   :ensure company)
-
-;; (use-package company-go
-;;   :ensure company-go
-;;   :init (add-to-list 'company-backends 'company-go))
-
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
@@ -182,29 +175,6 @@
 (use-package company
   :ensure company)
 
-;;; go
-
-(use-package go-mode
-  :ensure go-mode
-  :mode "\\.go\\'"
-  :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
-  :init
-  (progn
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    (add-hook 'go-mode-hook 'company-mode))
-  :config
-  (progn
-    (bind-key "C-c C-P" 'aim/occur-go-public-functions)
-    (bind-key "C-c C-f" 'gofmt go-mode-map)
-    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
-    (bind-key "C-c C-k" 'godoc go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
-    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-    (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "<tab>" 'company-complete go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
-
 (use-package go-eldoc
   :ensure go-eldoc
   :commands go-eldoc-setup
@@ -212,10 +182,6 @@
 
 (use-package golint
   :ensure golint)
-
-(use-package company-go
-  :ensure company-go
-  :init (add-to-list 'company-backends 'company-go))
 
 (use-package flycheck
   :ensure t
@@ -272,15 +238,15 @@
   (let ((yas/fallback-behavior 'return-nil))
     (yas/expand)))
 
-(defun tab-indent-or-complete ()
-  (interactive)
-  (if (minibufferp)
-      (minibuffer-complete)
-    (if (or (not yas/minor-mode)
-	    (null (do-yas-expand)))
-	(if (check-expansion)
-	    (company-complete-common)
-	  (indent-for-tab-command)))))
+;; (defun tab-indent-or-complete ()
+;;   (interactive)
+;;   (if (minibufferp)
+;;       (minibuffer-complete)
+;;     (if (or (not yas/minor-mode)
+;; 	    (null (do-yas-expand)))
+;; 	(if (check-expansion)
+;; 	    (company-complete-common)
+;; 	  (indent-for-tab-command)))))
 
 (setq company-idle-delay 0.3)
 (setq company-tooltip-limit 20)
@@ -290,17 +256,17 @@
 
 (add-hook 'lisp-mode #'(complete-mode 1))
 
-(defun indent-or-complete ()
-  (interactive)
-  (if (looking-at "\\_>")
-      (company-complete-common)
-    (indent-according-to-mode)))
+;; (defun indent-or-complete ()
+;;   (interactive)
+;;   (if (looking-at "\\_>")
+;;       (company-complete-common)
+;;     (indent-according-to-mode)))
 
-(defun complete-or-indent ()
-  (interactive)
-  (if (company-manual-begin)
-      (company-complete-common)
-    (indent-according-to-mode)))
+;; (defun complete-or-indent ()
+;;   (interactive)
+;;   (if (company-manual-begin)
+;;       (company-complete-common)
+;;     (indent-according-to-mode)))
 
 (defadvice kill-line (before check-position activate)
   (if (and (eolp) (not (bolp)))
@@ -406,7 +372,6 @@
   :defer nil
   :config
   (progn
-    (set-default 'tramp-default-method "scp")
     (set-default 'tramp-default-method "ssh")
     (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
@@ -504,9 +469,50 @@
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
 (setq interpreter-mode-alist
-      (cons '("python" . python-mode)
-	    interpreter-mode-alist)
-      python-mode-hook
-      '(lambda () (progn
-		    (set-variable 'py-indent-offset 4)
-		    (set-variable 'indent-tabs-mode nil))))
+      (cons '("python" . python-mode) interpreter-mode-alist)
+      python-mode-hook '(lambda () (progn
+				     (set-variable 'py-indent-offset 4)
+				     (set-variable 'indent-tabs-mode nil))))
+
+;; (eval-after-load 'company
+;;   (progn
+;;     (define-key company-active-map (kbd "TAB") nil)
+;;     (define-key company-active-map [tab] nil)))
+
+(use-package company
+  :ensure company)
+
+(use-package company-go
+  :ensure company-go
+  :init (add-to-list 'company-backends 'company-go))
+
+(use-package go-mode
+  :ensure go-mode
+  :mode "\\.go\\'"
+  :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
+  :init
+  (progn
+    (setq gofmt-command "goimports")
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    ;; By default company-mode loads every backend it has. If you want
+    ;; to only have company-mode enabled in go-mode add the following
+    ;; to your emacs-config:
+    (add-hook 'go-mode-hook (lambda ()
+			      (set (make-local-variable 'company-backends) '(company-go))
+			      (company-mode))))
+  :config
+  (progn
+    (bind-key "C-c C-P" 'aim/occur-go-public-functions)
+    (bind-key "C-c C-f" 'gofmt go-mode-map)
+    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
+    (bind-key "C-c C-k" 'godoc go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
+    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+    (bind-key "M-." 'godef-jump go-mode-map)
+    (bind-key "<tab>" 'company-complete go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
+
+(setq company-tooltip-limit 20)                      ; bigger popup window
+(setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
+(setq company-echo-delay 0)                          ; remove annoying blinking
+(setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
