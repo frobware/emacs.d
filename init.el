@@ -18,6 +18,7 @@
  '(highlight ((t (:background "grey10"))))
  '(hl-line ((t (:inherit highlight))) t)
  '(isearch-fail ((((class color)) (:background "red"))))
+ '(linum ((t (:foreground "#656868" :background "black"))))
  '(mode-line ((t (:background "grey15" :foreground "green" :box nil)))))
 
 (and (string-equal "darwin" system-type)
