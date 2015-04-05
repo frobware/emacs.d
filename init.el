@@ -547,6 +547,9 @@
 
 (global-set-key (kbd "C-c I") 'irc)
 
+(use-package rcirc-notify
+  :ensure t)
+
 (eval-after-load 'rcirc '(require 'rcirc-notify))
 (eval-after-load 'rcirc '(rcirc-notify-add-hooks))
 
