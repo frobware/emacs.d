@@ -136,7 +136,10 @@
 (use-package magit
   :bind ("C-c i" . magit-status)
   :commands magit-status
-  :ensure t)
+  :ensure t
+  :config
+  (progn
+    (setq magit-auto-revert-mode nil)))
 
 (use-package markdown-mode
   :mode ("\\.\\(m\\(ark\\)?down\\|md\\)$" . markdown-mode)
