@@ -81,7 +81,8 @@
 
 (mapc (lambda(p)
 	(push p package-archives))
-      '(("melpa" . "http://melpa.org/packages/")
+      '(("melpa-stable" . "http://stable.melpa.org/packages/")
+	("melpa" . "http://melpa.org/packages/")
 	("marmalade" . "http://marmalade-repo.org/packages/")
 	("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
@@ -162,14 +163,6 @@
   :ensure yaml-mode
   :mode "\\.ya?ml\\'")
 
-;; (use-package flycheck
-;;   :defer t
-;;   :config
-;;   (progn
-;;     (set-face-underline 'flycheck-error nil)
-;;     (set-face-background 'flycheck-error nil)
-;;     (set-face-underline 'flycheck-warning nil)))
-
 (use-package browse-url
   :ensure t)
 
@@ -195,9 +188,6 @@
     (set-face-underline 'flycheck-error nil)
     (set-face-background 'flycheck-error nil)
     (set-face-underline 'flycheck-warning nil)))
-
-(use-package flymake-go
-  :defer nil)
 
 (use-package ibuffer
   :config
@@ -503,7 +493,8 @@
     ;; to your emacs-config:
     (add-hook 'go-mode-hook (lambda ()
 			      (set (make-local-variable 'company-backends) '(company-go))
-			      (company-mode))))
+			      (company-mode)
+			      (flycheck-mode))))
   :config
   (progn
     (bind-key "C-c C-P" 'aim/occur-go-public-functions)
