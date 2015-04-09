@@ -306,8 +306,9 @@
   :config
   (global-git-gutter-mode +1))
 
-(use-package git-gutter-fringe
-  :ensure t)
+(and window-system
+     (use-package git-gutter-fringe
+       :ensure t))
 
 (use-package markdown-mode
   :ensure markdown-mode)
