@@ -125,7 +125,8 @@
   :ensure t
   :config
   (progn
-    (setq-default magit-gerrit-remote "gerrit")))
+    (setq-default magit-gerrit-remote "gerrit")
+    (setq magit-last-seen-setup-instructions "1.4.0")))
 
 ;;; An example of making magit-gerrit work.
 
