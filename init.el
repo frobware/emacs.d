@@ -527,6 +527,13 @@
 (use-package rcirc-notify
   :ensure t)
 
+(use-package projectile
+ :init (projectile-global-mode)
+  :ensure t)
+
+(use-package go-projectile
+  :ensure t)
+
 (eval-after-load 'rcirc '(require 'rcirc-notify))
 (eval-after-load 'rcirc '(rcirc-notify-add-hooks))
 
