@@ -93,13 +93,6 @@
 	;; ("marmalade" . "http://marmalade-repo.org/packages/")
 	;; ("org" . "http://orgmode.org/elpa/")))
 
-;; (mapc (lambda(p)
-;; 	(push p package-archives))
-;;       '(("melpa-stable" . "http://stable.melpa.org/packages/")
-;; 	("melpa" . "http://melpa.org/packages/")
-;; 	("marmalade" . "http://marmalade-repo.org/packages/")
-;; 	("org" . "http://orgmode.org/elpa/")))
-
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -228,16 +221,6 @@
   (let ((yas/fallback-behavior 'return-nil))
     (yas/expand)))
 
-;; (defun tab-indent-or-complete ()
-;;   (interactive)
-;;   (if (minibufferp)
-;;       (minibuffer-complete)
-;;     (if (or (not yas/minor-mode)
-;;	    (null (do-yas-expand)))
-;;	(if (check-expansion)
-;;	    (company-complete-common)
-;;	  (indent-for-tab-command)))))
-
 (setq company-idle-delay 0.3)
 (setq company-tooltip-limit 20)
 (setq company-minimum-prefix-length 2)
@@ -245,18 +228,6 @@
 (setq company-auto-complete nil)
 
 (add-hook 'lisp-mode #'(complete-mode 1))
-
-;; (defun indent-or-complete ()
-;;   (interactive)
-;;   (if (looking-at "\\_>")
-;;       (company-complete-common)
-;;     (indent-according-to-mode)))
-
-;; (defun complete-or-indent ()
-;;   (interactive)
-;;   (if (company-manual-begin)
-;;       (company-complete-common)
-;;     (indent-according-to-mode)))
 
 (defadvice kill-line (before check-position activate)
   (if (and (eolp) (not (bolp)))
@@ -429,13 +400,6 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
-;; (use-package badger-theme
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (load-theme 'badger t)
-;;     (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
-
 (put 'scroll-left 'disabled nil)
 
 (load-library "python")
@@ -449,11 +413,6 @@
       python-mode-hook '(lambda () (progn
 				     (set-variable 'py-indent-offset 4)
 				     (set-variable 'indent-tabs-mode nil))))
-
-;; (eval-after-load 'company
-;;   (progn
-;;     (define-key company-active-map (kbd "TAB") nil)
-;;     (define-key company-active-map [tab] nil)))
 
 (use-package company
   :ensure company)
