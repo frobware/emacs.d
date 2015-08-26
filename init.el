@@ -105,6 +105,13 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "HISTFILE")
+  (exec-path-from-shell-copy-env "GOPATH"))
+
 (use-package base16-theme
   :defer t)
 
@@ -157,14 +164,6 @@
 
 (use-package browse-url
   :ensure t)
-
-(use-package exec-path-from-shell
-  :ensure t
-  :config
-  (dolist (var '("GOPATH"))
-    (add-to-list 'exec-path-from-shell-variables var))
-  (exec-path-from-shell-initialize)
-  (exec-path-from-shell-copy-env "HISTFILE"))
 
 (use-package company
   :ensure company)
