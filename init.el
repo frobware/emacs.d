@@ -3,9 +3,15 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes (quote ("9b402e9e8f62024b2e7f516465b63a4927028a7055392290600b776e4a5b9905" "56cb99174fad69feba8edd6663c592e77d77332fb4c4bb5be058ef459a426463" "a0fdc9976885513b03b000b57ddde04621d94c3a08f3042d1f6e2dbc336d25c7" "c56d90af9285708041991bbc780a073182cbe91721de17c6e7a8aac1380336b3" "968c8cf5763708bb86a3f82bb0f8b8d2fe885e693ac8644268738ac2584da292" "cbef37d6304f12fb789f5d80c2b75ea01465e41073c30341dc84c6c0d1eb611d" "ba9be9caf9aa91eb34cf11ad9e8c61e54db68d2d474f99a52ba7e87097fa27f5" "5141eecb3e1ddd520e931cc1b30549490e4f8ebd49e8ea55ae528efa9857ffe6" "405fda54905200f202dd2e6ccbf94c1b7cc1312671894bc8eca7e6ec9e8a41a2" "de2c46ed1752b0d0423cde9b6401062b67a6a1300c068d5d7f67725adc6c3afb" "1affe85e8ae2667fb571fc8331e1e12840746dae5c46112d5abb0c3a973f5f5a" "ae8d0f1f36460f3705b583970188e4fbb145805b7accce0adb41031d99bd2580" "41b6698b5f9ab241ad6c30aea8c9f53d539e23ad4e3963abff4b57c0f8bf6730" "90e0447c82dd161963f5d22408ad6b088b1bf613839a95080c232f9d5dfe4c6a" "8f7e1668dd3a097964e6016c26d36822ab2e48fc3e9a3a2e2634224a5ca728c8" default)))
+ '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
+ '(custom-safe-themes
+   (quote
+    ("9b402e9e8f62024b2e7f516465b63a4927028a7055392290600b776e4a5b9905" "56cb99174fad69feba8edd6663c592e77d77332fb4c4bb5be058ef459a426463" "a0fdc9976885513b03b000b57ddde04621d94c3a08f3042d1f6e2dbc336d25c7" "c56d90af9285708041991bbc780a073182cbe91721de17c6e7a8aac1380336b3" "968c8cf5763708bb86a3f82bb0f8b8d2fe885e693ac8644268738ac2584da292" "cbef37d6304f12fb789f5d80c2b75ea01465e41073c30341dc84c6c0d1eb611d" "ba9be9caf9aa91eb34cf11ad9e8c61e54db68d2d474f99a52ba7e87097fa27f5" "5141eecb3e1ddd520e931cc1b30549490e4f8ebd49e8ea55ae528efa9857ffe6" "405fda54905200f202dd2e6ccbf94c1b7cc1312671894bc8eca7e6ec9e8a41a2" "de2c46ed1752b0d0423cde9b6401062b67a6a1300c068d5d7f67725adc6c3afb" "1affe85e8ae2667fb571fc8331e1e12840746dae5c46112d5abb0c3a973f5f5a" "ae8d0f1f36460f3705b583970188e4fbb145805b7accce0adb41031d99bd2580" "41b6698b5f9ab241ad6c30aea8c9f53d539e23ad4e3963abff4b57c0f8bf6730" "90e0447c82dd161963f5d22408ad6b088b1bf613839a95080c232f9d5dfe4c6a" "8f7e1668dd3a097964e6016c26d36822ab2e48fc3e9a3a2e2634224a5ca728c8" default)))
  '(jira-url "https://cards.linaro.org/rpc/xmlrpc")
- '(ns-command-modifier (quote meta)))
+ '(mail-host-address "frobware.com")
+ '(mm-text-html-renderer (quote shr))
+ '(ns-command-modifier (quote meta))
+ )
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -14,12 +20,13 @@
  ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "yellow"))))
  '(font-lock-keyword-face ((t (:foreground "white" :weight bold))))
- '(fringe ((t (:background "grey10"))))
+ '(fringe ((t (:background "grey20"))))
  '(highlight ((t (:background "grey10"))))
  '(hl-line ((t (:inherit highlight))) t)
  '(isearch-fail ((((class color)) (:background "red"))))
  '(linum ((t (:foreground "#656868" :background "black"))))
- '(mode-line ((t (:background "grey15" :foreground "green" :box nil)))))
+ '(mode-line ((t (:background "grey25" :foreground "green" :box nil))))
+ '(region ((t (:background "#444" :foreground "#ffffff")))))
 
 (and (string-equal "darwin" system-type)
      (progn
@@ -82,9 +89,17 @@
 (mapc (lambda(p)
 	(push p package-archives))
       '(("melpa-stable" . "http://stable.melpa.org/packages/")
-	("melpa" . "http://melpa.org/packages/")
-	("marmalade" . "http://marmalade-repo.org/packages/")
-	("org" . "http://orgmode.org/elpa/")))
+	("melpa" . "http://melpa.org/packages/")))
+	;; ("marmalade" . "http://marmalade-repo.org/packages/")
+	;; ("org" . "http://orgmode.org/elpa/")))
+
+;; (mapc (lambda(p)
+;; 	(push p package-archives))
+;;       '(("melpa-stable" . "http://stable.melpa.org/packages/")
+;; 	("melpa" . "http://melpa.org/packages/")
+;; 	("marmalade" . "http://marmalade-repo.org/packages/")
+;; 	("org" . "http://orgmode.org/elpa/")))
+
 (package-initialize)
 
 (when (not package-archive-contents)
@@ -103,16 +118,6 @@
   :mode ("\\.cmake$" . cmake-mode)
   :ensure t)
 
-;; (use-package exec-path-from-shell
-;;   :ensure t
-;;   :defer nil
-;;   :init
-;;   (progn
-;;     (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
-;;       (add-to-list 'exec-path-from-shell-variables var)))
-;;   :config
-;;   (exec-path-from-shell-initialize))
-
 (use-package ag
   :ensure t
   :commands (ag ag-files ag-regexp ag-project ag-project-files ag-project-regexp)
@@ -120,19 +125,6 @@
   (progn
     (setq ag-highlight-search t
 	  ag-reuse-buffers t)))
-
-(use-package magit-gerrit
-  :ensure t
-  :config
-  (progn
-    (setq-default magit-gerrit-remote "gerrit")))
-
-;;; An example of making magit-gerrit work.
-
-;; ((magit-mode
-;;   (magit-gerrit-remote . "ssh://frobware@review.openstack.org:29418/stackforge/rally.git"))
-;;  ("indent-tabs-mode"
-;;   (indent-tabs-mode)))
 
 (use-package magit
   :bind ("C-c i" . magit-status)
@@ -165,6 +157,14 @@
 
 (use-package browse-url
   :ensure t)
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (dolist (var '("GOPATH"))
+    (add-to-list 'exec-path-from-shell-variables var))
+  (exec-path-from-shell-initialize)
+  (exec-path-from-shell-copy-env "HISTFILE"))
 
 (use-package company
   :ensure company)
@@ -204,10 +204,7 @@
   :init
   (iswitchb-mode 1))
 
-(use-package server
-  :init
-  (unless (server-running-p)
-    (server-start)))
+(use-package server)
 
 (use-package uniquify
   :init
@@ -237,10 +234,10 @@
 ;;   (if (minibufferp)
 ;;       (minibuffer-complete)
 ;;     (if (or (not yas/minor-mode)
-;; 	    (null (do-yas-expand)))
-;; 	(if (check-expansion)
-;; 	    (company-complete-common)
-;; 	  (indent-for-tab-command)))))
+;;	    (null (do-yas-expand)))
+;;	(if (check-expansion)
+;;	    (company-complete-common)
+;;	  (indent-for-tab-command)))))
 
 (setq company-idle-delay 0.3)
 (setq company-tooltip-limit 20)
@@ -279,24 +276,6 @@
 (use-package ffap
   :config (ffap-bindings))
 
-(use-package exec-path-from-shell
-  :ensure t
-  :init
-  (progn
-    (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
-      (add-to-list 'exec-path-from-shell-variables var)))
-  :idle (exec-path-from-shell-initialize))
-
-;; (use-package exec-path-from-shell
-;;   :ensure t
-;;   :defer nil
-;;   :init
-;;   (progn
-;;     (dolist (var '("GOPATH" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE"))
-;;       (add-to-list 'exec-path-from-shell-variables var)))
-;;   :idle
-;;   (exec-path-from-shell-initialize))
-
 (defun aim/run-go-buffer ()
   (interactive)
   (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
@@ -305,6 +284,9 @@
   :ensure t
   :config
   (global-git-gutter-mode +1))
+
+(use-package fringe-helper
+  :ensure t)
 
 (and window-system
      (use-package git-gutter-fringe
@@ -437,7 +419,7 @@
 (setq x-select-enable-clipboard t
       x-select-enable-primary t
       save-interprogram-paste-before-kill t)
-	
+
 (setq sentence-end-double-space nil)
 
 (autoload 'zap-up-to-char "misc"
@@ -448,12 +430,12 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/")
 
-(use-package badger-theme
-  :ensure t
-  :config
-  (progn
-    (load-theme 'badger t)
-    (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
+;; (use-package badger-theme
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (load-theme 'badger t)
+;;     (set-face-attribute 'region nil :background "#555" :foreground "#ffffff")))
 
 (put 'scroll-left 'disabled nil)
 
@@ -558,13 +540,24 @@
 This doesn't support the chanserv auth method"
   (unless arg
     (dolist (p (auth-source-search :port '("nickserv")
-                                   :require '(:port :user :password)))
+				   :require '(:port :user :password)))
       (let ((secret (plist-get p :secret))
-            (method (intern (plist-get p :port))))
-        (add-to-list 'rcirc-authinfo
-                     (list (plist-get p :host)
-                           method
-                           (plist-get p :user)
-                           (if (functionp secret)
-                               (funcall secret)
-                             secret)))))))
+	    (method (intern (plist-get p :port))))
+	(add-to-list 'rcirc-authinfo
+		     (list (plist-get p :host)
+			   method
+			   (plist-get p :user)
+			   (if (functionp secret)
+			       (funcall secret)
+			     secret)))))))
+
+(require 'ansi-color)
+(add-to-list 'auto-mode-alist '("\\.log\\'" . display-ansi-colors))
+(add-to-list 'auto-mode-alist '("\\.log\\'" . log4j-mode))
+
+(defun display-ansi-colors ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
+
+(server-start)
