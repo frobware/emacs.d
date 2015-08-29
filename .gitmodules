@@ -7,3 +7,6 @@
 [submodule "vendor/badger-theme"]
 	path = vendor/badger-theme
 	url = https://github.com/ccann/badger-theme.git
+[submodule "vendor/color-theme-sanityinc-tomorrow"]
+	path = vendor/color-theme-sanityinc-tomorrow
+	url = https://github.com/purcell/color-theme-sanityinc-tomorrow.git
