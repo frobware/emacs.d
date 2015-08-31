@@ -10,3 +10,6 @@
 [submodule "vendor/color-theme-sanityinc-tomorrow"]
 	path = vendor/color-theme-sanityinc-tomorrow
 	url = https://github.com/purcell/color-theme-sanityinc-tomorrow.git
+[submodule "vendor/base16-emacs"]
+	path = vendor/base16-emacs
+	url = https://github.com/neil477/base16-emacs
