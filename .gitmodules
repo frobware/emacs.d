@@ -13,3 +13,6 @@
 [submodule "vendor/base16-emacs"]
 	path = vendor/base16-emacs
 	url = https://github.com/neil477/base16-emacs
+[submodule "vendor/exec-path-from-shell"]
+	path = vendor/exec-path-from-shell
+	url = https://github.com/purcell/exec-path-from-shell
