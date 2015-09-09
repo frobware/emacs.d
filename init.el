@@ -5,6 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
+ '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
  '(ns-command-modifier (quote meta)))
@@ -531,3 +532,26 @@ This doesn't support the chanserv auth method"
             (set-face-bold-p face (not dark-background))))
      (face-list)))
   (setq dark-background (not dark-background)))
+
+(require 'desktop)
+
+(setq desktop-buffers-not-to-save
+      (concat "\\("
+	      "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
+	      "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
+	      "\\)$"))
+
+(add-to-list 'desktop-modes-not-to-save 'dired-mode)
+(add-to-list 'desktop-modes-not-to-save 'Info-mode)
+(add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+(add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
+
+(desktop-save-mode 1)
+
+(defun my-desktop-save ()
+  (interactive)
+  ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
+  (if (eq (desktop-owner) (emacs-pid))
+      (desktop-save desktop-dirname)))
+
+(add-hook 'auto-save-hook 'my-desktop-save)
