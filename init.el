@@ -555,3 +555,5 @@ This doesn't support the chanserv auth method"
       (desktop-save desktop-dirname)))
 
 (add-hook 'auto-save-hook 'my-desktop-save)
+(require 'recentf)
+(recentf-mode 1)
