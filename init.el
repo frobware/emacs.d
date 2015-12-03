@@ -17,9 +17,9 @@
  ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "yellow"))))
  '(font-lock-keyword-face ((t (:foreground "white" :weight bold))))
- '(fringe ((t (:background "grey20"))))
+ '(fringe ((t (:background "grey10"))))
  '(highlight ((t (:background "grey10"))))
- '(hl-line ((t (:inherit highlight))) t)
+ '(hl-line ((t (:inherit highlight))))
  '(isearch-fail ((((class color)) (:background "red"))))
  '(linum ((t (:foreground "#656868" :background "black"))))
  '(mode-line ((t (:background "grey25" :foreground "green" :box nil))))
@@ -177,6 +177,31 @@
 (use-package ibuffer
   :config
   (progn
+    (setq ibuffer-saved-filter-groups
+          (quote (("default"
+                   ("dired" (mode . dired-mode))
+                   ("perl" (mode . cperl-mode))
+                   ("erc" (mode . erc-mode))
+                   ("planner" (or
+                               (name . "^\\*Calendar\\*$")
+                               (name . "^diary$")
+                               (mode . muse-mode)))
+                   ("emacs" (or
+                             (name . "^\\*scratch\\*$")
+                             (name . "^\\*Messages\\*$")))
+                   ("gnus" (or
+                            (mode . message-mode)
+                            (mode . bbdb-mode)
+                            (mode . mail-mode)
+                            (mode . gnus-group-mode)
+                            (mode . gnus-summary-mode)
+                            (mode . gnus-article-mode)
+                            (name . "^\\.bbdb$")
+                            (name . "^\\.newsrc-dribble")))))))
+    (add-hook 'ibuffer-mode-hook
+              (lambda ()
+                (ibuffer-switch-to-saved-filter-groups "default")))
+    (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)
     (global-set-key (kbd "C-x C-b") 'electric-buffer-list)))
     ;;(global-set-key (kbd "C-x C-b") 'ibuffer)))
 
@@ -428,7 +453,8 @@
     (add-hook 'go-mode-hook (lambda ()
 			      (set (make-local-variable 'company-backends) '(company-go))
 			      (company-mode)
-			      (flycheck-mode))))
+			      ;;(flycheck-mode)
+			      )))
   :config
   (progn
     (bind-key "C-c C-P" 'aim/occur-go-public-functions)
@@ -525,11 +551,11 @@ This doesn't support the chanserv auth method"
 (defun toggle-dark-background ()
   (interactive)
   (let ((difficult-colors
-         '("red" "blue" "medium blue")))
+	 '("red" "blue" "medium blue")))
     (mapc
      (lambda (face)
        (and (member (face-attribute face :foreground)  difficult-colors)
-            (set-face-bold-p face (not dark-background))))
+	    (set-face-bold-p face (not dark-background))))
      (face-list)))
   (setq dark-background (not dark-background)))
 
@@ -559,3 +585,8 @@ This doesn't support the chanserv auth method"
 (recentf-mode 1)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (autoload 'ibuffer "ibuffer" "List buffers." t)
+
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
+
+(require 'notmuch)
+(require 'notmuch-address)
