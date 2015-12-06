@@ -5,10 +5,24 @@
  ;; If there is more than one, they won't work right.
  '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
+ '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
  '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
- '(ns-command-modifier (quote meta)))
+ '(notmuch-saved-searches
+   (quote
+    ((:name "inbox" :query "tag:inbox" :key "i")
+     (:name "unread" :query "tag:unread" :key "u")
+     (:name "flagged" :query "tag:flagged" :key "f")
+     (:name "sent" :query "tag:sent" :key "t")
+     (:name "drafts" :query "tag:draft" :key "d")
+     (:name "all mail" :query "*" :key "a")
+     (:name "alexis-unread" :query "from:alexis tag:unread")
+     (:name "" :query "from:alexis")
+     (:name "alexis" :query "from:alexis")
+     (:name "my-reviews" :query "from:mcdermott review request"))))
+ '(ns-command-modifier (quote meta))
+ '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -16,6 +30,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "yellow"))))
+ '(diff-hunk-header ((t (:inherit diff-header))))
  '(font-lock-keyword-face ((t (:foreground "white" :weight bold))))
  '(fringe ((t (:background "grey10"))))
  '(highlight ((t (:background "grey10"))))
@@ -23,11 +38,12 @@
  '(isearch-fail ((((class color)) (:background "red"))))
  '(linum ((t (:foreground "#656868" :background "black"))))
  '(mode-line ((t (:background "grey25" :foreground "green" :box nil))))
- '(region ((t (:background "#444" :foreground "#ffffff")))))
+ '(region ((t (:background "#444" :foreground "#ffffff"))))
+ '(widget-field ((t (:background "grey25")))))
 
 (and (string-equal "darwin" system-type)
      (progn
-       (set-default-font "-*-Source Code Pro-light-normal-normal-*-18-*-*-*-m-0-iso10646-1" nil nil)
+       (set-default-font "-*-Source Code Pro-normal-normal-*-28-*-*-*-m-0-iso10646-1" nil nil)
        (menu-bar-mode)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -56,7 +72,7 @@
 
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
-(setq inhibit-startup-echo-area-message t)
+(setq inhibit-startup-echo-area-message (getenv "USER"))
 (setq initial-scratch-message nil)
 
 ;; Turn off 3d mode line
@@ -86,9 +102,9 @@
 (mapc (lambda(p)
 	(push p package-archives))
       '(("melpa-stable" . "http://stable.melpa.org/packages/")
-	("melpa" . "http://melpa.org/packages/")))
-	;; ("marmalade" . "http://marmalade-repo.org/packages/")
-	;; ("org" . "http://orgmode.org/elpa/")))
+	("melpa" . "http://melpa.org/packages/")
+        ("marmalade" . "http://marmalade-repo.org/packages/")
+        ("org" . "http://orgmode.org/elpa/")))
 
 (package-initialize)
 
@@ -139,6 +155,8 @@
   :config
   (progn
     (smex-initialize)))
+
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
@@ -426,11 +444,16 @@
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
-(setq interpreter-mode-alist
-      (cons '("python" . python-mode) interpreter-mode-alist)
-      python-mode-hook '(lambda () (progn
-				     (set-variable 'py-indent-offset 4)
-				     (set-variable 'indent-tabs-mode nil))))
+;; (setq interpreter-mode-alist
+;;       (cons '("python" . python-mode) interpreter-mode-alist)
+;;       python-mode-hook '(lambda () (progn
+;; 				     (set-variable 'py-indent-offset 4)
+;; 				     (set-variable 'indent-tabs-mode t))))
+
+(use-package python-mode
+      :init (progn
+	      (set-variable 'py-indent-offset 4)
+	      (set-variable 'indent-tabs-mode nil)))
 
 (use-package company
   :ensure company)
@@ -454,7 +477,7 @@
 			      (set (make-local-variable 'company-backends) '(company-go))
 			      (company-mode)
 			      ;;(flycheck-mode)
-			      )))
+                              )))
   :config
   (progn
     (bind-key "C-c C-P" 'aim/occur-go-public-functions)
@@ -477,7 +500,7 @@
 ;;; IRC
 
 (setq rcirc-server-alist
-      '(("ircproxy.linaro.org" :port 6667 :encryption tls
+      '(("irc.freenode.net" :port 6697 :encryption tls
 	 :channels ("#rcirc" "#emacs" "#emacswiki"))))
 
 ;; Identification for IRC server connections
@@ -563,6 +586,7 @@ This doesn't support the chanserv auth method"
 
 (setq desktop-buffers-not-to-save
       (concat "\\("
+	      "\\.go\\"
 	      "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
 	      "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
 	      "\\)$"))
@@ -590,3 +614,20 @@ This doesn't support the chanserv auth method"
 
 (require 'notmuch)
 (require 'notmuch-address)
+
+(aim/add-to-load-path "vendor/rbt")
+(require 'rbt)
+
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
+(require 'notmuch)
+
+(setq notmuch-message-headers '("To" "Subject")) ; The default list is '("Subject" "To" "Cc" "Date").
+(setq notmuch-show-indent-messages-width 1) ; The default is 1.
+
+;; Show HTML mail by default, and keep the text/plain hidden.
+;; (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
+(setq notmuch-multipart/alternative-discouraged '("text/html" "text/plain"))
+
+;; By default the "show hidden multipart" buttons are very bright (and distracting) in my color scheme.
+;; Make them be the same color as the email's body text.
+(set-face-foreground 'message-mml (face-attribute 'default :foreground))
