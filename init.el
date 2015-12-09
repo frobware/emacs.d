@@ -607,8 +607,6 @@ This doesn't support the chanserv auth method"
 (add-hook 'auto-save-hook 'my-desktop-save)
 (require 'recentf)
 (recentf-mode 1)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(autoload 'ibuffer "ibuffer" "List buffers." t)
 
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
 
