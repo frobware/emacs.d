@@ -537,6 +537,9 @@
 (use-package git-timemachine
   :ensure t)
 
+(use-package github-browse-file
+  :ensure t)
+
 (eval-after-load 'rcirc '(require 'rcirc-notify))
 (eval-after-load 'rcirc '(rcirc-notify-add-hooks))
 
@@ -632,3 +635,5 @@ This doesn't support the chanserv auth method"
 ;; By default the "show hidden multipart" buttons are very bright (and distracting) in my color scheme.
 ;; Make them be the same color as the email's body text.
 (set-face-foreground 'message-mml (face-attribute 'default :foreground))
+
+(setq yagist-encrypt-risky-config t)
