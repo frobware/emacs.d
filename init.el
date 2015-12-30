@@ -534,6 +534,9 @@
 (use-package go-projectile
   :ensure t)
 
+(use-package git-timemachine
+  :ensure t)
+
 (eval-after-load 'rcirc '(require 'rcirc-notify))
 (eval-after-load 'rcirc '(rcirc-notify-add-hooks))
 
