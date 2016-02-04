@@ -22,6 +22,9 @@
      (:name "alexis" :query "from:alexis")
      (:name "my-reviews" :query "from:mcdermott review request"))))
  '(ns-command-modifier (quote meta))
+ '(package-selected-packages
+   (quote
+    (wgrep-ag gnus-desktop-notify projectile fringe-helper git-gutter go-eldoc company yaml-mode smex rcirc-notify pt popup markdown-mode magit log4j-mode json-mode golint go-projectile git-gutter-fringe flycheck exec-path-from-shell dockerfile-mode company-go cmake-mode base16-theme ag ace-jump-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -141,6 +144,7 @@
   :ensure t
   :config
   (progn
+    (setq magit-refresh-status-buffer nil)
     (setq magit-auto-revert-mode nil)))
 
 (use-package markdown-mode
@@ -534,10 +538,7 @@
 (use-package go-projectile
   :ensure t)
 
-(use-package git-timemachine
-  :ensure t)
-
-(use-package github-browse-file
+(use-package wgrep-ag
   :ensure t)
 
 (eval-after-load 'rcirc '(require 'rcirc-notify))
@@ -616,24 +617,25 @@ This doesn't support the chanserv auth method"
 
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
 
-(require 'notmuch)
-(require 'notmuch-address)
+(and (require 'notmuch nil 't)
+     (progn
+       (require 'notmuch-address)
 
-(aim/add-to-load-path "vendor/rbt")
-(require 'rbt)
+       (aim/add-to-load-path "vendor/rbt")
+       (require 'rbt)
 
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
-(require 'notmuch)
+       (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
+       (require 'notmuch)
 
-(setq notmuch-message-headers '("To" "Subject")) ; The default list is '("Subject" "To" "Cc" "Date").
-(setq notmuch-show-indent-messages-width 1) ; The default is 1.
+       (setq notmuch-message-headers '("To" "Subject")) ; The default list is '("Subject" "To" "Cc" "Date").
+       (setq notmuch-show-indent-messages-width 1) ; The default is 1.
 
-;; Show HTML mail by default, and keep the text/plain hidden.
-;; (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
-(setq notmuch-multipart/alternative-discouraged '("text/html" "text/plain"))
+       ;; Show HTML mail by default, and keep the text/plain hidden.
+       ;; (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
+       (setq notmuch-multipart/alternative-discouraged '("text/html" "text/plain"))
 
-;; By default the "show hidden multipart" buttons are very bright (and distracting) in my color scheme.
-;; Make them be the same color as the email's body text.
-(set-face-foreground 'message-mml (face-attribute 'default :foreground))
+       ;; By default the "show hidden multipart" buttons are very bright (and distracting) in my color scheme.
+       ;; Make them be the same color as the email's body text.
+       (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
 
-(setq yagist-encrypt-risky-config t)
+;;(global-unset-key (kbd "C-z"))
