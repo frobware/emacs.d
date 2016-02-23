@@ -7,6 +7,7 @@
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
  '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
+ '(magit-pull-arguments nil)
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
  '(notmuch-saved-searches
@@ -24,7 +25,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (wgrep-ag gnus-desktop-notify projectile fringe-helper git-gutter go-eldoc company yaml-mode smex rcirc-notify pt popup markdown-mode magit log4j-mode json-mode golint go-projectile git-gutter-fringe flycheck exec-path-from-shell dockerfile-mode company-go cmake-mode base16-theme ag ace-jump-mode)))
+    (guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint go-projectile github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -160,7 +161,9 @@
   (progn
     (smex-initialize)))
 
-(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+;; (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+
+(remove-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
@@ -641,3 +644,6 @@ This doesn't support the chanserv auth method"
 (use-package wgrep-ag
   :ensure t)
 
+(add-to-list 'exec-path "/usr/local/go1.4.3/bin")
+
+(add-to-list 'default-frame-alist '(tty-color-mode . -1))
