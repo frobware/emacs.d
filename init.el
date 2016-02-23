@@ -124,6 +124,7 @@
 (use-package dired-x
   :init (progn
 	  (global-set-key (kbd "C-x C-j") 'dired-jump)
+	  (add-hook 'dired-mode-hook 'projectile-mode)
 	  (setq-default dired-omit-mode t)))
 
 (use-package cmake-mode
@@ -537,7 +538,6 @@
 (aim/add-to-load-path "vendor/go-projectile")
 
 (use-package projectile
-  :init (projectile-global-mode)
   :config (setq projectile-switch-project-action 'projectile-dired)
   :ensure t)
 
@@ -609,7 +609,7 @@ This doesn't support the chanserv auth method"
 (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
 (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
 
-(desktop-save-mode 1)
+;;(desktop-save-mode 1)
 
 (defun my-desktop-save ()
   (interactive)
@@ -650,7 +650,7 @@ This doesn't support the chanserv auth method"
 
 (add-to-list 'exec-path "/usr/local/go1.4.3/bin")
 
-(add-to-list 'default-frame-alist '(tty-color-mode . -1))
+(add-to-list 'default-frame-alist '(tty-color-mode  . -1))
 
 (use-package guide-key
   :ensure t
