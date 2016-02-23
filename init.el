@@ -25,7 +25,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint go-projectile github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
+    (go-direx guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint go-projectile github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -647,3 +647,9 @@ This doesn't support the chanserv auth method"
 (add-to-list 'exec-path "/usr/local/go1.4.3/bin")
 
 (add-to-list 'default-frame-alist '(tty-color-mode . -1))
+
+(use-package guide-key
+  :ensure t
+  :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
+
+(guide-key-mode 1)  ; Enable guide-key-mode
