@@ -25,7 +25,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (go-direx guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint go-projectile github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
+    (go-direx guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -534,8 +534,11 @@
 (use-package rcirc-notify
   :ensure t)
 
+(aim/add-to-load-path "vendor/go-projectile")
+
 (use-package projectile
- :init (projectile-global-mode)
+  :init (projectile-global-mode)
+  :config (setq projectile-switch-project-action 'projectile-dired)
   :ensure t)
 
 (use-package go-projectile
