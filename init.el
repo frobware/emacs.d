@@ -638,4 +638,6 @@ This doesn't support the chanserv auth method"
        ;; Make them be the same color as the email's body text.
        (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
 
-;;(global-unset-key (kbd "C-z"))
+(use-package wgrep-ag
+  :ensure t)
+
