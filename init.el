@@ -617,9 +617,10 @@ This doesn't support the chanserv auth method"
   (if (eq (desktop-owner) (emacs-pid))
       (desktop-save desktop-dirname)))
 
-(add-hook 'auto-save-hook 'my-desktop-save)
-(require 'recentf)
-(recentf-mode 1)
+;;(add-hook 'auto-save-hook 'my-desktop-save)
+
+;; (require 'recentf)
+;; (recentf-mode 1)
 
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
 
