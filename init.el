@@ -332,6 +332,9 @@
     (bind-key "<tab>" 'company-complete go-mode-map)
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
+(use-package itail
+  :ensure t)
+
 (use-package tramp
   :defer nil
   :config
