@@ -335,6 +335,9 @@
 (use-package itail
   :ensure t)
 
+(use-package itail
+  :ensure t)
+
 (use-package tramp
   :defer nil
   :config
