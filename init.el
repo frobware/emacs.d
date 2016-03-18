@@ -176,8 +176,8 @@
 (use-package golint
   :ensure golint)
 
-(and (file-exists-p "/usr/local/go1.4.2/misc/oracle.el")
-     (load-file "/usr/local/go1.4.2/misc/oracle.el"))
+(and (file-exists-p "/usr/local/go1.4.3/misc/oracle.el")
+     (load-file "/usr/local/go1.4.3/misc/oracle.el"))
 
 (use-package flycheck
   :ensure t
