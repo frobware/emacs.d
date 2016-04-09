@@ -10,18 +10,6 @@
  '(magit-pull-arguments nil)
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
- '(notmuch-saved-searches
-   (quote
-    ((:name "inbox" :query "tag:inbox" :key "i")
-     (:name "unread" :query "tag:unread" :key "u")
-     (:name "flagged" :query "tag:flagged" :key "f")
-     (:name "sent" :query "tag:sent" :key "t")
-     (:name "drafts" :query "tag:draft" :key "d")
-     (:name "all mail" :query "*" :key "a")
-     (:name "alexis-unread" :query "from:alexis tag:unread")
-     (:name "" :query "from:alexis")
-     (:name "alexis" :query "from:alexis")
-     (:name "my-reviews" :query "from:mcdermott review request"))))
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
@@ -233,9 +221,6 @@
 
 (aim/add-to-load-path "lisp")
 
-(require 'aim-functions)
-(require 'aim-global-keybindings)
-
 (use-package iswitchb
   :init
   (iswitchb-mode 1))
@@ -252,6 +237,132 @@
 
 (use-package dockerfile-mode
   :ensure t)
+
+(use-package lisp-mode
+  :config
+  (progn
+    (bind-key "M-/" 'company-complete emacs-lisp-mode-map)
+    (add-hook 'emacs-lisp-mode-hook 'company-mode t)))
+
+(use-package ffap
+  :config (ffap-bindings))
+
+(use-package git-gutter
+  :ensure t
+  :config
+  (global-git-gutter-mode +1))
+
+(use-package fringe-helper
+  :ensure t)
+
+(and window-system
+     (use-package git-gutter-fringe
+       :ensure t))
+
+(use-package markdown-mode
+  :ensure markdown-mode)
+
+(use-package ace-jump-mode
+  :ensure ace-jump-mode
+  :bind ("C-x SPC" . ace-jump-mode))
+
+;; The platinum searcher
+(use-package pt
+  :ensure pt)
+
+(use-package cc-mode
+  :mode (("\\.h\\'"    . c-mode)
+	 ("\\.c\\'"    . c-mode)
+	 ("\\.cpp\\'"  . c++-mode)
+	 ("\\.mm\\'"   . objc-mode)
+	 ("\\.java\\'" . java-mode)))
+
+(use-package "hippie-exp"
+  :config
+  (setq hippie-expand-try-functions-list
+	'(try-expand-dabbrev
+	  try-expand-dabbrev-all-buffers
+	  try-expand-dabbrev-from-kill
+	  try-complete-file-name-partially
+	  try-complete-file-name
+	  try-expand-all-abbrevs
+	  try-expand-list
+	  try-expand-line
+	  try-complete-lisp-symbol-partially
+	  try-complete-lisp-symbol))
+  :bind ("M-/" . hippie-expand))
+
+(use-package python-mode
+      :init (progn
+	      (set-variable 'py-indent-offset 4)
+	      (set-variable 'indent-tabs-mode nil)))
+
+(use-package company
+  :ensure company)
+
+(use-package company-go
+  :ensure company-go
+  :init (add-to-list 'company-backends 'company-go))
+
+(use-package go-mode
+  :ensure go-mode
+  :mode "\\.go\\'"
+  :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
+  :init
+  (progn
+    (setq gofmt-command "goimports")
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    ;; By default company-mode loads every backend it has. If you want
+    ;; to only have company-mode enabled in go-mode add the following
+    ;; to your emacs-config:
+    (add-hook 'go-mode-hook (lambda ()
+			      (set (make-local-variable 'company-backends) '(company-go))
+			      (company-mode)
+			      ;;(flycheck-mode)
+                              )))
+  :config
+  (progn
+    (bind-key "C-c C-P" 'aim/occur-go-public-functions)
+    (bind-key "C-c C-f" 'gofmt go-mode-map)
+    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
+    (bind-key "C-c C-k" 'godoc go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
+    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+    (bind-key "M-." 'godef-jump go-mode-map)
+    (bind-key "<tab>" 'company-complete go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
+
+(use-package tramp
+  :defer nil
+  :config
+  (progn
+    (set-default 'tramp-default-method "ssh")
+    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+    (setq tramp-ssh-controlmaster-options
+	  (concat
+	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
+	   "-o ControlMaster=auto -o ControlPersist=yes"))))
+
+(use-package projectile
+  :config (setq projectile-switch-project-action 'projectile-dired)
+  :ensure t)
+
+(use-package go-projectile
+  :ensure t)
+
+(use-package wgrep-ag
+  :ensure t)
+
+(use-package wgrep-ag
+  :config (guide-key-mode 1)
+  :ensure t)
+
+(use-package guide-key
+  :ensure t
+  :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
+
+(require 'aim-functions)
+(require 'aim-global-keybindings)
 
 (defun check-expansion ()
   (save-excursion
@@ -281,41 +392,9 @@
 
 (electric-indent-mode 1)
 
-(use-package lisp-mode
-  :config
-  (progn
-    (bind-key "M-/" 'company-complete emacs-lisp-mode-map)
-    (add-hook 'emacs-lisp-mode-hook 'company-mode t)))
-
-(use-package ffap
-  :config (ffap-bindings))
-
 (defun aim/run-go-buffer ()
   (interactive)
   (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
-
-(use-package git-gutter
-  :ensure t
-  :config
-  (global-git-gutter-mode +1))
-
-(use-package fringe-helper
-  :ensure t)
-
-(and window-system
-     (use-package git-gutter-fringe
-       :ensure t))
-
-(use-package markdown-mode
-  :ensure markdown-mode)
-
-(use-package ace-jump-mode
-  :ensure ace-jump-mode
-  :bind ("C-x SPC" . ace-jump-mode))
-
-;; The platinum searcher
-(use-package pt
-  :ensure pt)
 
 (defun isearch-face-settings ()
   (interactive)
@@ -330,45 +409,12 @@
 
 (defun aim/occur-go-public-functions ()
   (interactive)
-  (occur "^func [A-Z]"))
-
-(use-package cc-mode
-  :mode (("\\.h\\'"    . c-mode)
-	 ("\\.c\\'"    . c-mode)
-	 ("\\.cpp\\'"  . c++-mode)
-	 ("\\.mm\\'"   . objc-mode)
-	 ("\\.java\\'" . java-mode)))
-
-(use-package "hippie-exp"
-  :config
-  (setq hippie-expand-try-functions-list
-	'(try-expand-dabbrev
-	  try-expand-dabbrev-all-buffers
-	  try-expand-dabbrev-from-kill
-	  try-complete-file-name-partially
-	  try-complete-file-name
-	  try-expand-all-abbrevs
-	  try-expand-list
-	  try-expand-line
-	  try-complete-lisp-symbol-partially
-	  try-complete-lisp-symbol))
-  :bind ("M-/" . hippie-expand))
+  (occur "^func [A-Z]"))		;which is clearly broken
 
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
 	      vc-ignore-dir-regexp
 	      tramp-file-name-regexp))
-
-(use-package tramp
-  :defer nil
-  :config
-  (progn
-    (set-default 'tramp-default-method "ssh")
-    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
-    (setq tramp-ssh-controlmaster-options
-	  (concat
-	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-	   "-o ControlMaster=auto -o ControlPersist=yes"))))
 
 (and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
      (add-to-list 'load-path "~/repos/xml-rpc"))
@@ -458,46 +504,6 @@
 ;; 				     (set-variable 'py-indent-offset 4)
 ;; 				     (set-variable 'indent-tabs-mode t))))
 
-(use-package python-mode
-      :init (progn
-	      (set-variable 'py-indent-offset 4)
-	      (set-variable 'indent-tabs-mode nil)))
-
-(use-package company
-  :ensure company)
-
-(use-package company-go
-  :ensure company-go
-  :init (add-to-list 'company-backends 'company-go))
-
-(use-package go-mode
-  :ensure go-mode
-  :mode "\\.go\\'"
-  :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
-  :init
-  (progn
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    ;; By default company-mode loads every backend it has. If you want
-    ;; to only have company-mode enabled in go-mode add the following
-    ;; to your emacs-config:
-    (add-hook 'go-mode-hook (lambda ()
-			      (set (make-local-variable 'company-backends) '(company-go))
-			      (company-mode)
-			      ;;(flycheck-mode)
-                              )))
-  :config
-  (progn
-    (bind-key "C-c C-P" 'aim/occur-go-public-functions)
-    (bind-key "C-c C-f" 'gofmt go-mode-map)
-    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
-    (bind-key "C-c C-k" 'godoc go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
-    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-    (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "<tab>" 'company-complete go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
-
 (setq company-tooltip-limit 20)                      ; bigger popup window
 (setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
 (setq company-echo-delay 0)                          ; remove annoying blinking
@@ -536,16 +542,6 @@
   :ensure t)
 
 (aim/add-to-load-path "vendor/go-projectile")
-
-(use-package projectile
-  :config (setq projectile-switch-project-action 'projectile-dired)
-  :ensure t)
-
-(use-package go-projectile
-  :ensure t)
-
-(use-package wgrep-ag
-  :ensure t)
 
 (eval-after-load 'rcirc '(require 'rcirc-notify))
 (eval-after-load 'rcirc '(rcirc-notify-add-hooks))
@@ -645,18 +641,9 @@ This doesn't support the chanserv auth method"
        ;; Make them be the same color as the email's body text.
        (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
 
-(use-package wgrep-ag
-  :ensure t)
-
 (add-to-list 'exec-path "/usr/local/go1.4.3/bin")
 
 (add-to-list 'default-frame-alist '(tty-color-mode  . -1))
-
-(use-package guide-key
-  :ensure t
-  :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
-
-(guide-key-mode 1)  ; Enable guide-key-mode
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
