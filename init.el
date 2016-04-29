@@ -646,7 +646,7 @@ This doesn't support the chanserv auth method"
 
 (add-to-list 'exec-path "/usr/local/go1.4.3/bin")
 
-(add-to-list 'default-frame-alist '(tty-color-mode  . -1))
+;;(add-to-list 'default-frame-alist '(tty-color-mode  . -1))
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
