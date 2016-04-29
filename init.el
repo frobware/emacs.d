@@ -663,3 +663,9 @@ This doesn't support the chanserv auth method"
   "Delete duplicate lines in buffer and keep first occurrence."
   (interactive "*")
   (uniquify-all-lines-region (point-min) (point-max)))
+
+(use-package peep-dired
+  :ensure t
+  :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
+  :bind (:map dired-mode-map
+              ("P" . peep-dired)))
