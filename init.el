@@ -338,16 +338,31 @@
 (use-package itail
   :ensure t)
 
+;; (use-package tramp
+;;   :init
+;;   (setq tramp-ssh-controlmaster-options
+;;         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
+
 (use-package tramp
   :defer nil
   :config
   (progn
     (set-default 'tramp-default-method "ssh")
-    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+    ;; /sudo:root@10.17.20.215:/var/log/juju/
+    ;; /ssh:ubuntu@10.11.20.101|sudo:10.11.20.101:/var/log/juju/machine-0.log
+    ;; /ssh:ubuntu@10.17.20.215|sudo:10.17.20.215:/var/log/juju/
+    ;; /ssh:ubuntu@10.17.20.215|sudo:10.17.20.215:/
+    ;; /ssh:ubuntu@10.17.20.215|sudo:10.17.20.215:/
+    ;; http://irreal.org/blog/?p=895
+    (add-to-list 'tramp-default-proxies-alist
+		 '(nil "\\`root\\'" "/ssh:%h:"))
+    (add-to-list 'tramp-default-proxies-alist
+		 '((regexp-quote (system-name)) nil nil))
+;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
 	  (concat
 	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-	   "-o ControlMaster=auto -o ControlPersist=yes"))))
+	   "-o ControlMaster=auto -o ControlPersist=no"))))
 
 (use-package projectile
   :config (setq projectile-switch-project-action 'projectile-dired)
