@@ -16,7 +16,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (go-direx guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
+    (dumb-jump go-direx guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -703,3 +703,5 @@ This doesn't support the chanserv auth method"
       (cdr (assq 'name (frame-parameters frame)))
     (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
 
+(use-package dumb-jump
+  :ensure t)
