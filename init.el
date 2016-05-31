@@ -694,3 +694,12 @@ This doesn't support the chanserv auth method"
 (use-package rust
   :config
   (define-key rust-mode-map (kbd "C-c C-f") #'rustfmt-format-buffer))
+
+(defun get-frame-name (&optional frame)
+  (interactive)
+  "Return the string that names FRAME (a frame).  Default is selected frame."
+  (unless frame (setq frame (selected-frame)))
+  (if (framep frame)
+      (cdr (assq 'name (frame-parameters frame)))
+    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
+
