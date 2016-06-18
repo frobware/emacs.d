@@ -10,6 +10,7 @@
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
  '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
+ '(magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
  '(magit-pull-arguments nil)
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
