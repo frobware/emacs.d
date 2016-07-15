@@ -706,3 +706,9 @@ This doesn't support the chanserv auth method"
 
 (use-package dumb-jump
   :ensure t)
+
+(defun open-var-log-juju (hostname)
+  "Open Juju log directory"
+  (interactive "shost: ")
+  (let ((filename (format "/ssh:%s|sudo:%s:/var/log/juju/" hostname hostname)))
+    (find-file filename)))
