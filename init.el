@@ -712,3 +712,15 @@ This doesn't support the chanserv auth method"
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/juju/" hostname hostname)))
     (find-file filename)))
+
+(defun visit-dir (hostname)
+  "Open Juju log directory"
+  (interactive "shost: ")
+  (let ((filename (format "/ssh:%s|sudo:%s:/" hostname hostname)))
+    (find-file filename)))
+
+(defun ubuntu-visit-dir (hostname)
+  "Open Juju log directory"
+  (interactive "shost: ")
+  (let ((filename (format "/ssh:%s:~" hostname hostname)))
+    (find-file filename)))
