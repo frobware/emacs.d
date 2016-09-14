@@ -143,6 +143,13 @@
     (setq magit-refresh-status-buffer nil)
     (setq magit-auto-revert-mode nil)))
 
+(use-package magit-gh-pulls
+  :ensure t
+  :commands turn-on-magit-gh-pulls
+  :config
+  (progn
+    (add-hook 'magit-mode-hook 'turn-on-magit-gh-pulls)))
+
 (use-package markdown-mode
   :mode ("\\.\\(m\\(ark\\)?down\\|md\\)$" . markdown-mode)
   :config)
