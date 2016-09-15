@@ -6,18 +6,13 @@
  '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
  '(custom-safe-themes
    (quote
-    ("9f6750057fefba39c184783c7b80ddd9c63bc6e8064846b423b4362c9e930404" "90e0447c82dd161963f5d22408ad6b088b1bf613839a95080c232f9d5dfe4c6a" "e8e744a1b0726814ac3ab86ad5ccdf658b9ff1c5a63c4dc23841007874044d4a" "76bd62f6ce376bf0597fab7f478eaa98cd94a7b41f0ae46de63a958fbe99c1d9" default)))
- '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
+    ("16dd114a84d0aeccc5ad6fd64752a11ea2e841e3853234f19dc02a7b91f5d661" "9f6750057fefba39c184783c7b80ddd9c63bc6e8064846b423b4362c9e930404" "90e0447c82dd161963f5d22408ad6b088b1bf613839a95080c232f9d5dfe4c6a" "e8e744a1b0726814ac3ab86ad5ccdf658b9ff1c5a63c4dc23841007874044d4a" "76bd62f6ce376bf0597fab7f478eaa98cd94a7b41f0ae46de63a958fbe99c1d9" default)))
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
- '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
  '(magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
  '(magit-pull-arguments nil)
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
  '(ns-command-modifier (quote meta))
- '(package-selected-packages
-   (quote
-    (dumb-jump go-direx guide-key yaml-mode wgrep-ag w3m smex rustfmt rust-mode restclient rcirc-notify rcirc-alert pt pastebin offlineimap markdown-mode magit log4j-mode json-mode httprepl helm gotest golint github-browse-file git-gutter-fringe gist gh-md flycheck exec-path-from-shell emoji-fontset dockerfile-mode diff-hl company-go cmake-mode base16-theme ag ace-jump-mode)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -107,9 +102,6 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(use-package exec-path-from-shell
-  :ensure t)
-
 (use-package base16-theme
   :ensure t)
 
@@ -118,7 +110,6 @@
 (use-package dired-x
   :init (progn
 	  (global-set-key (kbd "C-x C-j") 'dired-jump)
-	  (add-hook 'dired-mode-hook 'projectile-mode)
 	  (setq-default dired-omit-mode t)))
 
 (use-package cmake-mode
@@ -377,23 +368,15 @@
 	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
 	   "-o ControlMaster=auto -o ControlPersist=no"))))
 
-(use-package projectile
-  :config (setq projectile-switch-project-action 'projectile-dired)
-  :ensure t)
-
-(use-package go-projectile
-  :ensure t)
-
-(use-package wgrep-ag
-  :ensure t)
-
-(use-package wgrep-ag
-  :config (guide-key-mode 1)
-  :ensure t)
-
 (use-package guide-key
   :ensure t
   :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
+
+(use-package wgrep
+  :ensure t)
+
+(use-package wgrep-ag
+  :ensure t)
 
 (require 'aim-functions)
 (require 'aim-global-keybindings)
@@ -575,8 +558,6 @@
 (use-package rcirc-notify
   :ensure t)
 
-(aim/add-to-load-path "vendor/go-projectile")
-
 (eval-after-load 'rcirc '(require 'rcirc-notify))
 (eval-after-load 'rcirc '(rcirc-notify-add-hooks))
 
@@ -729,3 +710,5 @@ This doesn't support the chanserv auth method"
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s:~" hostname hostname)))
     (find-file filename)))
+
+;;(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
