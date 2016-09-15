@@ -675,7 +675,7 @@ This doesn't support the chanserv auth method"
        ;; Make them be the same color as the email's body text.
        (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
 
-(add-to-list 'exec-path "/usr/local/go1.4.3/bin")
+(add-to-list 'exec-path "/usr/local/go1.7.1/bin")
 
 ;;(add-to-list 'default-frame-alist '(tty-color-mode  . -1))
 
