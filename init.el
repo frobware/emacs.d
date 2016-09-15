@@ -701,10 +701,6 @@ This doesn't support the chanserv auth method"
   :bind (:map dired-mode-map
               ("P" . peep-dired)))
 
-(use-package rust
-  :config
-  (define-key rust-mode-map (kbd "C-c C-f") #'rustfmt-format-buffer))
-
 (defun get-frame-name (&optional frame)
   (interactive)
   "Return the string that names FRAME (a frame).  Default is selected frame."
