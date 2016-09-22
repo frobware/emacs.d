@@ -4,9 +4,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
- '(custom-safe-themes
-   (quote
-    ("16dd114a84d0aeccc5ad6fd64752a11ea2e841e3853234f19dc02a7b91f5d661" "9f6750057fefba39c184783c7b80ddd9c63bc6e8064846b423b4362c9e930404" "90e0447c82dd161963f5d22408ad6b088b1bf613839a95080c232f9d5dfe4c6a" "e8e744a1b0726814ac3ab86ad5ccdf658b9ff1c5a63c4dc23841007874044d4a" "76bd62f6ce376bf0597fab7f478eaa98cd94a7b41f0ae46de63a958fbe99c1d9" default)))
+ '(custom-safe-themes t
+   )
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
  '(magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
  '(magit-pull-arguments nil)
