@@ -712,4 +712,4 @@ This doesn't support the chanserv auth method"
   (let ((filename (format "/ssh:%s:~" hostname hostname)))
     (find-file filename)))
 
-;;(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
+(add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)
