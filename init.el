@@ -102,8 +102,8 @@
   (package-refresh-contents))
 
 (use-package base16-theme
-  :ensure t)
-
+  :ensure t
+  :config
 (unless (window-system)
   (load-theme 'base16-default-dark))
 
