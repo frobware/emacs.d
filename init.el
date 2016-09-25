@@ -349,9 +349,6 @@
 (use-package itail
   :ensure t)
 
-(use-package itail
-  :ensure t)
-
 ;; (use-package tramp
 ;;   :init
 ;;   (setq tramp-ssh-controlmaster-options
