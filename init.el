@@ -4,9 +4,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
- '(custom-safe-themes t
-   )
+ '(custom-safe-themes t)
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
+ '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
+ '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
+ '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
+ '(magit-auto-revert-mode nil)
  '(magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
  '(magit-pull-arguments nil)
  '(mail-host-address "frobware.com")
@@ -31,10 +34,12 @@
  '(region ((t (:background "#444" :foreground "#ffffff"))))
  '(widget-field ((t (:background "grey25")))))
 
-(and (string-equal "darwin" system-type)
-     (progn
-       (set-default-font "-*-Source Code Pro-normal-normal-*-28-*-*-*-m-0-iso10646-1" nil nil)
-       (menu-bar-mode)))
+;; (and (string-equal "darwin" system-type)
+;;      (progn
+;;        (set-default-font "-*-Source Code Pro-normal-normal-*-28-*-*-*-m-0-iso10646-1" nil nil)
+;;        (menu-bar-mode)))
+
+;;(set-default-font "-*-Source Code Pro-normal-normal-*-22-*-*-*-m-0-iso10646-1" nil nil)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -91,10 +96,12 @@
 
 (mapc (lambda(p)
 	(push p package-archives))
-      '(("melpa-stable" . "http://stable.melpa.org/packages/")
-	("melpa" . "http://melpa.org/packages/")
-        ("marmalade" . "http://marmalade-repo.org/packages/")
-        ("org" . "http://orgmode.org/elpa/")))
+      '(("melpa" . "http://melpa.org/packages/")))
+;;      '(("melpa-stable" . "http://stable.melpa.org/packages/")))
+
+	;; ("melpa" . "http://melpa.org/packages/")
+        ;; ("marmalade" . "http://marmalade-repo.org/packages/")
+        ;; ("org" . "http://orgmode.org/elpa/")))
 
 (package-initialize)
 
@@ -124,6 +131,12 @@
   (progn
     (setq ag-highlight-search t
 	  ag-reuse-buffers t)))
+
+(use-package wgrep-ag
+  :config
+  (progn
+    (setq wgrep-auto-save-buffer t))
+  :ensure t)
 
 (use-package magit
   :bind ("C-c i" . magit-status)
@@ -179,9 +192,6 @@
 
 (use-package golint
   :ensure golint)
-
-(and (file-exists-p "/usr/local/go1.7.1/misc/go-guru.el")
-     (load-file "/usr/local/go1.7.1/misc/go-guru.el"))
 
 (use-package flycheck
   :ensure t
@@ -321,9 +331,9 @@
     ;; to your emacs-config:
     (add-hook 'go-mode-hook (lambda ()
 			      (set (make-local-variable 'company-backends) '(company-go))
-			      (company-mode)
+			      (company-mode))))
 			      ;;(flycheck-mode)
-                              )))
+			      ;;#'go-guru-hl-identifier-mode)))
   :config
   (progn
     (bind-key "C-c C-P" 'aim/occur-go-public-functions)
@@ -377,6 +387,10 @@
 
 (use-package wgrep-ag
   :ensure t)
+
+(use-package guide-key
+  :ensure t
+  :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
 
 (require 'aim-functions)
 (require 'aim-global-keybindings)
@@ -717,3 +731,8 @@ This doesn't support the chanserv auth method"
      (progn
        (load-file "/usr/local/go1.7.1/misc/go-guru.el")
        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)))
+
+(autoload 'wgrep-ag-setup "wgrep-ag")
+(add-hook 'ag-mode-hook 'wgrep-ag-setup)
+
+(global-set-key (kbd "M-.") 'dumb-jump-go)
