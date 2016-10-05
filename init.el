@@ -104,9 +104,9 @@
       '(("melpa" . "http://melpa.org/packages/")))
 ;;      '(("melpa-stable" . "http://stable.melpa.org/packages/")))
 
-	;; ("melpa" . "http://melpa.org/packages/")
-        ;; ("marmalade" . "http://marmalade-repo.org/packages/")
-        ;; ("org" . "http://orgmode.org/elpa/")))
+;; ("melpa" . "http://melpa.org/packages/")
+;; ("marmalade" . "http://marmalade-repo.org/packages/")
+;; ("org" . "http://orgmode.org/elpa/")))
 
 (package-initialize)
 
@@ -116,8 +116,8 @@
 (use-package base16-theme
   :ensure t
   :config
-(unless (window-system)
-  (load-theme 'base16-default-dark))
+  (unless (window-system)
+    (load-theme 'base16-default-dark)))
 
 (use-package dired-x
   :init (progn
@@ -211,32 +211,32 @@
   :config
   (progn
     (setq ibuffer-saved-filter-groups
-          (quote (("default"
-                   ("dired" (mode . dired-mode))
-                   ("perl" (mode . cperl-mode))
-                   ("erc" (mode . erc-mode))
-                   ("planner" (or
-                               (name . "^\\*Calendar\\*$")
-                               (name . "^diary$")
-                               (mode . muse-mode)))
-                   ("emacs" (or
-                             (name . "^\\*scratch\\*$")
-                             (name . "^\\*Messages\\*$")))
-                   ("gnus" (or
-                            (mode . message-mode)
-                            (mode . bbdb-mode)
-                            (mode . mail-mode)
-                            (mode . gnus-group-mode)
-                            (mode . gnus-summary-mode)
-                            (mode . gnus-article-mode)
-                            (name . "^\\.bbdb$")
-                            (name . "^\\.newsrc-dribble")))))))
+	  (quote (("default"
+		   ("dired" (mode . dired-mode))
+		   ("perl" (mode . cperl-mode))
+		   ("erc" (mode . erc-mode))
+		   ("planner" (or
+			       (name . "^\\*Calendar\\*$")
+			       (name . "^diary$")
+			       (mode . muse-mode)))
+		   ("emacs" (or
+			     (name . "^\\*scratch\\*$")
+			     (name . "^\\*Messages\\*$")))
+		   ("gnus" (or
+			    (mode . message-mode)
+			    (mode . bbdb-mode)
+			    (mode . mail-mode)
+			    (mode . gnus-group-mode)
+			    (mode . gnus-summary-mode)
+			    (mode . gnus-article-mode)
+			    (name . "^\\.bbdb$")
+			    (name . "^\\.newsrc-dribble")))))))
     (add-hook 'ibuffer-mode-hook
-              (lambda ()
-                (ibuffer-switch-to-saved-filter-groups "default")))
+	      (lambda ()
+		(ibuffer-switch-to-saved-filter-groups "default")))
     (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)
     (global-set-key (kbd "C-x C-b") 'electric-buffer-list)))
-    ;;(global-set-key (kbd "C-x C-b") 'ibuffer)))
+;;(global-set-key (kbd "C-x C-b") 'ibuffer)))
 
 (aim/add-to-load-path "lisp")
 
@@ -312,9 +312,9 @@
   :bind ("M-/" . hippie-expand))
 
 (use-package python-mode
-      :init (progn
-	      (set-variable 'py-indent-offset 4)
-	      (set-variable 'indent-tabs-mode nil)))
+  :init (progn
+	  (set-variable 'py-indent-offset 4)
+	  (set-variable 'indent-tabs-mode nil)))
 
 (use-package company
   :ensure company)
@@ -337,8 +337,8 @@
     (add-hook 'go-mode-hook (lambda ()
 			      (set (make-local-variable 'company-backends) '(company-go))
 			      (company-mode))))
-			      ;;(flycheck-mode)
-			      ;;#'go-guru-hl-identifier-mode)))
+  ;;(flycheck-mode)
+  ;;#'go-guru-hl-identifier-mode)))
   :config
   (progn
     (bind-key "C-c C-P" 'aim/occur-go-public-functions)
@@ -374,7 +374,7 @@
 		 '(nil "\\`root\\'" "/ssh:%h:"))
     (add-to-list 'tramp-default-proxies-alist
 		 '((regexp-quote (system-name)) nil nil))
-;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+    ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
 	  (concat
 	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
@@ -534,8 +534,8 @@
 ;; (setq interpreter-mode-alist
 ;;       (cons '("python" . python-mode) interpreter-mode-alist)
 ;;       python-mode-hook '(lambda () (progn
-;; 				     (set-variable 'py-indent-offset 4)
-;; 				     (set-variable 'indent-tabs-mode t))))
+;;				     (set-variable 'py-indent-offset 4)
+;;				     (set-variable 'indent-tabs-mode t))))
 
 (setq company-tooltip-limit 20)                      ; bigger popup window
 (setq company-idle-delay .3)                         ; decrease delay before autocompletion popup shows
@@ -696,7 +696,7 @@ This doesn't support the chanserv auth method"
   :ensure t
   :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
   :bind (:map dired-mode-map
-              ("P" . peep-dired)))
+	      ("P" . peep-dired)))
 
 (defun get-frame-name (&optional frame)
   (interactive)
