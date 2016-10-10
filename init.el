@@ -113,12 +113,6 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(use-package base16-theme
-  :ensure t
-  :config
-  (unless (window-system)
-    (load-theme 'base16-default-dark)))
-
 (use-package dired-x
   :init (progn
 	  (global-set-key (kbd "C-x C-j") 'dired-jump)
@@ -738,3 +732,28 @@ This doesn't support the chanserv auth method"
 (add-hook 'ag-mode-hook 'wgrep-ag-setup)
 
 (global-set-key (kbd "M-.") 'dumb-jump-go)
+
+(defun terminal-init-screen ()
+  "Terminal initialization function for screen."
+  ;; Use the xterm color initialization code.
+  (load "term/xterm")
+  (xterm-register-default-colors)
+  (tty-set-up-initial-frame-faces))
+
+(unless (window-system)
+  (terminal-init-screen))
+
+;; Set color-theme if running in X or a high-color terminal
+(defun setup-color-theme-p ()
+  "Returns true if it looks like the display can handle 24-bit colors"
+  (or (display-graphic-p)
+      (< 256 (display-color-cells))
+      (string-match "^st-24bit" (getenv "TERM"))
+      (getenv "KONSOLE_DBUS_SERVICE")))
+
+(defun setup-color-theme ()
+  "Set up my color theme"
+  (when (setup-color-theme-p)
+    (set-face-attribute 'default nil :background "#000000")))
+
+(add-hook 'window-setup-hook 'setup-color-theme)
