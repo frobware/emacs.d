@@ -664,8 +664,6 @@ This doesn't support the chanserv auth method"
        ;; Make them be the same color as the email's body text.
        (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
 
-(add-to-list 'exec-path "/usr/local/go1.7.1/bin")
-
 ;;(add-to-list 'default-frame-alist '(tty-color-mode  . -1))
 
 (defun uniquify-all-lines-region (start end)
@@ -723,6 +721,9 @@ This doesn't support the chanserv auth method"
      (progn
        (load-file "/usr/local/go1.7.1/misc/go-guru.el")
        (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)))
+
+(and (file-exists-p "/usr/local/go1.7.1/bin/go")
+     (add-to-list 'exec-path "/usr/local/go1.7.1/bin"))
 
 (autoload 'wgrep-ag-setup "wgrep-ag")
 (add-hook 'ag-mode-hook 'wgrep-ag-setup)
