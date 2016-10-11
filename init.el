@@ -748,8 +748,7 @@ This doesn't support the chanserv auth method"
   "Returns true if it looks like the display can handle 24-bit colors"
   (or (display-graphic-p)
       (< 256 (display-color-cells))
-      (string-match "^st-24bit" (getenv "TERM"))
-      (getenv "KONSOLE_DBUS_SERVICE")))
+      (getenv "KONSOLE_DBUS_SESSION")))
 
 (defun setup-color-theme ()
   "Set up my color theme"
