@@ -601,8 +601,6 @@ This doesn't support the chanserv auth method"
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
 
-(server-start)
-
 (defvar dark-background nil)
 
 (defun toggle-dark-background ()
@@ -756,3 +754,8 @@ This doesn't support the chanserv auth method"
     (set-face-attribute 'default nil :background "#000000")))
 
 (add-hook 'window-setup-hook 'setup-color-theme)
+
+(unless (server-running-p)
+  (server-start))
+
+(message "Done")
