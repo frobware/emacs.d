@@ -234,8 +234,6 @@
   :init
   (iswitchb-mode 1))
 
-(use-package server)
-
 (use-package uniquify
   :init
   (progn
@@ -706,7 +704,10 @@ This doesn't support the chanserv auth method"
   (require 'mouse)
   (xterm-mouse-mode t))
 
-(unless (server-running-p)
-  (server-start))
+(use-package server
+  :ensure t
+  :config 
+  (unless (server-running-p)
+    (server-start)))
 
 (message "Done")
