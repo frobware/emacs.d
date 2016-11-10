@@ -402,31 +402,6 @@
 	      vc-ignore-dir-regexp
 	      tramp-file-name-regexp))
 
-(and (file-exists-p "~/repos/xml-rpc/xml-rpc.el")
-     (add-to-list 'load-path "~/repos/xml-rpc"))
-
-(and (file-exists-p "~/repos/lava-mode/lava-mode.el")
-     (progn
-       (use-package json-mode
-	 :defer nil
-	 :ensure t)
-       (use-package log4j-mode
-	 :defer nil
-	 :ensure t)
-       (use-package popup
-	 :defer nil
-	 :ensure t)
-       (add-to-list 'load-path "~/repos/lava-mode")
-       (require 'lava-mode)))
-
-(defun aim/sj ()
-  (interactive)
-  (save-excursion
-    (with-output-to-temp-buffer "*sj*"
-      (shell-command (format "sj --show-job %s" (buffer-file-name (current-buffer))) "*sj*")
-      (pop-to-buffer "*sj*")
-      (lava-mode-submit-job nil))))
-
 (defmacro with-x-environment (&rest body)
   `(let ((process-environment
 	  (cons (concat "DISPLAY=" (getenv "DISPLAY" (selected-frame)))
