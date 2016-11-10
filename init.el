@@ -122,6 +122,9 @@
     (setq wgrep-auto-save-buffer t))
   :ensure t)
 
+(use-package wgrep
+  :ensure t)
+
 (use-package magit
   :bind ("C-c i" . magit-status)
   :commands magit-status
@@ -361,12 +364,6 @@
 (use-package guide-key
   :ensure t
   :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
-
-(use-package wgrep
-  :ensure t)
-
-(use-package wgrep-ag
-  :ensure t)
 
 (use-package guide-key
   :ensure t
