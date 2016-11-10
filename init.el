@@ -30,13 +30,6 @@
  '(region ((t (:background "#444" :foreground "#ffffff"))))
  '(widget-field ((t (:background "grey25")))))
 
-;; (and (string-equal "darwin" system-type)
-;;      (progn
-;;        (set-default-font "-*-Source Code Pro-normal-normal-*-28-*-*-*-m-0-iso10646-1" nil nil)
-;;        (menu-bar-mode)))
-
-;;(set-default-font "-*-Source Code Pro-normal-normal-*-22-*-*-*-m-0-iso10646-1" nil nil)
-
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (put 'narrow-to-region 'disabled nil)
