@@ -603,20 +603,19 @@ This doesn't support the chanserv auth method"
 
 ;;(desktop-save-mode 1)
 
-(defun my-desktop-save ()
+(defun aim/desktop-save ()
   (interactive)
   ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-  (if (eq (desktop-owner) (emacs-pid))
-      (desktop-save desktop-dirname)))
+  (unless (desktop-save-mode-off)
+    (if (eq (desktop-owner) (emacs-pid))
+	(desktop-save desktop-dirname))))
 
-;; (add-hook 'auto-save-hook 'my-desktop-save)
-;; (require 'recentf)
-;; (recentf-mode 1)
+(add-hook 'auto-save-hook 'aim/desktop-save)
 
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
 (require 'recentf)
 (recentf-mode 1)
 
+;;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
 
 (and (require 'notmuch nil 't)
      (progn
