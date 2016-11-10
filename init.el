@@ -584,19 +584,6 @@ This doesn't support the chanserv auth method"
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
 
-(defvar dark-background nil)
-
-(defun toggle-dark-background ()
-  (interactive)
-  (let ((difficult-colors
-	 '("red" "blue" "medium blue")))
-    (mapc
-     (lambda (face)
-       (and (member (face-attribute face :foreground)  difficult-colors)
-	    (set-face-bold-p face (not dark-background))))
-     (face-list)))
-  (setq dark-background (not dark-background)))
-
 (require 'desktop)
 
 (setq desktop-buffers-not-to-save
@@ -619,8 +606,7 @@ This doesn't support the chanserv auth method"
   (if (eq (desktop-owner) (emacs-pid))
       (desktop-save desktop-dirname)))
 
-;;(add-hook 'auto-save-hook 'my-desktop-save)
-
+;; (add-hook 'auto-save-hook 'my-desktop-save)
 ;; (require 'recentf)
 ;; (recentf-mode 1)
 
@@ -646,8 +632,6 @@ This doesn't support the chanserv auth method"
        ;; By default the "show hidden multipart" buttons are very bright (and distracting) in my color scheme.
        ;; Make them be the same color as the email's body text.
        (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
-
-;;(add-to-list 'default-frame-alist '(tty-color-mode  . -1))
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
