@@ -306,6 +306,7 @@
   :bind ("M-/" . hippie-expand))
 
 (use-package python-mode
+  :ensure t
   :init (progn
 	  (set-variable 'py-indent-offset 4)
 	  (set-variable 'indent-tabs-mode nil)))
