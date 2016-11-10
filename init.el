@@ -266,10 +266,6 @@
   :ensure ace-jump-mode
   :bind ("C-x SPC" . ace-jump-mode))
 
-;; The platinum searcher
-(use-package pt
-  :ensure pt)
-
 (use-package cc-mode
   :mode (("\\.h\\'"    . c-mode)
 	 ("\\.c\\'"    . c-mode)
