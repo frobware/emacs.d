@@ -8,7 +8,7 @@
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
  '(default-frame-alist
     (quote
-     ((reverse . nil)
+     ((reverse . t)
       (vertical-scroll-bars)
       (tty-color-mode . true-color))))
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
