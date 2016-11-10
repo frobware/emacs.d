@@ -633,6 +633,11 @@ This doesn't support the chanserv auth method"
   :bind (:map dired-mode-map
 	      ("P" . peep-dired)))
 
+(use-package dumb-jump
+  :ensure t
+  :config
+  (global-set-key (kbd "M-.") 'dumb-jump-go))
+
 (defun get-frame-name (&optional frame)
   (interactive)
   "Return the string that names FRAME (a frame).  Default is selected frame."
@@ -640,9 +645,6 @@ This doesn't support the chanserv auth method"
   (if (framep frame)
       (cdr (assq 'name (frame-parameters frame)))
     (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
-
-(use-package dumb-jump
-  :ensure t)
 
 (defun open-var-log-juju (hostname)
   "Open Juju log directory"
@@ -666,8 +668,6 @@ This doesn't support the chanserv auth method"
      (use-package go-guru
        :load-path "/usr/local/go1.7.1/misc"
        :config (add-to-list 'exec-path "/usr/local/go1.7.1/bin")))
-
-(global-set-key (kbd "M-.") 'dumb-jump-go)
 
 (unless (window-system)
   ;; use xclip to copy/paste in emacs-nox
