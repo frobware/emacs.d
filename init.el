@@ -490,29 +490,6 @@
 (require 'recentf)
 (recentf-mode 1)
 
-;;(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
-
-(and (require 'notmuch nil 't)
-     (progn
-       (require 'notmuch-address)
-
-       (aim/add-to-load-path "vendor/rbt")
-       (require 'rbt)
-
-       (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
-       (require 'notmuch)
-
-       (setq notmuch-message-headers '("To" "Subject")) ; The default list is '("Subject" "To" "Cc" "Date").
-       (setq notmuch-show-indent-messages-width 1) ; The default is 1.
-
-       ;; Show HTML mail by default, and keep the text/plain hidden.
-       ;; (setq notmuch-multipart/alternative-discouraged '("text/plain" "text/html"))
-       (setq notmuch-multipart/alternative-discouraged '("text/html" "text/plain"))
-
-       ;; By default the "show hidden multipart" buttons are very bright (and distracting) in my color scheme.
-       ;; Make them be the same color as the email's body text.
-       (set-face-foreground 'message-mml (face-attribute 'default :foreground))))
-
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
   (interactive "*r")
