@@ -13,10 +13,6 @@
       (tty-color-mode . true-color))))
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
- '(helm-locate-project-list (quote ("~/go/src/github.com/juju")))
- '(magit-auto-revert-mode nil)
- '(magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
- '(magit-pull-arguments nil)
  '(mail-host-address "frobware.com")
  '(mm-text-html-renderer (quote shr))
  '(ns-command-modifier (quote meta))
@@ -143,8 +139,10 @@
   :ensure t
   :config
   (progn
-    (setq magit-refresh-status-buffer nil)
-    (setq magit-auto-revert-mode nil)))
+    (setq magit-refresh-status-buffer nil
+	  magit-auto-revert-mode nil
+	  magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
+	  magit-pull-arguments nil)))
 
 (use-package magit-gh-pulls
   :ensure t
