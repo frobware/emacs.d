@@ -497,60 +497,6 @@
 
 (setq twittering-icon-mode t)
 
-;;; IRC
-
-(setq rcirc-server-alist
-      '(("irc.freenode.net" :port 6697 :encryption tls
-	 :channels ("#rcirc" "#emacs" "#emacswiki"))))
-
-;; Identification for IRC server connections
-(setq rcirc-default-user-name "frobware"
-      rcirc-default-nick      "frobware"
-      rcirc-default-full-name "Andrew McDermott")
-
-;; Enable automatic authentication with rcirc-authinfo keys.
-(setq rcirc-auto-authenticate-flag t)
-
-;; Enable logging support by default.
-(setq rcirc-log-flag      t
-      rcirc-log-directory (expand-file-name ".rcirclogs" (getenv "HOME")))
-
-;; Some UI options which I like better than the defaults.
-(rcirc-track-minor-mode 1)
-
-(setq rcirc-prompt      "»» "
-      rcirc-time-format "%H:%M "
-      rcirc-fill-flag   nil)
-
-(global-set-key (kbd "C-c I") 'irc)
-
-(use-package rcirc-notify
-  :ensure t)
-
-(eval-after-load 'rcirc '(require 'rcirc-notify))
-(eval-after-load 'rcirc '(rcirc-notify-add-hooks))
-
-(require 'auth-source)
-
-(message (auth-source-search :port '("nickserv")
-			     :require '(:port :user :password)))
-
-(defadvice rcirc (before rcirc-read-from-authinfo activate)
-  "Allow rcirc to read authinfo from ~/.authinfo.gpg via the auth-source API.
-This doesn't support the chanserv auth method"
-  (unless arg
-    (dolist (p (auth-source-search :port '("nickserv")
-				   :require '(:port :user :password)))
-      (let ((secret (plist-get p :secret))
-	    (method (intern (plist-get p :port))))
-	(add-to-list 'rcirc-authinfo
-		     (list (plist-get p :host)
-			   method
-			   (plist-get p :user)
-			   (if (functionp secret)
-			       (funcall secret)
-			     secret)))))))
-
 (require 'ansi-color)
 (add-to-list 'auto-mode-alist '("\\.log\\'" . display-ansi-colors))
 (add-to-list 'auto-mode-alist '("\\.log\\'" . log4j-mode))
