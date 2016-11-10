@@ -172,7 +172,13 @@
   :ensure t)
 
 (use-package company
-  :ensure company)
+  :ensure company
+  :config
+  (setq company-idle-delay 0.3
+	company-tooltip-limit 20
+	company-minimum-prefix-length 2
+	company-echo-delay 0
+	company-auto-complete nil))
 
 (use-package go-eldoc
   :ensure go-eldoc
@@ -363,24 +369,6 @@
 
 (require 'aim-functions)
 (require 'aim-global-keybindings)
-
-(defun check-expansion ()
-  (save-excursion
-    (if (looking-at "\\_>") t
-      (backward-char 1)
-      (if (looking-at "\\.") t
-	(backward-char 1)
-	(if (looking-at "->") t nil)))))
-
-(defun do-yas-expand ()
-  (let ((yas/fallback-behavior 'return-nil))
-    (yas/expand)))
-
-(setq company-idle-delay 0.3)
-(setq company-tooltip-limit 20)
-(setq company-minimum-prefix-length 2)
-(setq company-echo-delay 0)
-(setq company-auto-complete nil)
 
 (add-hook 'lisp-mode #'(complete-mode 1))
 
