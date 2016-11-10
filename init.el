@@ -717,13 +717,10 @@ This doesn't support the chanserv auth method"
   (let ((filename (format "/ssh:%s:~" hostname hostname)))
     (find-file filename)))
 
-(and (file-exists-p "/usr/local/go1.7.1/misc/go-guru.el")
-     (progn
-       (load-file "/usr/local/go1.7.1/misc/go-guru.el")
-       (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode)))
-
-(and (file-exists-p "/usr/local/go1.7.1/bin/go")
-     (add-to-list 'exec-path "/usr/local/go1.7.1/bin"))
+(if (file-exists-p "/usr/local/go1.7.1/misc/go-guru.el")
+     (use-package go-guru
+       :load-path "/usr/local/go1.7.1/misc"
+       :config (add-to-list 'exec-path "/usr/local/go1.7.1/bin")))
 
 (autoload 'wgrep-ag-setup "wgrep-ag")
 (add-hook 'ag-mode-hook 'wgrep-ag-setup)
