@@ -453,12 +453,6 @@
 
 (put 'scroll-left 'disabled nil)
 
-(load-library "python")
-
-(autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-
 (require 'ansi-color)
 (add-to-list 'auto-mode-alist '("\\.log\\'" . display-ansi-colors))
 (add-to-list 'auto-mode-alist '("\\.log\\'" . log4j-mode))
