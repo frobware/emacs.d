@@ -297,9 +297,6 @@
 	  (set-variable 'py-indent-offset 4)
 	  (set-variable 'indent-tabs-mode nil)))
 
-(use-package company
-  :ensure company)
-
 (use-package company-go
   :ensure company-go
   :init (add-to-list 'company-backends 'company-go))
@@ -334,11 +331,6 @@
 
 (use-package itail
   :ensure t)
-
-;; (use-package tramp
-;;   :init
-;;   (setq tramp-ssh-controlmaster-options
-;;         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
 
 (use-package tramp
   :defer nil
