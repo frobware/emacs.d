@@ -614,6 +614,9 @@ This doesn't support the chanserv auth method"
 ;; (recentf-mode 1)
 
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/")
+(require 'recentf)
+(recentf-mode 1)
+
 
 (and (require 'notmuch nil 't)
      (progn
