@@ -111,8 +111,10 @@
 (use-package ag
   :ensure t
   :config
-  (setq ag-highlight-search t
-	ag-reuse-buffers t))
+  (progn
+    (setq ag-highlight-search t
+	  ag-reuse-buffers t)
+    (add-hook 'ag-mode-hook 'wgrep-ag-setup)))
 
 (use-package wgrep-ag
   :config
@@ -693,9 +695,6 @@ This doesn't support the chanserv auth method"
      (use-package go-guru
        :load-path "/usr/local/go1.7.1/misc"
        :config (add-to-list 'exec-path "/usr/local/go1.7.1/bin")))
-
-(autoload 'wgrep-ag-setup "wgrep-ag")
-(add-hook 'ag-mode-hook 'wgrep-ag-setup)
 
 (global-set-key (kbd "M-.") 'dumb-jump-go)
 
