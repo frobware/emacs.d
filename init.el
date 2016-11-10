@@ -125,11 +125,9 @@
 
 (use-package ag
   :ensure t
-  :commands (ag ag-files ag-regexp ag-project ag-project-files ag-project-regexp)
   :config
-  (progn
-    (setq ag-highlight-search t
-	  ag-reuse-buffers t)))
+  (setq ag-highlight-search t
+	ag-reuse-buffers t))
 
 (use-package wgrep-ag
   :config
