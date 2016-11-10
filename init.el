@@ -78,16 +78,10 @@
 	menu-bar-mode
 	tool-bar-mode))
 
-(aim/add-to-load-path "vendor/use-package")
-
-(require 'use-package)
-(require 'package)
-
-(mapc (lambda(p)
-	(push p package-archives))
+(setq package-archives
       '(("melpa" . "http://melpa.org/packages/")
-	("gnu" . "http://elpa.gnu.org/packages/")
-	("org" . "http://orgmode.org/elpa/")))
+	("org" . "http://orgmode.org/elpa/")
+	("gnu" . "http://elpa.gnu.org/packages/")))
 
 (package-initialize)
 
