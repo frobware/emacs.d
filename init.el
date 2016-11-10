@@ -6,11 +6,6 @@
  '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
  '(custom-safe-themes t)
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
- '(default-frame-alist
-    (quote
-     ((reverse . t)
-      (vertical-scroll-bars)
-      (tty-color-mode . true-color))))
  '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
  '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
  '(mail-host-address "frobware.com")
