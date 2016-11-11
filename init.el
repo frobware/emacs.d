@@ -589,4 +589,8 @@
   (unless (server-running-p)
     (server-start)))
 
+(if (and (display-graphic-p) aim/is-linux)
+    (set-face-background 'cursor "yellow")
+  (shell-command (format "echo -ne '\\033]12;#00ff00\\007' > /proc/%d/fd/1" (emacs-pid))))
+
 (message "Done")
