@@ -486,8 +486,8 @@
 
 (add-hook 'auto-save-hook 'aim/desktop-save)
 
-(require 'recentf)
-(recentf-mode 1)
+;; (require 'recentf)
+;; (recentf-mode 1)
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
