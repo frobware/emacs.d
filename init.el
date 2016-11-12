@@ -1,5 +1,6 @@
 (unless (window-system)
-  (setq frame-background-mode 'dark))
+  (if (not frame-background-mode)
+      (setq frame-background-mode 'dark)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
