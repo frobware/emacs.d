@@ -338,8 +338,11 @@
   :ensure t
   :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
 
-(require 'aim-functions)
-(require 'aim-global-keybindings)
+(use-package aim-functions
+  :load-path "lisp/")
+
+(use-package aim-global-keybindings
+  :load-path "lisp/")
 
 (add-hook 'lisp-mode #'(complete-mode 1))
 
