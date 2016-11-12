@@ -1,38 +1,6 @@
 (unless (window-system)
   (setq frame-background-mode 'dark))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(canlock-password "922d24caa598a3ec5e6422d35faf8f4fa739ba71")
- '(custom-safe-themes t)
- '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
- '(exec-path-from-shell-variables (quote ("PATH" "MANPATH" "GOPATH")))
- '(gnus-boring-article-headers (quote (empty followup-to reply-to long-to many-to)))
- '(mail-host-address "frobware.com")
- '(mm-text-html-renderer (quote shr))
- '(ns-command-modifier (quote meta))
- '(send-mail-function (quote smtpmail-send-it)))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cursor ((t (:background "yellow"))))
- '(diff-hunk-header ((t (:inherit diff-header))))
- '(font-lock-keyword-face ((t (:foreground "white" :weight bold))))
- '(fringe ((t (:background "grey10"))))
- '(highlight ((t (:background "grey10"))))
- '(hl-line ((t (:inherit highlight))))
- '(isearch-fail ((((class color)) (:background "red"))))
- '(linum ((t (:foreground "#656868" :background "black"))))
- '(mode-line ((t (:background "grey25" :foreground "green" :box nil))))
- '(region ((t (:background "#444" :foreground "#ffffff"))))
- '(widget-field ((t (:background "grey25")))))
-
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (put 'narrow-to-region 'disabled nil)
@@ -135,6 +103,8 @@
 	  magit-auto-revert-mode nil
 	  magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
 	  magit-pull-arguments nil)))
+
+;;'(magit-diff-hunk-heading-highlight ((t (:background "grey30" :foreground "grey90")))))
 
 (use-package magit-gh-pulls
   :ensure t
