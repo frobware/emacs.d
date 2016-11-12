@@ -593,4 +593,9 @@
     (set-face-background 'cursor "yellow")
   (shell-command (format "echo -ne '\\033]12;#00ff00\\007' > /proc/%d/fd/1" (emacs-pid))))
 
+(eval-after-load 'diff-mode
+  '(progn
+     (set-face-foreground 'diff-added "green3")
+     (set-face-foreground 'diff-removed "red3")))
+
 (message "Done")
