@@ -1,5 +1,5 @@
 (unless (window-system)
-  (set-face-attribute 'default nil :background "#000000"))
+  (setq frame-background-mode 'dark))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
