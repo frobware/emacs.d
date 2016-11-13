@@ -1,5 +1,5 @@
 (unless (window-system)
-  (if (not frame-background-mode)
+  (or frame-background-mode
       (setq frame-background-mode 'dark)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -524,40 +524,40 @@
        :load-path "/usr/local/go1.7.1/misc"
        :config (add-to-list 'exec-path "/usr/local/go1.7.1/bin")))
 
-(unless (window-system)
-  ;; use xclip to copy/paste in emacs-nox
-  (when (getenv "DISPLAY")
-    (defun xclip-cut-function (text &optional push)
-      (with-temp-buffer
-	(insert text)
-	(call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
-    (defun xclip-paste-function()
-      (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
-	(unless (string= (car kill-ring) xclip-output)
-	  xclip-output )))
-    (setq interprogram-cut-function 'xclip-cut-function)
-    (setq interprogram-paste-function 'xclip-paste-function))
-  (defun terminal-init-screen ()
-    "Terminal initialization function for screen."
-    ;; Use the xterm color initialization code.
-    (load "term/xterm")
-    (xterm-register-default-colors)
-    (tty-set-up-initial-frame-faces))
-  ;; Set color-theme if running in X or a high-color terminal
-  (defun setup-color-theme-p ()
-    "Returns true if it looks like the display can handle 24-bit colors"
-    (or (display-graphic-p)
-	(< 256 (display-color-cells))
-	(getenv "KONSOLE_DBUS_SESSION")))
-  (defun setup-color-theme ()
-    "Set up my color theme"
-    (when (setup-color-theme-p)
-      (set-face-attribute 'default nil :background "#000000")))
-  (terminal-init-screen)
-  (add-hook 'window-setup-hook 'setup-color-theme)
-  ;; xterm mouse support
-  (require 'mouse)
-  (xterm-mouse-mode t))
+;; (unless (window-system)
+;;   ;; use xclip to copy/paste in emacs-nox
+;;   (when (getenv "DISPLAY")
+;;     (defun xclip-cut-function (text &optional push)
+;;       (with-temp-buffer
+;; 	(insert text)
+;; 	(call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
+;;     (defun xclip-paste-function()
+;;       (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
+;; 	(unless (string= (car kill-ring) xclip-output)
+;; 	  xclip-output )))
+;;     (setq interprogram-cut-function 'xclip-cut-function)
+;;     (setq interprogram-paste-function 'xclip-paste-function))
+;;   (defun terminal-init-screen ()
+;;     "Terminal initialization function for screen."
+;;     ;; Use the xterm color initialization code.
+;;     (load "term/xterm")
+;;     (xterm-register-default-colors)
+;;     (tty-set-up-initial-frame-faces))
+;;   ;; Set color-theme if running in X or a high-color terminal
+;;   (defun setup-color-theme-p ()
+;;     "Returns true if it looks like the display can handle 24-bit colors"
+;;     (or (display-graphic-p)
+;; 	(< 256 (display-color-cells))
+;; 	(getenv "KONSOLE_DBUS_SESSION")))
+;;   (defun setup-color-theme ()
+;;     "Set up my color theme"
+;;     (when (setup-color-theme-p)
+;;       (set-face-attribute 'default nil :background "#000000")))
+;;   (terminal-init-screen)
+;;   (add-hook 'window-setup-hook 'setup-color-theme)
+;;   ;; xterm mouse support
+;;   (require 'mouse)
+;;   (xterm-mouse-mode t))
 
 (use-package server
   :ensure t
