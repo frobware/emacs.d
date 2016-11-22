@@ -307,6 +307,9 @@
     (bind-key "<tab>" 'company-complete go-mode-map)
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
+(use-package go-guru
+  :ensure t)
+
 (use-package itail
   :ensure t)
 
@@ -518,11 +521,6 @@
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s:~" hostname hostname)))
     (find-file filename)))
-
-(if (file-exists-p "/usr/local/go1.7.1/misc/go-guru.el")
-     (use-package go-guru
-       :load-path "/usr/local/go1.7.1/misc"
-       :config (add-to-list 'exec-path "/usr/local/go1.7.1/bin")))
 
 ;; (unless (window-system)
 ;;   ;; use xclip to copy/paste in emacs-nox
