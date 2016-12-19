@@ -572,6 +572,9 @@
      (set-face-foreground 'diff-added "green3")
      (set-face-foreground 'diff-removed "red3")))
 
+(use-package go-guru
+  :ensure t)
+
 (defalias 'ttl 'toggle-truncate-lines)
 
 (message "Done")
