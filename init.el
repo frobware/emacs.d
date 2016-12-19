@@ -572,4 +572,6 @@
      (set-face-foreground 'diff-added "green3")
      (set-face-foreground 'diff-removed "red3")))
 
+(defalias 'ttl 'toggle-truncate-lines)
+
 (message "Done")
