@@ -279,6 +279,9 @@
   :ensure company-go
   :init (add-to-list 'company-backends 'company-go))
 
+(use-package godoctor
+  :ensure t)
+
 (use-package go-mode
   :ensure go-mode
   :mode "\\.go\\'"
@@ -297,6 +300,7 @@
   ;;#'go-guru-hl-identifier-mode)))
   :config
   (progn
+    (use-package godoctor)
     (bind-key "C-c C-P" 'aim/occur-go-public-functions)
     (bind-key "C-c C-f" 'gofmt go-mode-map)
     (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
