@@ -508,20 +508,12 @@
       (cdr (assq 'name (frame-parameters frame)))
     (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
 
-(defun open-var-log-juju (hostname)
-  "Open Juju log directory"
-  (interactive "shost: ")
-  (let ((filename (format "/ssh:%s|sudo:%s:/var/log/juju/" hostname hostname)))
-    (find-file filename)))
-
-(defun visit-dir (hostname)
-  "Open Juju log directory"
+(defun visit-dir-as-root (hostname)
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/" hostname hostname)))
     (find-file filename)))
 
-(defun ubuntu-visit-dir (hostname)
-  "Open Juju log directory"
+(defun visit-dir (hostname)
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s:~" hostname hostname)))
     (find-file filename)))
