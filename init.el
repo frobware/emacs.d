@@ -243,10 +243,6 @@
 (use-package markdown-mode
   :ensure markdown-mode)
 
-(use-package ace-jump-mode
-  :ensure ace-jump-mode
-  :bind ("C-x SPC" . ace-jump-mode))
-
 (use-package cc-mode
   :mode (("\\.h\\'"    . c-mode)
 	 ("\\.c\\'"    . c-mode)
@@ -570,6 +566,18 @@
 
 (use-package go-guru
   :ensure t)
+
+(use-package clang-format
+  :ensure t)
+
+(c-add-style "WebKit" '("Google"
+                        (c-basic-offset . 4)
+                        (c-offsets-alist . ((innamespace . 0)
+                                            (access-label . -)
+                                            (case-label . 0)
+                                            (member-init-intro . +)
+                                            (topmost-intro . 0)
+                                            (arglist-cont-nonempty . +)))))
 
 (defalias 'ttl 'toggle-truncate-lines)
 
