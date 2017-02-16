@@ -571,6 +571,9 @@
 (use-package go-guru
   :ensure t)
 
+(use-package clang-format
+  :ensure t)
+
 (use-package google-c-style
   :ensure t
   :config
