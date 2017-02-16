@@ -586,6 +586,16 @@
 					      (topmost-intro . 0)
 					      (arglist-cont-nonempty . +))))))
 
+
+;; and add a dir-locals.el that has in your repo:
+;;
+;; ((nil . ((indent-tabs-mode . nil)
+;;          (c-basic-offset . 4)
+;;          (fill-column . 120))))
+
+;; (c-mode . ((c-file-style . "WebKit")))
+;; (c++-mode . ((c-file-style . "WebKit"))))
+
 (defalias 'ttl 'toggle-truncate-lines)
 
 (message "Done")
