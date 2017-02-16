@@ -571,17 +571,17 @@
 (use-package go-guru
   :ensure t)
 
-(use-package clang-format
-  :ensure t)
-
-(c-add-style "WebKit" '("Google"
-                        (c-basic-offset . 4)
-                        (c-offsets-alist . ((innamespace . 0)
-                                            (access-label . -)
-                                            (case-label . 0)
-                                            (member-init-intro . +)
-                                            (topmost-intro . 0)
-                                            (arglist-cont-nonempty . +)))))
+(use-package google-c-style
+  :ensure t
+  :config
+  (c-add-style "WebKit" '("Google"
+			  (c-basic-offset . 4)
+			  (c-offsets-alist . ((innamespace . 0)
+					      (access-label . -)
+					      (case-label . 0)
+					      (member-init-intro . +)
+					      (topmost-intro . 0)
+					      (arglist-cont-nonempty . +))))))
 
 (defalias 'ttl 'toggle-truncate-lines)
 
