@@ -243,6 +243,10 @@
 (use-package markdown-mode
   :ensure markdown-mode)
 
+;; (use-package ace-jump-mode
+;;   :ensure ace-jump-mode
+;;   :bind ("C-c a SPC" . ace-jump-mode))
+
 (use-package cc-mode
   :mode (("\\.h\\'"    . c-mode)
 	 ("\\.c\\'"    . c-mode)
