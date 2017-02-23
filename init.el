@@ -596,6 +596,40 @@
 ;; (c-mode . ((c-file-style . "WebKit")))
 ;; (c++-mode . ((c-file-style . "WebKit"))))
 
+(use-package ycmd
+  :ensure t)
+
+(use-package company-ycmd
+  :ensure t)
+
+(use-package flycheck-ycmd
+  :ensure t)
+
+(company-ycmd-setup)
+(flycheck-ycmd-setup)
+
+;; Show completions after 0.15 seconds
+(setq company-idle-delay 0.15)
+
+;; Activate for editing C++ files
+(add-hook 'c++-mode-hook 'ycmd-mode)
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'c++-mode-hook 'flycheck-mode)
+
+;; Replace the directory information with where you downloaded ycmd to
+(set-variable 'ycmd-server-command (list "python" (substitute-in-file-name "$HOME/ycmd/ycmd/__main__.py")))
+
+;; Edit according to where you have your Chromium/Blink checkout
+;;(add-to-list 'ycmd-extra-conf-whitelist (substitute-in-file-name "$HOME/dev/blink/.ycm_extra_conf.py"))
+
+;; Show flycheck errors in idle-mode as well
+(setq ycmd-parse-conditions '(save new-line mode-enabled idle-change))
+
+;; Makes emacs-ycmd less verbose
+(setq url-show-status nil)
+
 (defalias 'ttl 'toggle-truncate-lines)
+
+(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
 
 (message "Done")
