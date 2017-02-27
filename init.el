@@ -630,6 +630,4 @@
 
 (defalias 'ttl 'toggle-truncate-lines)
 
-(add-hook 'emacs-lisp-mode-hook 'auto-make-header)
-
 (message "Done")
