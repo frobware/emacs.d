@@ -598,4 +598,7 @@
 
 (defalias 'ttl 'toggle-truncate-lines)
 
+(use-package vcl-mode
+  :ensure t)
+
 (message "Done")
