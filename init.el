@@ -587,6 +587,9 @@
 					      (arglist-cont-nonempty . +))))))
 
 
+(use-package xcscope
+  :ensure t)
+
 ;; and add a dir-locals.el that has in your repo:
 ;;
 ;; ((nil . ((indent-tabs-mode . nil)
