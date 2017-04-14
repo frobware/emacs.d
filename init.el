@@ -619,3 +619,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(defadvice gdb-inferior-filter
+    (around gdb-inferior-filter-without-stealing)
+  (with-current-buffer (gdb-get-buffer-create 'gdb-inferior-io)
+    (comint-output-filter proc string)))
+
+(ad-activate 'gdb-inferior-filter)
