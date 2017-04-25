@@ -19,3 +19,6 @@
 [submodule "vendor/go-projectile"]
 	path = vendor/go-projectile
 	url = https://github.com/frobware/go-projectile.git
+[submodule "vendor/rusti.el"]
+	path = vendor/rusti.el
+	url = https://github.com/ruediger/rusti.el.git

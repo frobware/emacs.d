@@ -615,7 +615,10 @@
     ((c-mode . "linux")
      (java-mode . "java")
      (awk-mode . "awk")
-     (other . "gnu")))))
+     (other . "gnu"))))
+ '(package-selected-packages
+   (quote
+    (racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -632,9 +635,20 @@
 (use-package cargo
   :ensure t)
 
+(use-package flycheck-rust
+  :ensure t)
+
+(use-package racer
+  :ensure t)
+
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+
 (use-package rust-mode
   :config (progn (setq rust-format-on-save t))
   :ensure t)
 
-(use-package flycheck-rust
-  :ensure t)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+
+(setq company-tooltip-align-annotations t)
