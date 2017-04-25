@@ -629,3 +629,11 @@
     (comint-output-filter proc string)))
 
 (ad-activate 'gdb-inferior-filter)
+(use-package cargo
+  :ensure t)
+
+(use-package rust-mode
+  :ensure t)
+
+(use-package flycheck-rust
+  :ensure t)
