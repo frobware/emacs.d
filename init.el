@@ -633,6 +633,7 @@
   :ensure t)
 
 (use-package rust-mode
+  :config (progn (setq rust-format-on-save t))
   :ensure t)
 
 (use-package flycheck-rust
