@@ -3,8 +3,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- ;; '(helm-gtags-prefix-key "\C-t")
- ;; '(helm-gtags-suggested-key-mapping t)
  '(c-default-style
    (quote
     ((c-mode . "linux")
@@ -12,6 +10,7 @@
      (awk-mode . "awk")
      (other . "gnu"))))
  '(frame-background-mode (quote dark))
+ '(helm-gtags-suggested-key-mapping t)
  '(package-selected-packages
    (quote
     (helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
@@ -669,8 +668,7 @@
     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-    (setq helm-gtags-suggested-key-mapping t))
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))
   :ensure t)
 
 (add-hook 'c-mode-hook 'helm-gtags-mode)
