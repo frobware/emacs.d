@@ -1,3 +1,28 @@
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(c-default-style
+   (quote
+    ((c-mode . "linux")
+     (java-mode . "java")
+     (awk-mode . "awk")
+     (other . "gnu"))))
+ '(frame-background-mode (quote dark))
+ '(package-selected-packages
+   (quote
+    (racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+;; Perls of wisdom:
+;;   http://emacshorrors.com/posts/come-in-and-find-out.html
 (unless (window-system)
   (or frame-background-mode
       (setq frame-background-mode 'dark)))
@@ -73,7 +98,6 @@
 	  (setq-default dired-omit-mode t)))
 
 (use-package cmake-mode
-  :defer t
   :mode ("\\.cmake$" . cmake-mode)
   :ensure t)
 
@@ -605,26 +629,7 @@
   :ensure t)
 
 (message "Done")
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(c-default-style
-   (quote
-    ((c-mode . "linux")
-     (java-mode . "java")
-     (awk-mode . "awk")
-     (other . "gnu"))))
- '(package-selected-packages
-   (quote
-    (racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
 
 (defadvice gdb-inferior-filter
     (around gdb-inferior-filter-without-stealing)
