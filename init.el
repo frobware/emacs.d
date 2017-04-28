@@ -3,6 +3,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ ;; '(helm-gtags-prefix-key "\C-t")
+ ;; '(helm-gtags-suggested-key-mapping t)
  '(c-default-style
    (quote
     ((c-mode . "linux")
@@ -667,7 +669,8 @@
     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+    (setq helm-gtags-suggested-key-mapping t))
   :ensure t)
 
 (add-hook 'c-mode-hook 'helm-gtags-mode)
