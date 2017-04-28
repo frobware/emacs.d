@@ -12,7 +12,7 @@
  '(frame-background-mode (quote dark))
  '(package-selected-packages
    (quote
-    (racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
+    (helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -657,3 +657,19 @@
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 
 (setq company-tooltip-align-annotations t)
+
+(use-package helm-gtags
+  :config
+  (progn
+    (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+    (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+    (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+    (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+    (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+    (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))
+  :ensure t)
+
+(add-hook 'c-mode-hook 'helm-gtags-mode)
+(add-hook 'c++-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook 'helm-gtags-mode)
