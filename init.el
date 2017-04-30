@@ -13,14 +13,15 @@
  '(helm-gtags-suggested-key-mapping t)
  '(package-selected-packages
    (quote
-    (helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
+    (window-system auto-complete projectile company-irony irony helm-rtags helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(highlight ((t (:background "gray30"))))
+ '(hl-line ((t (:inherit highlight)))))
 
 ;; Perls of wisdom:
 ;;   http://emacshorrors.com/posts/come-in-and-find-out.html
@@ -225,7 +226,8 @@
 		(ibuffer-switch-to-saved-filter-groups "default")))
     (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)
     (global-set-key (kbd "C-x C-b") 'electric-buffer-list)))
-;;(global-set-key (kbd "C-x C-b") 'ibuffer)))
+
+;;(global-set-key (kbd "C-x C-b") 'ibuffer)
 
 (aim/add-to-load-path "lisp")
 
@@ -520,10 +522,10 @@
   :bind (:map dired-mode-map
 	      ("P" . peep-dired)))
 
-(use-package dumb-jump
-  :ensure t
-  :config
-  (global-set-key (kbd "M-.") 'dumb-jump-go))
+;; (use-package dumb-jump
+;;   :ensure t
+;;   :config
+;;   (global-set-key (kbd "M-.") 'dumb-jump-go))
 
 (defun get-frame-name (&optional frame)
   (interactive)
@@ -645,21 +647,23 @@
   :ensure t)
 
 (use-package racer
-  :ensure t)
-
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'eldoc-mode)
-(add-hook 'racer-mode-hook #'company-mode)
+  :ensure t
+  :config
+  (progn
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode)))
 
 (use-package rust-mode
-  :config (progn (setq rust-format-on-save t))
+  :config (progn
+	    (setq rust-format-on-save t)
+	    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common))
   :ensure t)
-
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 
 (setq company-tooltip-align-annotations t)
 
 (use-package helm-gtags
+  :ensure t
   :config
   (progn
     (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
@@ -668,9 +672,65 @@
     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack))
+    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+    (add-hook 'c-mode-hook 'helm-gtags-mode)
+    (add-hook 'c++-mode-hook 'helm-gtags-mode)
+    (add-hook 'asm-mode-hook 'helm-gtags-mode)))
+
+;; from https://github.com/mineo/dotfiles/blob/master/spacemacs/.emacs.d/private/layers/mineo-rtags/packages.el
+(use-package rtags
+  :config
+  (progn
+    (setq rtags-autostart-diagnostics t
+	  rtags-completions-enabled t
+	  rtags-use-helm t)
+    ;; (define-key c-mode-base-map (kbd "M-.")
+    ;;   (function rtags-find-symbol-at-point))
+    ;; (define-key c-mode-base-map (kbd "M-,")
+    ;;   (function rtags-find-references-at-point))
+    ;; See https://github.com/Andersbakken/rtags/issues/832
+    (use-package helm-rtags
+      :ensure t)
+    ;; (push '(company-rtags)
+    ;;	company-backends-c-mode-common)
+    (rtags-enable-standard-keybindings)
+    (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)))
+
+(use-package flycheck-rtags
+  :ensure rtags)
+
+(use-package irony
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+(use-package company-irony
+  :ensure t
+  :config
+  (progn
+    (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
+    (add-hook 'c-mode-common-hook 'company-mode)))
+;;  (global-set-key (kbd "M-RET") 'company-irony))
+
+(use-package projectile
   :ensure t)
 
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook 'helm-gtags-mode)
+(use-package auto-complete
+  :ensure t
+  :config
+  (ac-config-default))
+
+(unless (fboundp 'xref-push-marker-stack)
+  (defalias 'xref-pop-marker-stack 'pop-tag-mark)
+
+  (defun xref-push-marker-stack (&optional m)
+    "Add point to the marker stack."
+    (ring-insert find-tag-marker-ring (or m (point-marker)))))
+
+(define-key c-mode-base-map (kbd "M-,")
+  (function rtags-location-stack-back))
+
+;;(add-hook 'after-init-hook 'global-company-mode)
