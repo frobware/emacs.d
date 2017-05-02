@@ -733,6 +733,7 @@
 (global-flycheck-mode -1)
 
 (use-package helm-gtags
+  :ensure t
   :init
   (progn
     (setq helm-gtags-ignore-case t
