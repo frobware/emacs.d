@@ -741,3 +741,6 @@
   :ensure t
   :config
   (cmake-ide-setup))
+(require 'xcscope)
+(cscope-setup)
+
