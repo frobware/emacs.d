@@ -12,9 +12,10 @@
  '(frame-background-mode (quote dark))
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
+ '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
  '(package-selected-packages
    (quote
-    (helm-gtags helm-cscope git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (company-irony irony helm-gtags cmake-ide projectile helm-rtags rtags racer cargo vcl-mode google-c-style clang-format peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -621,37 +622,13 @@
 					      (arglist-cont-nonempty . +))))))
 
 
-(use-package xcscope
-  :ensure t)
-
-;; and add a dir-locals.el that has in your repo:
-;;
-;; ((nil . ((indent-tabs-mode . nil)
-;;          (c-basic-offset . 4)
-;;          (fill-column . 120))))
-
-;; (c-mode . ((c-file-style . "WebKit")))
-;; (c++-mode . ((c-file-style . "WebKit"))))
-
 (defalias 'ttl 'toggle-truncate-lines)
 
 (use-package vcl-mode
   :ensure t)
 
-(message "Done")
-
-
-(defadvice gdb-inferior-filter
-    (around gdb-inferior-filter-without-stealing)
-  (with-current-buffer (gdb-get-buffer-create 'gdb-inferior-io)
-    (comint-output-filter proc string)))
-
-(ad-activate 'gdb-inferior-filter)
 (use-package cargo
   :ensure t)
-
-;; (use-package flycheck-rust
-;;   :ensure t)
 
 (use-package racer
   :ensure t
@@ -690,20 +667,20 @@
 (use-package helm-rtags
   :ensure t)
 
-;; (use-package irony
-;;   :ensure t
-;;   :config
-;;   (add-hook 'c++-mode-hook 'irony-mode)
-;;   (add-hook 'c-mode-hook 'irony-mode)
-;;   (add-hook 'objc-mode-hook 'irony-mode)
-;;   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+(use-package irony
+  :ensure t
+  :config
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-;; (use-package company-irony
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
-;;     (add-hook 'c-mode-common-hook 'company-mode)))
+(use-package company-irony
+  :ensure t
+  :config
+  (progn
+    (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
+    (add-hook 'c-mode-common-hook 'company-mode)))
 
 (use-package projectile
   :ensure t
@@ -725,21 +702,16 @@
   :config
   (cmake-ide-setup))
 
-(add-hook 'after-init-hook 'global-company-mode)
-
-(require 'xcscope)
-(cscope-setup)
-
 (use-package helm-gtags
   :ensure t
   :init
   (progn
     (setq helm-gtags-ignore-case t
-          helm-gtags-auto-update t
-          helm-gtags-use-input-at-cursor t
-          helm-gtags-pulse-at-cursor t
-          helm-gtags-prefix-key "\C-cg"
-          helm-gtags-suggested-key-mapping t)
+	  helm-gtags-auto-update t
+	  helm-gtags-use-input-at-cursor t
+	  helm-gtags-pulse-at-cursor t
+	  helm-gtags-prefix-key "\C-cg"
+	  helm-gtags-suggested-key-mapping t)
     (add-hook 'dired-mode-hook 'helm-gtags-mode)
     (add-hook 'eshell-mode-hook 'helm-gtags-mode)
     (add-hook 'c-mode-hook 'helm-gtags-mode)
@@ -753,3 +725,14 @@
       (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
       (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
       (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history))))
+
+(defadvice gdb-inferior-filter
+    (around gdb-inferior-filter-without-stealing)
+  (with-current-buffer (gdb-get-buffer-create 'gdb-inferior-io)
+    (comint-output-filter proc string)))
+
+(ad-activate 'gdb-inferior-filter)
+
+;;(add-hook 'after-init-hook 'global-company-mode)
+
+(message "Done")
