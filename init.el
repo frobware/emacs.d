@@ -94,6 +94,10 @@
 (require 'use-package)
 (require 'bind-key)
 
+(use-package cc-mode
+  :ensure t
+  :bind ("C-M-m" . cmake-ide-compile))
+
 (use-package dired-x
   :init (progn
 	  (global-set-key (kbd "C-x C-j") 'dired-jump)
