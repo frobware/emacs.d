@@ -724,9 +724,10 @@
   :ensure t)
 
 (use-package auto-complete
+(use-package projectile
   :ensure t
   :config
-  (ac-config-default))
+  (projectile-global-mode))
 
 (unless (fboundp 'xref-push-marker-stack)
   (defalias 'xref-pop-marker-stack 'pop-tag-mark)
