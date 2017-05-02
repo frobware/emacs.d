@@ -13,7 +13,7 @@
  '(helm-gtags-suggested-key-mapping t)
  '(package-selected-packages
    (quote
-    (window-system auto-complete projectile company-irony irony helm-rtags helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
+    (rtags window-system auto-complete projectile company-irony irony helm-rtags helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -662,20 +662,21 @@
 
 (setq company-tooltip-align-annotations t)
 
-(use-package helm-gtags
-  :ensure t
-  :config
-  (progn
-    (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-    (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-    (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-    (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-    (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-    (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-    (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-    (add-hook 'c-mode-hook 'helm-gtags-mode)
-    (add-hook 'c++-mode-hook 'helm-gtags-mode)
-    (add-hook 'asm-mode-hook 'helm-gtags-mode)))
+(and nil
+     (use-package helm-gtags
+       :ensure t
+       :config
+       (progn
+	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+	 (add-hook 'c-mode-hook 'helm-gtags-mode)
+	 (add-hook 'c++-mode-hook 'helm-gtags-mode)
+	 (add-hook 'asm-mode-hook 'helm-gtags-mode))))
 
 ;; from https://github.com/mineo/dotfiles/blob/master/spacemacs/.emacs.d/private/layers/mineo-rtags/packages.el
 (use-package rtags
