@@ -10,11 +10,11 @@
      (awk-mode . "awk")
      (other . "gnu"))))
  '(frame-background-mode (quote dark))
+ '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
- '(helm-gtags-prefix-key "\C-cg")
  '(package-selected-packages
    (quote
-    (helm-cscope git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper flycheck-rust dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (helm-gtags helm-cscope git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -195,14 +195,14 @@
 (use-package golint
   :ensure golint)
 
-(use-package flycheck
-  :ensure t
-  :config
-  (progn
-    (setq flycheck-highlighting-mode 'lines)
-    (set-face-underline 'flycheck-error nil)
-    (set-face-background 'flycheck-error nil)
-    (set-face-underline 'flycheck-warning nil)))
+;; (use-package flycheck
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (setq flycheck-highlighting-mode 'lines)
+;;     (set-face-underline 'flycheck-error nil)
+;;     (set-face-background 'flycheck-error nil)
+;;     (set-face-underline 'flycheck-warning nil)))
 
 (use-package ibuffer
   :config
@@ -650,8 +650,8 @@
 (use-package cargo
   :ensure t)
 
-(use-package flycheck-rust
-  :ensure t)
+;; (use-package flycheck-rust
+;;   :ensure t)
 
 (use-package racer
   :ensure t
@@ -729,8 +729,6 @@
 
 (require 'xcscope)
 (cscope-setup)
-
-(global-flycheck-mode -1)
 
 (use-package helm-gtags
   :ensure t
