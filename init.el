@@ -13,7 +13,7 @@
  '(helm-gtags-suggested-key-mapping t)
  '(package-selected-packages
    (quote
-    (rtags window-system auto-complete projectile company-irony irony helm-rtags helm-gtags racer flycheck-rust cargo vcl-mode xcscope google-c-style clang-format dumb-jump peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode flycheck golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
+    (git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper flycheck-rust dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -682,48 +682,42 @@
 	 (add-hook 'c++-mode-hook 'helm-gtags-mode)
 	 (add-hook 'asm-mode-hook 'helm-gtags-mode))))
 
-;; from https://github.com/mineo/dotfiles/blob/master/spacemacs/.emacs.d/private/layers/mineo-rtags/packages.el
 (use-package rtags
+  :ensure t
   :config
   (progn
-    (setq rtags-autostart-diagnostics t
-	  rtags-completions-enabled t
-	  rtags-use-helm t)
-    ;; (define-key c-mode-base-map (kbd "M-.")
-    ;;   (function rtags-find-symbol-at-point))
-    ;; (define-key c-mode-base-map (kbd "M-,")
-    ;;   (function rtags-find-references-at-point))
-    ;; See https://github.com/Andersbakken/rtags/issues/832
-    (use-package helm-rtags
-      :ensure t)
-    ;; (push '(company-rtags)
-    ;;	company-backends-c-mode-common)
+    (setq rtags-completions-enabled t)
     (rtags-enable-standard-keybindings)
     (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)))
 
-(use-package flycheck-rtags
-  :ensure rtags)
+(define-key c-mode-base-map (kbd "M-.")
+  (function rtags-find-symbol-at-point))
 
-(use-package irony
-  :ensure t
-  :config
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+;; (define-key c-mode-base-map (kbd "M-,")
+;;   (function rtags-find-references-at-point))
+;; See https://github.com/Andersbakken/rtags/issues/832))
 
-(use-package company-irony
-  :ensure t
-  :config
-  (progn
-    (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
-    (add-hook 'c-mode-common-hook 'company-mode)))
-;;  (global-set-key (kbd "M-RET") 'company-irony))
+;; (eval-after-load 'company
+;;   '(add-to-list 'company-backends 'company-irony))
 
-(use-package projectile
+(use-package helm-rtags
   :ensure t)
 
-(use-package auto-complete
+;; (use-package irony
+;;   :ensure t
+;;   :config
+;;   (add-hook 'c++-mode-hook 'irony-mode)
+;;   (add-hook 'c-mode-hook 'irony-mode)
+;;   (add-hook 'objc-mode-hook 'irony-mode)
+;;   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+;; (use-package company-irony
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
+;;     (add-hook 'c-mode-common-hook 'company-mode)))
+
 (use-package projectile
   :ensure t
   :config
