@@ -99,9 +99,11 @@
   :bind ("C-M-m" . cmake-ide-compile))
 
 (use-package dired-x
-  :init (progn
-	  (global-set-key (kbd "C-x C-j") 'dired-jump)
-	  (setq-default dired-omit-mode t)))
+  :config
+  (progn
+    (global-set-key (kbd "C-x C-j") 'dired-jump)
+    (add-to-list 'dired-omit-extensions ".cmd")
+    (setq-default dired-omit-mode t)))
 
 (use-package cmake-mode
   :mode ("\\.cmake$" . cmake-mode)
