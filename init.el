@@ -735,3 +735,8 @@
   (function rtags-location-stack-back))
 
 ;;(add-hook 'after-init-hook 'global-company-mode)
+
+(use-package cmake-ide
+  :ensure t
+  :config
+  (cmake-ide-setup))
