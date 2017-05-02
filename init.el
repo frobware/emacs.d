@@ -13,7 +13,7 @@
  '(helm-gtags-suggested-key-mapping t)
  '(package-selected-packages
    (quote
-    (git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper flycheck-rust dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (helm-cscope git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper flycheck-rust dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -735,12 +735,14 @@
 (define-key c-mode-base-map (kbd "M-,")
   (function rtags-location-stack-back))
 
-;;(add-hook 'after-init-hook 'global-company-mode)
-
 (use-package cmake-ide
   :ensure t
   :config
   (cmake-ide-setup))
+
+(add-hook 'after-init-hook 'global-company-mode)
+
 (require 'xcscope)
 (cscope-setup)
 
+(global-flycheck-mode -1)
