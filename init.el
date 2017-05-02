@@ -11,6 +11,7 @@
      (other . "gnu"))))
  '(frame-background-mode (quote dark))
  '(helm-gtags-suggested-key-mapping t)
+ '(helm-gtags-prefix-key "\C-cg")
  '(package-selected-packages
    (quote
     (helm-cscope git-gutter-fringe helm-rtags yaml-mode xcscope wgrep-ag vcl-mode use-package smex rtags racer python-mode projectile peep-dired markdown-mode magit-gh-pulls itail guide-key google-c-style golint godoctor go-guru go-eldoc git-gutter fringe-helper flycheck-rust dockerfile-mode company-go cmake-mode cmake-ide clang-format cargo ag))))
@@ -668,21 +669,21 @@
 
 (setq company-tooltip-align-annotations t)
 
-(and nil
-     (use-package helm-gtags
-       :ensure t
-       :config
-       (progn
-	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
-	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
-	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
-	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-	 (add-hook 'c-mode-hook 'helm-gtags-mode)
-	 (add-hook 'c++-mode-hook 'helm-gtags-mode)
-	 (add-hook 'asm-mode-hook 'helm-gtags-mode))))
+;; (and nil
+;;      (use-package helm-gtags
+;;        :ensure t
+;;        :config
+;;        (progn
+;; 	 (define-key helm-gtags-mode-map (kbd "M-t") 'helm-gtags-find-tag)
+;; 	 (define-key helm-gtags-mode-map (kbd "M-r") 'helm-gtags-find-rtag)
+;; 	 (define-key helm-gtags-mode-map (kbd "M-s") 'helm-gtags-find-symbol)
+;; 	 (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
+;; 	 (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+;; 	 (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+;; 	 (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+;; 	 (add-hook 'c-mode-hook 'helm-gtags-mode)
+;; 	 (add-hook 'c++-mode-hook 'helm-gtags-mode)
+;; 	 (add-hook 'asm-mode-hook 'helm-gtags-mode))))
 
 (use-package rtags
   :ensure t
@@ -746,3 +747,35 @@
 (cscope-setup)
 
 (global-flycheck-mode -1)
+
+(use-package helm-gtags
+  :init
+  (progn
+    (setq helm-gtags-ignore-case t
+          helm-gtags-auto-update t
+          helm-gtags-use-input-at-cursor t
+          helm-gtags-pulse-at-cursor t
+          helm-gtags-prefix-key "\C-cg"
+          helm-gtags-suggested-key-mapping t)
+
+    ;; Enable helm-gtags-mode in Dired so you can jump to any tag
+    ;; when navigate project tree with Dired
+    (add-hook 'dired-mode-hook 'helm-gtags-mode)
+
+    ;; Enable helm-gtags-mode in Eshell for the same reason as above
+    (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+
+    ;; Enable helm-gtags-mode in languages that GNU Global supports
+    (add-hook 'c-mode-hook 'helm-gtags-mode)
+    (add-hook 'c++-mode-hook 'helm-gtags-mode)
+    (add-hook 'java-mode-hook 'helm-gtags-mode)
+    (add-hook 'asm-mode-hook 'helm-gtags-mode)
+
+    ;; key bindings
+    (with-eval-after-load 'helm-gtags
+      (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
+      (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
+      (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
+      (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+      (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+      (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history))))
