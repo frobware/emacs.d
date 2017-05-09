@@ -733,6 +733,10 @@
 
 (ad-activate 'gdb-inferior-filter)
 
+(use-package elide-head
+  :config
+  (add-hook 'c-mode-common-hook 'elide-head))
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
