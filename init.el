@@ -9,6 +9,12 @@
      (java-mode . "java")
      (awk-mode . "awk")
      (other . "gnu"))))
+ '(elide-head-headers-to-hide
+   (quote
+    (("is free software[:;] you can redistribute it" . "\\(Boston, MA 0211\\(1-1307\\|0-1301\\), USA\\|If not, see <http://www\\.gnu\\.org/licenses/>\\)\\.")
+     ("The Regents of the University of California\\.  All rights reserved\\." . "SUCH DAMAGE\\.")
+     ("Permission is hereby granted, free of charge" . "authorization from the X Consortium\\.")
+     ("Copyright 2017 The Kubernetes Authors." . "limitations under the License."))))
  '(frame-background-mode (quote dark))
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
