@@ -741,6 +741,7 @@
 
 (use-package elide-head
   :config
+  (add-hook 'go-mode-hook 'elide-head)
   (add-hook 'c-mode-common-hook 'elide-head))
 
 ;;(add-hook 'after-init-hook 'global-company-mode)
