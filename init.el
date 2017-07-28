@@ -352,6 +352,9 @@
     (bind-key "<tab>" 'company-complete go-mode-map)
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
+(use-package go-dlv
+  :ensure t)
+
 (use-package go-guru
   :ensure t)
 
