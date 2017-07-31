@@ -750,3 +750,24 @@
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
+;;; Taken from:
+;;; https://stackoverflow.com/questions/3139970/open-a-file-at-line-with-filenameline-syntax
+;;;
+;; Open files and goto lines like we see from g++ etc. i.e. file:line#
+;; (to-do "make `find-file-line-number' work for emacsclient as well")
+;; (to-do "make `find-file-line-number' check if the file exists")
+(defadvice find-file (around find-file-line-number
+                             (filename &optional wildcards)
+                             activate)
+  "Turn files like file.cpp:14 into file.cpp and going to the 14-th line."
+  (save-match-data
+    (let* ((matched (string-match "^\\(.*\\):\\([0-9]+\\):?$" filename))
+           (line-number (and matched
+                             (match-string 2 filename)
+                             (string-to-number (match-string 2 filename))))
+           (filename (if matched (match-string 1 filename) filename)))
+      ad-do-it
+      (when line-number
+        ;; goto-line is for interactive use
+        (goto-char (point-min))
+        (forward-line (1- line-number))))))
