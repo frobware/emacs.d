@@ -19,6 +19,7 @@
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
+ '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
     (company-irony irony helm-gtags cmake-ide projectile helm-rtags rtags racer cargo vcl-mode google-c-style clang-format peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
