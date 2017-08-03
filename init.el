@@ -343,7 +343,7 @@
   :config
   (progn
     (use-package godoctor)
-    (bind-key "C-c C-P" 'aim/occur-go-public-functions)
+    ;;(bind-key "C-c C-P" 'aim/occur-go-public-functions)
     (bind-key "C-c C-f" 'gofmt go-mode-map)
     (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
     (bind-key "C-c C-k" 'godoc go-mode-map)
