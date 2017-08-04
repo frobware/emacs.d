@@ -692,10 +692,10 @@
     (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
     (add-hook 'c-mode-common-hook 'company-mode)))
 
-(use-package projectile
-  :ensure t
-  :config
-  (projectile-global-mode))
+;; (use-package projectile
+;;   :ensure t
+;;   :config
+;;   (projectile-global-mode))
 
 (unless (fboundp 'xref-push-marker-stack)
   (defalias 'xref-pop-marker-stack 'pop-tag-mark)
