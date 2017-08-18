@@ -748,6 +748,9 @@
   (add-hook 'go-mode-hook 'elide-head)
   (add-hook 'c-mode-common-hook 'elide-head))
 
+(use-package helm-ls-git
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
