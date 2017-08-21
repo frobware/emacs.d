@@ -243,16 +243,9 @@
     (add-hook 'ibuffer-mode-hook
 	      (lambda ()
 		(ibuffer-switch-to-saved-filter-groups "default")))
-    (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)
-    (global-set-key (kbd "C-x C-b") 'electric-buffer-list)))
-
-;;(global-set-key (kbd "C-x C-b") 'ibuffer)
+    (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)))
 
 (aim/add-to-load-path "lisp")
-
-(use-package iswitchb
-  :init
-  (iswitchb-mode 1))
 
 (use-package uniquify
   :init
