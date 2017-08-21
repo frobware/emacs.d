@@ -222,6 +222,7 @@
 	  (quote (("default"
 		   ("dired" (mode . dired-mode))
 		   ("perl" (mode . cperl-mode))
+		   ("Go" (mode . go-mode))
 		   ("erc" (mode . erc-mode))
 		   ("planner" (or
 			       (name . "^\\*Calendar\\*$")
