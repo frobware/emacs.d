@@ -748,6 +748,9 @@
 (use-package helm-ls-git
   :ensure t)
 
+(use-package protobuf-mode
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
