@@ -25,7 +25,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (company-irony irony helm-gtags cmake-ide projectile helm-rtags rtags racer cargo vcl-mode google-c-style clang-format peep-dired guide-key itail go-guru godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode golint go-eldoc company yaml-mode smex magit-gh-pulls magit wgrep-ag ag cmake-mode use-package))))
+    (helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style golint godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -746,8 +746,12 @@
   (add-hook 'go-mode-hook 'elide-head)
   (add-hook 'c-mode-common-hook 'elide-head))
 
-(use-package helm-ls-git
+(use-package helm
   :ensure t)
+
+(use-package helm-ls-git
+  :config
+  (global-set-key (kbd "C-c C-l") 'helm-ls-git-ls))
 
 (use-package protobuf-mode
   :ensure t)
