@@ -759,6 +759,9 @@
 (use-package terraform-mode
   :ensure t)
 
+(use-package kubernetes-overview
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
