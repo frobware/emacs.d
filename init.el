@@ -756,6 +756,9 @@
 (use-package protobuf-mode
   :ensure t)
 
+(use-package terraform-mode
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
