@@ -762,6 +762,9 @@
 (use-package kubernetes-overview
   :ensure t)
 
+(use-package pass
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
