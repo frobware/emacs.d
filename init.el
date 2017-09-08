@@ -750,6 +750,7 @@
   :ensure t)
 
 (use-package helm-ls-git
+  :ensure t
   :config
   (global-set-key (kbd "C-c C-l") 'helm-ls-git-ls))
 
