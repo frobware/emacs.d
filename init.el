@@ -1,3 +1,9 @@
+;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
+;; http://seclists.org/oss-sec/2017/q3/422
+(eval-after-load "enriched"
+  '(defun enriched-decode-display-prop (start end &optional param)
+     (list start end)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
