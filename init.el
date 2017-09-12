@@ -775,6 +775,9 @@
 (use-package gist
   :ensure t)
 
+(use-package go-projectile
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
