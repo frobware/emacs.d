@@ -778,6 +778,9 @@
 (use-package go-projectile
   :ensure t)
 
+(use-package org-trello
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
