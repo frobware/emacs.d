@@ -781,6 +781,9 @@
 (use-package org-trello
   :ensure t)
 
+(use-package go-stacktracer
+  :ensure t)
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
