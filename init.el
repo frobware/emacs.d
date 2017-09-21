@@ -784,7 +784,11 @@
 (use-package go-stacktracer)
 
 (use-package direnv
-  :ensure t)
+  :ensure t
+  :config
+  (progn
+    (direnv-mode)
+    (setq direnv-always-show-summary t)))
 
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
