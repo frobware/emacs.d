@@ -32,7 +32,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style golint godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style golint godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -778,9 +778,6 @@
 (use-package go-projectile
   :ensure t)
 
-(use-package org-trello
-  :ensure t)
-
 (use-package go-stacktracer)
 
 (use-package direnv
@@ -788,7 +785,7 @@
   :config
   (progn
     (direnv-mode)
-    (setq direnv-always-show-summary t)))
+    (setq direnv-always-show-summary nil)))
 
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
