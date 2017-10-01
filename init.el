@@ -1,3 +1,25 @@
+(require 'package)
+
+(setq package-enable-at-startup nil)
+
+(setq package-archives
+      '(("melpa-stable" . "https://stable.melpa.org/packages/")
+	("melpa" . "http://melpa.org/packages/")
+	("org" . "http://orgmode.org/elpa/")
+	("gnu" . "http://elpa.gnu.org/packages/")))
+
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile
+  (require 'use-package))
+
+(require 'diminish)
+(require 'bind-key)
+
 ;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
 ;; http://seclists.org/oss-sec/2017/q3/422
 (eval-after-load "enriched"
@@ -32,7 +54,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style golint godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -95,20 +117,20 @@
 	menu-bar-mode
 	tool-bar-mode))
 
-(setq package-archives
-      '(("melpa-stable" . "https://stable.melpa.org/packages/")
-	("melpa" . "http://melpa.org/packages/")
-	("org" . "http://orgmode.org/elpa/")
-	("gnu" . "http://elpa.gnu.org/packages/")))
+;; (setq package-archives
+;;       '(("melpa-stable" . "https://stable.melpa.org/packages/")
+;; 	("melpa" . "http://melpa.org/packages/")
+;; 	("org" . "http://orgmode.org/elpa/")
+;; 	("gnu" . "http://elpa.gnu.org/packages/")))
 
-(package-initialize)
+;; (package-initialize)
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
+;; (when (not package-archive-contents)
+;;   (package-refresh-contents))
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
 (require 'use-package)
 (require 'bind-key)
@@ -764,9 +786,6 @@
   :ensure t)
 
 (use-package terraform-mode
-  :ensure t)
-
-(use-package kubernetes-overview
   :ensure t)
 
 (use-package pass
