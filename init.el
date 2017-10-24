@@ -872,3 +872,13 @@ save it in `ffap-file-at-point-line-number' variable."
   (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
 
 (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
+
+(defun open-var-log-messages (hostname)
+  (interactive "shost: ")
+  (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
+    (find-file filename)))
+
+(defun itail-var-log-messages (hostname)
+  (interactive "shost: ")
+  (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
+    (itail filename)))
