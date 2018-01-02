@@ -17,7 +17,6 @@
 (eval-when-compile
   (require 'use-package))
 
-(require 'diminish)
 (require 'bind-key)
 
 ;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
@@ -54,7 +53,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
