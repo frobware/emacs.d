@@ -884,7 +884,10 @@ save it in `ffap-file-at-point-line-number' variable."
     (itail filename)))
 
 (use-package notmuch
-  :ensure t)
+  :ensure t
+  :config
+  (setq notmuch-hello-thousands-separator ","))
+
 (use-package atomic-chrome
   :ensure t
   :config
