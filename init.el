@@ -882,3 +882,6 @@ save it in `ffap-file-at-point-line-number' variable."
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
     (itail filename)))
+
+(use-package notmuch
+  :ensure t)
