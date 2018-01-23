@@ -50,10 +50,23 @@
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
+ '(notmuch-saved-searches
+   (quote
+    ((:name "aos-pod" :query "tag:lists/aos-pod" :key "p" :sort-order newest-first :search-type nil)
+     (:name "today" :query "date:today" :key "T" :sort-order oldest-first)
+     (:name "inbox" :query "tag:inbox" :key "i")
+     (:name "unread" :query "tag:unread" :key "u")
+     (:name "flagged" :query "tag:flagged" :key "f")
+     (:name "sent" :query "tag:sent" :key "t")
+     (:name "drafts" :query "tag:draft" :key "d")
+     (:name "ImageQualify" :query "ImageQualify")
+     (:name "me" :query "date:today to:me is:unread"))))
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag))))
+    (atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+ '(send-mail-function (quote smtpmail-send-it))
+ '(server-use-tcp t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
