@@ -904,7 +904,21 @@ save it in `ffap-file-at-point-line-number' variable."
   :config
   (setq notmuch-hello-thousands-separator ","))
 
+(defun atomic-chrome-server-running-p ()
+  "Returns t if the atomic-chrome server is currently running, otherwise nil."
+  (let ((retval nil))
+    (condition-case ex
+        (progn
+          (delete-process
+           (make-network-process
+            :name "atomic-client-test" :host "localhost"
+            :noquery t :service "64292"))
+          (setq retval t))
+      ('error nil))
+    retval))
+
 (use-package atomic-chrome
   :ensure t
   :config
-  (atomic-chrome-start-server))
+  (when (not (atomic-chrome-server-running-p))
+    (atomic-chrome-start-server)))
