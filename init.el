@@ -885,3 +885,7 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package notmuch
   :ensure t)
+(use-package atomic-chrome
+  :ensure t
+  :config
+  (atomic-chrome-start-server))
