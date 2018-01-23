@@ -822,6 +822,30 @@
     (direnv-mode)
     (setq direnv-always-show-summary nil)))
 
+(use-package notmuch
+  :ensure t
+  :config
+  (setq notmuch-hello-thousands-separator ","))
+
+(defun atomic-chrome-server-running-p ()
+  "Returns t if the atomic-chrome server is currently running, otherwise nil."
+  (let ((retval nil))
+    (condition-case ex
+        (progn
+          (delete-process
+           (make-network-process
+            :name "atomic-client-test" :host "localhost"
+            :noquery t :service "64292"))
+          (setq retval t))
+      ('error nil))
+    retval))
+
+(use-package atomic-chrome
+  :ensure t
+  :config
+  (when (not (atomic-chrome-server-running-p))
+    (atomic-chrome-start-server)))
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
@@ -898,27 +922,3 @@ save it in `ffap-file-at-point-line-number' variable."
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
     (itail filename)))
-
-(use-package notmuch
-  :ensure t
-  :config
-  (setq notmuch-hello-thousands-separator ","))
-
-(defun atomic-chrome-server-running-p ()
-  "Returns t if the atomic-chrome server is currently running, otherwise nil."
-  (let ((retval nil))
-    (condition-case ex
-        (progn
-          (delete-process
-           (make-network-process
-            :name "atomic-client-test" :host "localhost"
-            :noquery t :service "64292"))
-          (setq retval t))
-      ('error nil))
-    retval))
-
-(use-package atomic-chrome
-  :ensure t
-  :config
-  (when (not (atomic-chrome-server-running-p))
-    (atomic-chrome-start-server)))
