@@ -418,10 +418,10 @@
     ;; /ssh:ubuntu@10.17.20.215|sudo:10.17.20.215:/
     ;; /ssh:ubuntu@10.17.20.215|sudo:10.17.20.215:/
     ;; http://irreal.org/blog/?p=895
-    (add-to-list 'tramp-default-proxies-alist
-		 '(nil "\\`root\\'" "/ssh:%h:"))
-    (add-to-list 'tramp-default-proxies-alist
-		 '((regexp-quote (system-name)) nil nil))
+    ;; (add-to-list 'tramp-default-proxies-alist
+    ;; 		 '(nil "\\`root\\'" "/ssh:%h:"))
+    ;; (add-to-list 'tramp-default-proxies-alist
+    ;; 		 '((regexp-quote (system-name)) nil nil))
     ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
 	  (concat
