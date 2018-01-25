@@ -425,8 +425,9 @@
     ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
 	  (concat
-	   "-o ControlPath=/tmp/ssh-ControlPath-%%r@%%h:%%p "
-	   "-o ControlMaster=auto -o ControlPersist=no"))))
+	   "-o ControlPath=tramp.%%r@%%h:%%p "
+	   "-o ControlMaster=auto "
+	   "-o ControlPersist=no"))))
 
 (use-package guide-key
   :ensure t
