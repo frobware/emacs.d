@@ -433,10 +433,6 @@
   :ensure t
   :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
 
-(use-package guide-key
-  :ensure t
-  :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
-
 (use-package aim-functions
   :load-path "lisp/")
 
