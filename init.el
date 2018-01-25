@@ -250,6 +250,9 @@
 (use-package golint
   :ensure golint)
 
+(use-package go-stacktracer
+  :ensure t)
+
 ;; (use-package flycheck
 ;;   :ensure t
 ;;   :config
