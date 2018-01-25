@@ -897,7 +897,8 @@ save it in `ffap-file-at-point-line-number' variable."
 (defadvice find-file-at-point (after ffap-goto-line-number activate)
   "If `ffap-file-at-point-line-number' is non-nil goto this line."
   (when ffap-file-at-point-line-number
-    (goto-line ffap-file-at-point-line-number)
+    (with-no-warnings
+      (goto-line ffap-file-at-point-line-number))
     (setq ffap-file-at-point-line-number nil)))
 
 ;; Pressing d will copy both A and B to buffer C.
