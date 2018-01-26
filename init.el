@@ -375,7 +375,6 @@
   :init
   (progn
     (setq gofmt-command "goimports")
-    (setq gofmt-args "-s")
     (add-hook 'before-save-hook 'gofmt-before-save)
     ;; By default company-mode loads every backend it has. If you want
     ;; to only have company-mode enabled in go-mode add the following
