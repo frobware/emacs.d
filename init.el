@@ -809,9 +809,6 @@
 (use-package gist
   :ensure t)
 
-(use-package go-projectile
-  :ensure t)
-
 (use-package go-stacktracer)
 
 (use-package direnv
