@@ -426,7 +426,7 @@
 	  (concat
 	   "-o ControlPath=tramp.%%r@%%h:%%p "
 	   "-o ControlMaster=auto "
-	   "-o ControlPersist=no"))))
+	   "-o ControlPersist=yes"))))
 
 (use-package guide-key
   :ensure t
