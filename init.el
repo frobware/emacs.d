@@ -195,9 +195,6 @@
 
 ;;'(magit-diff-hunk-heading-highlight ((t (:background "grey30" :foreground "grey90")))))
 
-(use-package magithub
-  :after magit)
-
 (use-package magit-gh-pulls
   :ensure t
   :commands turn-on-magit-gh-pulls
