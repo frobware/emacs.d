@@ -842,6 +842,11 @@
   (when (not (atomic-chrome-server-running-p))
     (atomic-chrome-start-server)))
 
+(use-package smart-shift
+  :ensure t
+  :config
+  (global-smart-shift-mode t))
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
