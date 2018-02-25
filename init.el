@@ -860,6 +860,11 @@
   :config
   (global-smart-shift-mode t))
 
+(use-package jinja2-mode
+  :ensure t
+  :config
+  (add-to-list 'auto-mode-alist '("\\.j2\\'" . jinja2-mode)))
+
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
