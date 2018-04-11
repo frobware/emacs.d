@@ -138,9 +138,9 @@
 
 ;; (setq package-archives
 ;;       '(("melpa-stable" . "https://stable.melpa.org/packages/")
-;; 	("melpa" . "http://melpa.org/packages/")
-;; 	("org" . "http://orgmode.org/elpa/")
-;; 	("gnu" . "http://elpa.gnu.org/packages/")))
+;;	("melpa" . "http://melpa.org/packages/")
+;;	("org" . "http://orgmode.org/elpa/")
+;;	("gnu" . "http://elpa.gnu.org/packages/")))
 
 ;; (package-initialize)
 
@@ -432,9 +432,9 @@
     ;; /ssh:ubuntu@10.17.20.215|sudo:10.17.20.215:/
     ;; http://irreal.org/blog/?p=895
     ;; (add-to-list 'tramp-default-proxies-alist
-    ;; 		 '(nil "\\`root\\'" "/ssh:%h:"))
+    ;;		 '(nil "\\`root\\'" "/ssh:%h:"))
     ;; (add-to-list 'tramp-default-proxies-alist
-    ;; 		 '((regexp-quote (system-name)) nil nil))
+    ;;		 '((regexp-quote (system-name)) nil nil))
     ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     (setq tramp-ssh-controlmaster-options
 	  (concat
@@ -835,12 +835,12 @@
   "Returns t if the atomic-chrome server is currently running, otherwise nil."
   (let ((retval nil))
     (condition-case ex
-        (progn
-          (delete-process
-           (make-network-process
-            :name "atomic-client-test" :host "localhost"
-            :noquery t :service "64292"))
-          (setq retval t))
+	(progn
+	  (delete-process
+	   (make-network-process
+	    :name "atomic-client-test" :host "localhost"
+	    :noquery t :service "64292"))
+	  (setq retval t))
       ('error nil))
     retval))
 
@@ -870,20 +870,20 @@
 ;; (to-do "make `find-file-line-number' work for emacsclient as well")
 ;; (to-do "make `find-file-line-number' check if the file exists")
 (defadvice find-file (around find-file-line-number
-                             (filename &optional wildcards)
-                             activate)
+			     (filename &optional wildcards)
+			     activate)
   "Turn files like file.cpp:14 into file.cpp and going to the 14-th line."
   (save-match-data
     (let* ((matched (string-match "^\\(.*\\):\\([0-9]+\\):?$" filename))
-           (line-number (and matched
-                             (match-string 2 filename)
-                             (string-to-number (match-string 2 filename))))
-           (filename (if matched (match-string 1 filename) filename)))
+	   (line-number (and matched
+			     (match-string 2 filename)
+			     (string-to-number (match-string 2 filename))))
+	   (filename (if matched (match-string 1 filename) filename)))
       ad-do-it
       (when line-number
-        ;; goto-line is for interactive use
-        (goto-char (point-min))
-        (forward-line (1- line-number))))))
+	;; goto-line is for interactive use
+	(goto-char (point-min))
+	(forward-line (1- line-number))))))
 
 (defvar ffap-file-at-point-line-number nil
   "Variable to hold line number from the last `ffap-file-at-point' call.")
@@ -892,20 +892,20 @@
   "Search `ffap-string-at-point' for a line number pattern and
 save it in `ffap-file-at-point-line-number' variable."
   (let* ((string (ffap-string-at-point)) ;; string/name definition copied from `ffap-string-at-point'
-         (name
-          (or (condition-case nil
-                  (and (not (string-match "//" string)) ; foo.com://bar
-                       (substitute-in-file-name string))
-                (error nil))
-              string))
-         (line-number-string
-          (and (string-match ":[0-9]+" name)
-               (substring name (1+ (match-beginning 0)) (match-end 0))))
-         (line-number
-          (and line-number-string
-               (string-to-number line-number-string))))
+	 (name
+	  (or (condition-case nil
+		  (and (not (string-match "//" string)) ; foo.com://bar
+		       (substitute-in-file-name string))
+		(error nil))
+	      string))
+	 (line-number-string
+	  (and (string-match ":[0-9]+" name)
+	       (substring name (1+ (match-beginning 0)) (match-end 0))))
+	 (line-number
+	  (and line-number-string
+	       (string-to-number line-number-string))))
     (if (and line-number (> line-number 0))
-        (setq ffap-file-at-point-line-number line-number)
+	(setq ffap-file-at-point-line-number line-number)
       (setq ffap-file-at-point-line-number nil))))
 
 (defadvice find-file-at-point (after ffap-goto-line-number activate)
@@ -919,9 +919,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun ediff-copy-both-to-C ()
   (interactive)
   (ediff-copy-diff ediff-current-difference nil 'C nil
-                   (concat
-                    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
-                    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
+		   (concat
+		    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
+		    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
 
 (defun add-d-to-ediff-mode-map ()
   (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
