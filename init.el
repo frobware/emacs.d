@@ -1,5 +1,5 @@
-(setq server-use-tcp t
-      server-socket-dir "~/.emacs.d/server")
+;; (setq server-use-tcp t
+;;       server-socket-dir "~/.emacs.d/server")
 
 (require 'package)
 
@@ -69,7 +69,8 @@
    (quote
     (atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
  '(send-mail-function (quote smtpmail-send-it))
- '(server-use-tcp t))
+ ;;'(server-use-tcp t)
+ )
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -652,12 +653,6 @@
 ;;   (require 'mouse)
 ;;   (xterm-mouse-mode t))
 
-(use-package server
-  :ensure t
-  :config
-  (unless (server-running-p)
-    (server-start)))
-
 (if (and (display-graphic-p) aim/is-linux)
     (set-face-background 'cursor "yellow")
   (shell-command (format "echo -ne '\\033]12;#00ff00\\007' > /proc/%d/fd/1" (emacs-pid))))
@@ -942,3 +937,9 @@ save it in `ffap-file-at-point-line-number' variable."
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
     (itail filename)))
+
+(use-package server
+  :ensure t
+  :config
+  (unless (server-running-p)
+    (server-start)))
