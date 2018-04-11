@@ -689,6 +689,11 @@
 (use-package cargo
   :ensure t)
 
+;; In the environment you'll need:
+;;    export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
+;;
+;; And you'll need the actual src component:
+;;     $ rustup component add rust-src
 (use-package racer
   :ensure t
   :config
