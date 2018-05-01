@@ -67,7 +67,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (auth-source-pass atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+    (heaven-and-hell auth-source-pass atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
  '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
@@ -871,17 +871,15 @@
 (aim/add-to-load-path "your/site/elisp/path")
 
 (use-package heaven-and-hell
-  :load-path "your/site/elisp/path"
+  :ensure t
   :init
   (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
   (setq heaven-and-hell-themes
-	'((light . #'tsdh-light)
-	  (dark . #'tsdh-dark)))
+        '((light . tsdh-light)
+          (dark . tsdh-dark))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
   :hook (after-init . heaven-and-hell-init-hook)
-  :bind (("C-c <f6>" . heaven-and-hell-load-default-emacs-theme)
-	 ("<f6>" . heaven-and-hell-toggle-theme)))
-
-;;(add-hook 'after-init-hook 'global-company-mode)
+  :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
+         ("<f6>" . heaven-and-hell-toggle-theme)))
 
 (message "Done")
 ;;; Taken from:
