@@ -67,10 +67,8 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
- '(send-mail-function (quote smtpmail-send-it))
- ;;'(server-use-tcp t)
- )
+    (auth-source-pass atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+ '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -866,8 +864,10 @@
   (add-to-list 'auto-mode-alist '("\\.j2\\'" . jinja2-mode)))
 
 (use-package auth-source-pass
+  :ensure t
   :config
   (auth-source-pass-enable))
+
 (aim/add-to-load-path "your/site/elisp/path")
 
 (use-package heaven-and-hell
