@@ -868,6 +868,18 @@
 (use-package auth-source-pass
   :config
   (auth-source-pass-enable))
+(aim/add-to-load-path "your/site/elisp/path")
+
+(use-package heaven-and-hell
+  :load-path "your/site/elisp/path"
+  :init
+  (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
+  (setq heaven-and-hell-themes
+	'((light . #'tsdh-light)
+	  (dark . #'tsdh-dark)))
+  :hook (after-init . heaven-and-hell-init-hook)
+  :bind (("C-c <f6>" . heaven-and-hell-load-default-emacs-theme)
+	 ("<f6>" . heaven-and-hell-toggle-theme)))
 
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
