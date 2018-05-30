@@ -67,8 +67,10 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (heaven-and-hell auth-source-pass atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
- '(send-mail-function (quote smtpmail-send-it)))
+    (atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+ '(send-mail-function (quote smtpmail-send-it))
+ ;;'(server-use-tcp t)
+ )
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -864,22 +866,13 @@
   (add-to-list 'auto-mode-alist '("\\.j2\\'" . jinja2-mode)))
 
 (use-package auth-source-pass
-  :ensure t
   :config
   (auth-source-pass-enable))
 
-(aim/add-to-load-path "your/site/elisp/path")
+(use-package ini-mode
+  :ensure t)
 
-(use-package heaven-and-hell
-  :ensure t
-  :init
-  (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
-  (setq heaven-and-hell-themes
-        '((light . tsdh-light)
-          (dark . tsdh-dark))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
-  :hook (after-init . heaven-and-hell-init-hook)
-  :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
-         ("<f6>" . heaven-and-hell-toggle-theme)))
+;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
 ;;; Taken from:
