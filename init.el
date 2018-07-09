@@ -542,8 +542,12 @@
 
 (add-hook 'auto-save-hook 'aim/desktop-save)
 
-;; (require 'recentf)
-;; (recentf-mode 1)
+(use-package recentf
+  :config
+  (progn
+    (setq recentf-auto-cleanup 'never
+	  recentf-max-saved-items 100)
+    (recentf-mode 1)))
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
