@@ -946,3 +946,18 @@ save it in `ffap-file-at-point-line-number' variable."
   :config
   (unless (server-running-p)
     (server-start)))
+(defun aim/set-graphical-frame-style (frame)
+  (if (display-graphic-p frame)
+      (progn
+	;; (set-frame-parameter frame 'cursor-color "green")
+	;; (set-frame-parameter frame 'background-color "black")
+	;; (set-frame-parameter frame 'foreground-color "white")
+	;; (set-frame-parameter frame 'background-mode 'dark)
+	;; (frame-set-background-mode frame 'dark)
+	(message "FRAME %s" (frame-parameters frame))))
+  (message "FRAME %s" (frame-parameters frame)))
+
+(defun aim/on-frame-open (&optional frame)
+  (aim/set-graphical-frame-style frame))
+
+(add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
