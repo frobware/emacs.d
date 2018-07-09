@@ -1,6 +1,3 @@
-;; (setq server-use-tcp t
-;;       server-socket-dir "~/.emacs.d/server")
-
 (require 'package)
 
 (setq package-enable-at-startup nil)
