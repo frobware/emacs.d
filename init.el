@@ -775,6 +775,12 @@
 
 (use-package elide-head
   :config
+  (setq elide-head-headers-to-hide
+	(quote
+	 (("is free software[: ;] you can redistribute it" . "\\(Boston, MA 0211\\(1-1307\\|0-1301\\), USA\\|If not, see <http://www\\.gnu\\.org/licenses/>\\)\\.")
+	  ("The Regents of the University of California\\.  All rights reserved\\." . "SUCH DAMAGE\\.")
+	  ("Permission is hereby granted, free of charge" . "authorization from the X Consortium\\.")
+	  ("Copyright .* The Kubernetes Authors." . "limitations under the License."))))
   (add-hook 'go-mode-hook 'elide-head)
   (add-hook 'c-mode-common-hook 'elide-head))
 
