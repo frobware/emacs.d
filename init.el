@@ -804,7 +804,8 @@
 (use-package gist
   :ensure t)
 
-(use-package go-stacktracer)
+(use-package go-stacktracer
+  :ensure t)
 
 (use-package direnv
   :ensure t
