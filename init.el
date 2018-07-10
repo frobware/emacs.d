@@ -946,7 +946,6 @@ save it in `ffap-file-at-point-line-number' variable."
   :ensure t
   :config
   (unless (server-running-p)
-    (setq server-socket-dir (expand-file-name "server" user-emacs-directory))
     (server-force-delete)
     (server-start)))
 
