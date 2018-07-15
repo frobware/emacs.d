@@ -67,7 +67,8 @@
  '(ediff-even-diff-A ((t (:background "dim gray"))))
  '(ediff-even-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-B ((t (:background "dim gray"))))
- '(hl-line ((t (:background "grey30")))))
+ ;;'(hl-line ((t (:background "grey30"))))
+)
 
 ;; Perls of wisdom:
 ;;   http://emacshorrors.com/posts/come-in-and-find-out.html
