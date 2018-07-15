@@ -943,6 +943,10 @@ save it in `ffap-file-at-point-line-number' variable."
   :config (setq dumb-jump-selector 'helm) ;;(setq dumb-jump-selector 'ivy)
   :ensure t)
 
+
+(use-package pinentry
+  :ensure t)
+
 (use-package server
   :ensure t
   :config
