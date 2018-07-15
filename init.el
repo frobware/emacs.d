@@ -71,9 +71,9 @@
 
 ;; Perls of wisdom:
 ;;   http://emacshorrors.com/posts/come-in-and-find-out.html
-(unless (window-system)
-  (or frame-background-mode
-      (setq frame-background-mode 'dark)))
+;; (unless (window-system)
+;;   (or frame-background-mode
+;;       (setq frame-background-mode 'dark)))
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
