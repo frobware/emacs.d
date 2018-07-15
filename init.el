@@ -950,9 +950,10 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package server
   :ensure t
   :config
-  (unless (server-running-p)
-    (server-force-delete)
-    (server-start)))
+  ;; (unless (server-running-p)
+  ;;   (server-force-delete)
+  ;;   (server-start))
+  )
 
 (defun aim/set-graphical-frame-style (frame)
   (if (display-graphic-p frame)
