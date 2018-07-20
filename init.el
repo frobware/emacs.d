@@ -975,3 +975,5 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (setq epa-pinentry-mode 'loopback)
 (pinentry-start)
+
+(setq epg-gpg-program "gpg2")
