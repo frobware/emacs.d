@@ -37,6 +37,9 @@
      (java-mode . "java")
      (awk-mode . "awk")
      (other . "gnu"))))
+ '(custom-safe-themes
+   (quote
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
@@ -55,9 +58,7 @@
  '(package-selected-packages
    (quote
     (atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
- '(send-mail-function (quote smtpmail-send-it))
- ;;'(server-use-tcp t)
- )
+ '(send-mail-function (quote smtpmail-send-it)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -66,9 +67,7 @@
  ;; If there is more than one, they won't work right.
  '(ediff-even-diff-A ((t (:background "dim gray"))))
  '(ediff-even-diff-B ((t (:background "dim gray"))))
- '(ediff-odd-diff-B ((t (:background "dim gray"))))
- ;;'(hl-line ((t (:background "grey30"))))
-)
+ '(ediff-odd-diff-B ((t (:background "dim gray")))))
 
 ;; Perls of wisdom:
 ;;   http://emacshorrors.com/posts/come-in-and-find-out.html
@@ -947,21 +946,16 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package pinentry
   :ensure t)
 
-(use-package server
-  :ensure t
-  :config
-  ;; (unless (server-running-p)
-  ;;   (server-force-delete)
-  ;;   (server-start))
-  )
-
 (defun aim/set-graphical-frame-style (frame)
+  ;; (set-frame-parameter frame 'background-color "black")
+  ;; (set-frame-parameter frame 'foreground-color "white")
+  ;; (set-frame-parameter frame 'background-mode 'dark)
   (if (display-graphic-p frame)
       (progn
 	;; (set-frame-parameter frame 'cursor-color "green")
-	;; (set-frame-parameter frame 'background-color "black")
-	;; (set-frame-parameter frame 'foreground-color "white")
-	;; (set-frame-parameter frame 'background-mode 'dark)
+	(set-frame-parameter frame 'background-color "black")
+	(set-frame-parameter frame 'foreground-color "white")
+	(set-frame-parameter frame 'background-mode 'dark)
 	;; (frame-set-background-mode frame 'dark)
 	(message "FRAME %s" (frame-parameters frame))))
   (message "FRAME %s" (frame-parameters frame)))
@@ -970,3 +964,14 @@ save it in `ffap-file-at-point-line-number' variable."
   (aim/set-graphical-frame-style frame))
 
 (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
+
+(use-package server
+  :ensure t
+  :config
+  ;(unless (server-running-p)
+  ;  (server-force-delete)
+  ;  (server-start))
+  )
+
+(setq epa-pinentry-mode 'loopback)
+(pinentry-start)
