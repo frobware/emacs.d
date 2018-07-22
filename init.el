@@ -75,6 +75,12 @@
 ;;   (or frame-background-mode
 ;;       (setq frame-background-mode 'dark)))
 
+(defun aim/set-cursor-colour nil
+  (interactive)
+  (if (and (display-graphic-p) aim/is-linux)
+      (set-face-background 'cursor "yellow")
+    (shell-command (format "echo -ne '\\033]12;#00ff00\\007' > /proc/%d/fd/1" (emacs-pid)))))
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (put 'narrow-to-region 'disabled nil)
@@ -438,15 +444,15 @@
   (interactive)
   (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
 
-(defun isearch-face-settings ()
+(defun aim/isearch-face-settings ()
   (interactive)
   (set-face-foreground 'isearch "black")
   (set-face-background 'isearch "yellow")
   (set-face-foreground 'lazy-highlight "black")
   (set-face-background 'lazy-highlight "orange"))
 
-(eval-after-load "isearch"
-  `(isearch-face-settings))
+;; (eval-after-load "isearch"
+;;   `(aim/isearch-face-settings))
 
 (defun aim/occur-go-public-functions ()
   (interactive)
@@ -629,14 +635,11 @@
 ;;   (require 'mouse)
 ;;   (xterm-mouse-mode t))
 
-(if (and (display-graphic-p) aim/is-linux)
-    (set-face-background 'cursor "yellow")
-  (shell-command (format "echo -ne '\\033]12;#00ff00\\007' > /proc/%d/fd/1" (emacs-pid))))
-
-(eval-after-load 'diff-mode
-  '(progn
-     (set-face-foreground 'diff-added "green3")
-     (set-face-foreground 'diff-removed "red3")))
+;; (eval-after-load 'diff-mode
+;;   '(progn
+;;      (set-face-foreground 'diff-added "brightgreen")
+;;      (set-face-foreground 'diff-changed "bold white")
+;;      (set-face-foreground 'diff-removed "brightred")))
 
 (use-package go-guru
   :ensure t)
@@ -942,28 +945,36 @@ save it in `ffap-file-at-point-line-number' variable."
   :config (setq dumb-jump-selector 'helm) ;;(setq dumb-jump-selector 'ivy)
   :ensure t)
 
-
 (use-package pinentry
   :ensure t)
 
-(defun aim/set-graphical-frame-style (frame)
-  ;; (set-frame-parameter frame 'background-color "black")
-  ;; (set-frame-parameter frame 'foreground-color "white")
-  ;; (set-frame-parameter frame 'background-mode 'dark)
-  (if (display-graphic-p frame)
+(defun aim/frame-colours-unspecified (frame)
+  (interactive)
+  (let ((fg (face-attribute 'default :foreground frame))
+	(bg (face-attribute 'default :background frame)))
+    (and (equal fg "unspecified-fg") (equal bg "unspecified-bg"))))
+
+(defun aim/on-frame-open (frame)
+  (interactive)
+  ;;(message "before FRAME %s" (frame-parameters frame))
+  (if (not (display-graphic-p frame))
       (progn
-	;; (set-frame-parameter frame 'cursor-color "green")
-	(set-frame-parameter frame 'background-color "black")
-	(set-frame-parameter frame 'foreground-color "white")
-	(set-frame-parameter frame 'background-mode 'dark)
-	;; (frame-set-background-mode frame 'dark)
-	(message "FRAME %s" (frame-parameters frame))))
-  (message "FRAME %s" (frame-parameters frame)))
+	(if (and (equal (frame-parameter frame 'background-mode) 'dark)
+		 (aim/frame-colours-unspecified frame))
+	    (progn
+	      (set-frame-parameter frame 'background-color "#000000")
+	      (set-frame-parameter frame 'foreground-color "#FFFFFF")
+	(if (and (equal (frame-parameter frame 'background-mode) 'light)
+		 (aim/frame-colours-unspecified frame))
+	    (progn
+	      (set-frame-parameter frame 'background-color "#FFFFFF")
+	      (set-frame-parameter frame 'foreground-color "#000000")
+	;; (if (equal (frame-parameter frame 'background-color) "white")
+	;;     (set-frame-parameter frame 'background-color "brightwhite"))
+	      (message "after FRAME %s" (frame-parameters frame)))))))))
 
-(defun aim/on-frame-open (&optional frame)
-  (aim/set-graphical-frame-style frame))
-
-(add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
+;; (aim/on-frame-open (selected-frame))
+;; (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
 
 (use-package server
   :ensure t
@@ -973,7 +984,5 @@ save it in `ffap-file-at-point-line-number' variable."
   ;  (server-start))
   )
 
-(setq epa-pinentry-mode 'loopback)
-(pinentry-start)
-
-(setq epg-gpg-program "gpg2")
+;; (setq epa-pinentry-mode 'loopback)
+;; (pinentry-start)
