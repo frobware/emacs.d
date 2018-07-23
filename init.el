@@ -948,6 +948,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package pinentry
   :ensure t)
 
+(use-package adoc-mode
+  :ensure t)
+
 (defun aim/frame-colours-unspecified (frame)
   (interactive)
   (let ((fg (face-attribute 'default :foreground frame))
