@@ -242,6 +242,9 @@
 (use-package golint
   :ensure golint)
 
+(use-package go-add-tags
+  :ensure go-add-tags)
+
 (use-package go-stacktracer
   :ensure t)
 
