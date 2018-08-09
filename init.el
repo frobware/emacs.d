@@ -1,3 +1,5 @@
+;;; preferred background colour #0E0C63
+
 (require 'package)
 
 (setq package-enable-at-startup nil)
