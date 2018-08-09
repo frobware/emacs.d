@@ -992,3 +992,5 @@ save it in `ffap-file-at-point-line-number' variable."
 
 ;; (setq epa-pinentry-mode 'loopback)
 ;; (pinentry-start)
+
+(aim/set-global-keybindings)
