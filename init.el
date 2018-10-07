@@ -996,4 +996,9 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (setq epa-pinentry-mode 'loopback)
 ;; (pinentry-start)
 
+(defun kill-dired-buffers ()
+  (interactive)
+  (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+			     (kill-buffer buffer)))
+	(buffer-list)))
 (aim/set-global-keybindings)
