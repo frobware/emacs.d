@@ -1005,4 +1005,11 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; github/gitlab/bitbucket/stash/git.savannah.gnu.org from Emacs
 (use-package browse-at-remote
   :ensure t)
+
+(defun browse-url-chromote (url &rest ignore)
+  "Browse URL using browse-url-chromote."
+  (interactive "sURL: ")
+  (shell-command (concat "browse-url-chromote " url)))
+
+;;(setq browse-url-browser-function 'browse-url-chromote)
 (aim/set-global-keybindings)
