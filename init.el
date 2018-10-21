@@ -32,7 +32,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ag-arguments (quote ("--smart-case" "--stats" "--follow")))
+ '(ag-arguments (quote ("--smart-case" "--stats" "--follow" "--silent")))
  '(c-default-style
    (quote
     ((c-mode . "linux")
@@ -42,32 +42,55 @@
  '(custom-safe-themes
    (quote
     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+ '(github-notifier-token "df5b167dda84607fdb65e38d3f4d4c218e2882e8")
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
+ '(notmuch-archive-tags (quote ("-inbox" "-unread")))
+ '(notmuch-hello-tag-list-make-query "tag:unread")
+ '(notmuch-message-headers (quote ("Subject" "To" "Cc" "Bcc" "Date" "Reply-To")))
+ '(notmuch-multipart/alternative-discouraged (quote ("text/html")) t)
  '(notmuch-saved-searches
    (quote
-    ((:name "aos-pod" :query "tag:lists/aos-pod" :key "p" :sort-order newest-first :search-type nil)
+    ((:name "Assigned" :query "from:notifications@github.com cc:assigned.noreply@github.com")
+     (:name "aos-pod" :query "tag:lists/aos-pod" :key "p" :sort-order newest-first :search-type nil)
      (:name "today" :query "date:today" :key "T" :sort-order oldest-first)
      (:name "inbox" :query "tag:inbox" :key "i")
      (:name "unread" :query "tag:unread" :key "u")
      (:name "flagged" :query "tag:flagged" :key "f")
      (:name "sent" :query "tag:sent" :key "t")
      (:name "drafts" :query "tag:draft" :key "d")
+     (:name "gh" :query "tag:gh is:unread" :key "g")
+     (:name "RRs" :query "Review requested to:amcdermo from:notifications@github.com is:unread" :key "R")
      (:name "ImageQualify" :query "ImageQualify")
      (:name "me" :query "date:today to:me is:unread"))))
+ '(notmuch-search-line-faces
+   (quote
+    (("deleted" :foreground "red")
+     ("unread" :weight bold)
+     ("flagged" :foreground "yellow"))))
+ '(notmuch-search-oldest-first nil)
+ '(notmuch-show-all-multipart/alternative-parts nil)
+ '(notmuch-show-all-tags-list nil)
+ '(notmuch-show-insert-text/plain-hook
+   (quote
+    (notmuch-wash-convert-inline-patch-to-part notmuch-wash-tidy-citations notmuch-wash-elide-blank-lines notmuch-wash-excerpt-citations notmuch-wash-wrap-long-lines)))
+ '(notmuch-show-logo nil)
+ '(notmuch-wash-wrap-lines-length 80)
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
- '(password-store-password-length 12)
- '(send-mail-function (quote smtpmail-send-it)))
+    (mu4e-maildirs-extension mu4e github-notifier paradox browse-url-dwim browse-at-remote dired+ kubernetes kubernetes-tramp adoc-mode pinentry dumb-jump ini-mode jinja2-mode smart-shift go-add-tags counsel counsel-notmuch helm-system-packages helm-notmuch weechat slack go-impl hide-lines atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+ '(send-mail-function (quote smtpmail-send-it))
+ '(smtpmail-smtp-server "smtp.gmail.com")
+ '(smtpmail-smtp-service 25))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(diff-file-header ((t (:background "grey30" :weight bold))))
  '(ediff-even-diff-A ((t (:background "dim gray"))))
  '(ediff-even-diff-B ((t (:background "dim gray"))))
  '(ediff-odd-diff-B ((t (:background "dim gray")))))
@@ -965,22 +988,22 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (defun aim/on-frame-open (frame)
   (interactive)
-  ;;(message "before FRAME %s" (frame-parameters frame))
+  (message "before FRAME %s" (frame-parameters frame))
+  (message "before FRAME background-mode %s" (frame-parameter frame 'background-mode))
+  (message "before FRAME foreground-mode %s" (frame-parameter frame 'foreground-mode))
   (if (not (display-graphic-p frame))
       (progn
-	(if (and (equal (frame-parameter frame 'background-mode) 'dark)
-		 (aim/frame-colours-unspecified frame))
-	    (progn
-	      (set-frame-parameter frame 'background-color "#000000")
-	      (set-frame-parameter frame 'foreground-color "#FFFFFF")
 	(if (and (equal (frame-parameter frame 'background-mode) 'light)
 		 (aim/frame-colours-unspecified frame))
 	    (progn
-	      (set-frame-parameter frame 'background-color "#FFFFFF")
-	      (set-frame-parameter frame 'foreground-color "#000000")
-	;; (if (equal (frame-parameter frame 'background-color) "white")
-	;;     (set-frame-parameter frame 'background-color "brightwhite"))
-	      (message "after FRAME %s" (frame-parameters frame)))))))))
+	      (set-frame-parameter frame 'background-color "#000000")
+	      (set-frame-parameter frame 'foreground-color "#FFFFFF"))
+	  (if (and (equal (frame-parameter frame 'background-mode) 'dark)
+		   (aim/frame-colours-unspecified frame))
+	      (progn
+		(set-frame-parameter frame 'background-color "#FFFFFF")
+		(set-frame-parameter frame 'foreground-color "#000000"))))))
+  (message "after FRAME %s" (frame-parameters frame)))
 
 ;; (aim/on-frame-open (selected-frame))
 ;; (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
@@ -988,9 +1011,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package server
   :ensure t
   :config
-  ;(unless (server-running-p)
-  ;  (server-force-delete)
-  ;  (server-start))
+					;(unless (server-running-p)
+					;  (server-force-delete)
+					;  (server-start))
   )
 
 ;; (setq epa-pinentry-mode 'loopback)
@@ -998,9 +1021,10 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (defun kill-dired-buffers ()
   (interactive)
-  (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
-			     (kill-buffer buffer)))
+  (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer)) 
+			   (kill-buffer buffer))) 
 	(buffer-list)))
+
 ;; This package is easiest way to open particular link on
 ;; github/gitlab/bitbucket/stash/git.savannah.gnu.org from Emacs
 (use-package browse-at-remote
@@ -1009,7 +1033,49 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun browse-url-chromote (url &rest ignore)
   "Browse URL using browse-url-chromote."
   (interactive "sURL: ")
-  (shell-command (concat "browse-url-chromote " url)))
+  (shell-command (concat "/home/aim/bin/browse-url-chromote " url)))
 
 ;;(setq browse-url-browser-function 'browse-url-chromote)
+
 (aim/set-global-keybindings)
+
+(defun endless/visit-notifications ()
+  (interactive)
+  (endless/count-for-mode-line nil)
+  (browse-url "https://github.com/notifications"))
+
+(defvar endless/gh-mode-line nil)
+
+(defun endless/count-for-mode-line (data)
+  (setq endless/gh-mode-line
+	(when data
+	  (format " GH-%s" (length data))))
+  (force-mode-line-update))
+
+(add-to-list 'global-mode-string
+	     '(endless/gh-mode-line
+	       (:propertize endless/gh-mode-line
+			    local-map (keymap (mode-line keymap (mouse-1 . endless/visit-notifications)))
+			    mouse-face mode-line-highlight)))
+
+;; If already installed, this does nothing.
+
+(package-install 'paradox)
+(autoload 'paradox--github-action "paradox-github")
+(defun endless/check-gh-notifications ()
+  (interactive)
+  "Check for github notifications and update the mode-line."
+  (paradox--github-action "notifications"
+    :reader (lambda ()
+              (let ((json-false nil)
+                    (json-array-type 'list))
+                (json-read)))
+    :callback #'endless/count-for-mode-line))
+
+(defvar endless/gh-timer
+  (when (bound-and-true-p paradox-github-token)
+    (run-with-idle-timer 30 'repeat
+                         #'endless/check-gh-notifications)))
+
+(use-package github-notifier
+  :ensure t)
