@@ -1022,8 +1022,8 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (defun kill-dired-buffers ()
   (interactive)
-  (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer)) 
-			   (kill-buffer buffer))) 
+  (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
+			   (kill-buffer buffer)))
 	(buffer-list)))
 
 ;; This package is easiest way to open particular link on
@@ -1039,44 +1039,3 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(setq browse-url-browser-function 'browse-url-chromote)
 
 (aim/set-global-keybindings)
-
-(defun endless/visit-notifications ()
-  (interactive)
-  (endless/count-for-mode-line nil)
-  (browse-url "https://github.com/notifications"))
-
-(defvar endless/gh-mode-line nil)
-
-(defun endless/count-for-mode-line (data)
-  (setq endless/gh-mode-line
-	(when data
-	  (format " GH-%s" (length data))))
-  (force-mode-line-update))
-
-(add-to-list 'global-mode-string
-	     '(endless/gh-mode-line
-	       (:propertize endless/gh-mode-line
-			    local-map (keymap (mode-line keymap (mouse-1 . endless/visit-notifications)))
-			    mouse-face mode-line-highlight)))
-
-;; If already installed, this does nothing.
-
-(package-install 'paradox)
-(autoload 'paradox--github-action "paradox-github")
-(defun endless/check-gh-notifications ()
-  (interactive)
-  "Check for github notifications and update the mode-line."
-  (paradox--github-action "notifications"
-    :reader (lambda ()
-              (let ((json-false nil)
-                    (json-array-type 'list))
-                (json-read)))
-    :callback #'endless/count-for-mode-line))
-
-(defvar endless/gh-timer
-  (when (bound-and-true-p paradox-github-token)
-    (run-with-idle-timer 30 'repeat
-                         #'endless/check-gh-notifications)))
-
-(use-package github-notifier
-  :ensure t)
