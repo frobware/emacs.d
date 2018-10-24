@@ -195,7 +195,6 @@
   :ensure t
   :config
   (progn
-    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell) 
     (setq magit-refresh-status-buffer nil
 	  magit-auto-revert-mode nil
 	  magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
@@ -223,9 +222,11 @@
   (progn
     (smex-initialize)))
 
-;; (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-
-(remove-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+;; Setting ‘flyspell-issue-message-flag’ to nil, as printing messages
+;; for every word (when checking the entire buffer) causes an enormous
+;; slowdown.
+(setq flyspell-issue-message-flag nil)
 
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
