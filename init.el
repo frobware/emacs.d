@@ -195,6 +195,7 @@
   :ensure t
   :config
   (progn
+    (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell) 
     (setq magit-refresh-status-buffer nil
 	  magit-auto-revert-mode nil
 	  magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
