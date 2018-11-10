@@ -1009,14 +1009,6 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (aim/on-frame-open (selected-frame))
 ;; (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
 
-(use-package server
-  :ensure t
-  :config
-					;(unless (server-running-p)
-					;  (server-force-delete)
-					;  (server-start))
-  )
-
 ;; (setq epa-pinentry-mode 'loopback)
 ;; (pinentry-start)
 
