@@ -1034,7 +1034,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun browse-url-chromote (url &rest ignore)
   "Browse URL using browse-url-chromote."
   (interactive "sURL: ")
-  (shell-command (concat "/home/aim/bin/browse-url-chromote " url)))
+  (shell-command (expand-file-name "~/bin/browse-url-chromote ") url))
 
 ;;(setq browse-url-browser-function 'browse-url-chromote)
 
