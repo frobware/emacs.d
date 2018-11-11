@@ -1031,3 +1031,13 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(setq browse-url-browser-function 'browse-url-chromote)
 
 (aim/set-global-keybindings)
+(use-package unfill
+  :ensure t
+  :bind ([remap fill-paragraph] . unfill-toggle))
+
+(use-package use-package-ensure-system-package
+  :ensure t)
+
+(use-package rg
+  :ensure-system-package
+  (rg . ripgrep))
