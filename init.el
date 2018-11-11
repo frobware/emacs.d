@@ -981,6 +981,13 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package adoc-mode
   :ensure t)
 
+(use-package use-package-ensure-system-package
+  :ensure t)
+
+(use-package rg
+  :ensure-system-package
+  (rg . ripgrep))
+
 (defun aim/frame-colours-unspecified (frame)
   (interactive)
   (let ((fg (face-attribute 'default :foreground frame))
