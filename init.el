@@ -990,6 +990,7 @@ save it in `ffap-file-at-point-line-number' variable."
   :ensure t)
 
 (use-package rg
+  :ensure t
   :ensure-system-package
   (rg . ripgrep))
 
