@@ -993,6 +993,10 @@ save it in `ffap-file-at-point-line-number' variable."
   :ensure-system-package
   (rg . ripgrep))
 
+(use-package unfill
+  :ensure t
+  :bind ([remap fill-paragraph] . unfill-toggle))
+
 (defun aim/frame-colours-unspecified (frame)
   (interactive)
   (let ((fg (face-attribute 'default :foreground frame))
