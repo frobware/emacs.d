@@ -1,3 +1,11 @@
+(defvar aim/is-darwin (eq system-type 'darwin))
+(defvar aim/is-linux (eq system-type 'gnu/linux))
+
+(and aim/is-darwin
+     (progn
+       (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+       (add-to-list 'default-frame-alist '(ns-appearance . dark))))
+
 ;;; preferred background colour #0E0C63
 
 (require 'package)
@@ -123,9 +131,6 @@
 ;; When saving files, set execute permission if #! is in first line.
 (add-hook 'after-save-hook
 	  'executable-make-buffer-file-executable-if-script-p)
-
-(defvar aim/is-darwin (eq system-type 'darwin))
-(defvar aim/is-linux (eq system-type 'gnu/linux))
 
 (defun aim/add-to-load-path (path)
   (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
