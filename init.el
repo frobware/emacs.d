@@ -8,6 +8,8 @@
 
 ;;; preferred background colour #0E0C63
 
+(setq abbrev-file-name (expand-file-name "~/.abbrevs"))
+
 (require 'package)
 
 (setq package-enable-at-startup nil)
