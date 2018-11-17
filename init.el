@@ -1050,3 +1050,10 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(setq browse-url-browser-function 'browse-url-chromote)
 
 (aim/set-global-keybindings)
+
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
