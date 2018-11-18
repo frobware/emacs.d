@@ -1025,6 +1025,13 @@ save it in `ffap-file-at-point-line-number' variable."
 		(set-frame-parameter frame 'foreground-color "#000000"))))))
   (message "after FRAME %s" (frame-parameters frame)))
 
+(defun aim/maybe-frob-colours (frame)
+  (interactive)
+  (and (string-match "xterm-" (getenv "TERM"))
+       (aim/on-frame-open (selected-frame))))
+
+(add-hook 'after-make-frame-functions 'aim/maybe-frob-colours 'append)
+
 ;; (aim/on-frame-open (selected-frame))
 ;; (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
 
