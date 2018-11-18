@@ -991,11 +991,6 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package use-package-ensure-system-package
   :ensure t)
 
-(use-package rg
-  :ensure t
-  :ensure-system-package
-  (rg . ripgrep))
-
 (use-package unfill
   :ensure t
   :bind ([remap fill-paragraph] . unfill-toggle))
