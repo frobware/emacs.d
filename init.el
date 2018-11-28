@@ -1023,7 +1023,7 @@ save it in `ffap-file-at-point-line-number' variable."
 	    (progn
 	      (set-frame-parameter frame 'background-color "#000000")
 	      (set-frame-parameter frame 'foreground-color "#FFFFFF"))
-	  (if (and (equal (frame-parameter frame 'background-mode) 'dark)
+	  (if (and (equal (frame-parameter frame 'background-mode) nil)
 		   (aim/frame-colours-unspecified frame))
 	      (progn
 		(set-frame-parameter frame 'background-color "#FFFFFF")
