@@ -1069,3 +1069,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (require 'rust-mode)
 (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
 (setq company-tooltip-align-annotations t)
+
+(when (file-exists-p (expand-file-name "~/emacs-libvterm/vterm-module.so"))
+  (add-to-list 'load-path (expand-file-name "~/emacs-libvterm"))
+  (require 'vterm))
