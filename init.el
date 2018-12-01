@@ -19,16 +19,21 @@
 ;; clone mirror:
 ;; $ git clone --depth 1 git@github.com:d12frosted/elpa-mirror.git ~/.elpa-mirror
 
-(setq package-archives
-      `(("melpa" . (expand-file-name "~/.elpa-mirror/melpa/"))
-	("org"   . (expand-file-name "~/.elpa-mirror/org/"))
-	("gnu"   . (expand-file-name "~/.elpa-mirror/gnu/"))))
-
 ;; (setq package-archives
-;;       '(("melpa-stable" . "https://stable.melpa.org/packages/")
-;;	("melpa" . "http://melpa.org/packages/")
-;;	("org" . "http://orgmode.org/elpa/")
-;;	("gnu" . "http://elpa.gnu.org/packages/")))
+;;       `(("melpa" . (expand-file-name "~/.elpa-mirror/melpa/"))
+;; 	("org"   . (expand-file-name "~/.elpa-mirror/org/"))
+;; 	("gnu"   . (expand-file-name "~/.elpa-mirror/gnu/"))))
+
+(setq package-archives
+      '(("melpa-stable" . "https://stable.melpa.org/packages/")
+	("melpa" . "http://melpa.org/packages/")
+	("org" . "http://orgmode.org/elpa/")
+	("gnu" . "http://elpa.gnu.org/packages/")))
+
+(setq package-archives
+      '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
+        ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
+        ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
 
 (package-initialize)
 
