@@ -904,10 +904,6 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.j2\\'" . jinja2-mode)))
 
-(use-package auth-source-pass
-  :config
-  (auth-source-pass-enable))
-
 (use-package ini-mode
   :ensure t)
 
