@@ -1079,3 +1079,6 @@ save it in `ffap-file-at-point-line-number' variable."
 (when (file-exists-p (expand-file-name "~/emacs-libvterm/vterm-module.so"))
   (add-to-list 'load-path (expand-file-name "~/emacs-libvterm"))
   (require 'vterm))
+
+(use-package forge
+  :ensure t)
