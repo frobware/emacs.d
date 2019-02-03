@@ -1037,7 +1037,8 @@ save it in `ffap-file-at-point-line-number' variable."
   (and (string-match "xterm-" (getenv "TERM"))
        (aim/on-frame-open (selected-frame))))
 
-(add-hook 'after-make-frame-functions 'aim/maybe-frob-colours 'append)
+(unless (window-system)
+  (add-hook 'after-make-frame-functions 'aim/maybe-frob-colours 'append))
 
 ;; (aim/on-frame-open (selected-frame))
 ;; (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
