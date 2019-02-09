@@ -1079,3 +1079,13 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package forge
   :ensure t)
+
+(defun aim/light-mode ()
+  (interactive)
+  (setq frame-background-mode 'light)
+  (mapc 'frame-set-background-mode (frame-list)))
+
+(defun aim/dark-mode ()
+  (interactive)
+  (setq frame-background-mode 'dark)
+  (mapc 'frame-set-background-mode (frame-list)))
