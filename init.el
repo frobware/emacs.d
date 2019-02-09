@@ -10,10 +10,6 @@
 
 (setq abbrev-file-name (expand-file-name "~/.abbrevs"))
 
-(require 'package)
-
-(setq package-enable-at-startup nil)
-
 ;; melpa went AWAL
 ;;
 ;; clone mirror:
@@ -24,16 +20,18 @@
 ;; 	("org"   . (expand-file-name "~/.elpa-mirror/org/"))
 ;; 	("gnu"   . (expand-file-name "~/.elpa-mirror/gnu/"))))
 
-(setq package-archives
-      '(("melpa-stable" . "https://stable.melpa.org/packages/")
-	("melpa" . "http://melpa.org/packages/")
-	("org" . "http://orgmode.org/elpa/")
-	("gnu" . "http://elpa.gnu.org/packages/")))
+(require 'package)
+
+(setq package-enable-at-startup nil)
 
 (setq package-archives
-      '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
-        ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
-        ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
+      '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
+        ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA"        . "https://melpa.org/packages/"))
+      package-archive-priorities
+      '(("GNU ELPA"     . 10)
+        ("MELPA Stable" . 5)
+        ("MELPA"        . 0)))
 
 (package-initialize)
 
