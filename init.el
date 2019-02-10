@@ -69,6 +69,7 @@
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
+ '(magit-diff-refine-hunk (quote all))
  '(notmuch-archive-tags (quote ("-inbox" "-unread")))
  '(notmuch-hello-tag-list-make-query "tag:unread")
  '(notmuch-message-headers (quote ("Subject" "To" "Cc" "Bcc" "Date" "Reply-To")))
