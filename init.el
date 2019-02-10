@@ -1074,9 +1074,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun aim/light-mode ()
   (interactive)
   (setq frame-background-mode 'light)
-  (mapc 'frame-set-background-mode (frame-list)))
+  (mapc 'frame-set-background-mode (list (selected-frame))))
 
 (defun aim/dark-mode ()
   (interactive)
   (setq frame-background-mode 'dark)
-  (mapc 'frame-set-background-mode (frame-list)))
+  (mapc 'frame-set-background-mode (list (selected-frame))))
