@@ -1037,15 +1037,6 @@ save it in `ffap-file-at-point-line-number' variable."
   (and (string-match "xterm-" (getenv "TERM"))
        (aim/on-frame-open (selected-frame))))
 
-(unless (window-system)
-  (add-hook 'after-make-frame-functions 'aim/maybe-frob-colours 'append))
-
-;; (aim/on-frame-open (selected-frame))
-;; (add-hook 'after-make-frame-functions 'aim/on-frame-open 'append)
-
-;; (setq epa-pinentry-mode 'loopback)
-;; (pinentry-start)
-
 (defun kill-dired-buffers ()
   (interactive)
   (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
