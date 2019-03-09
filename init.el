@@ -1,3 +1,15 @@
+; from https://matthewbauer.us/bauer/#install
+; and
+; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+(setq gc-cons-threshold
+      most-positive-fixnum)
+
+(add-hook 'after-init-hook
+	  (lambda ()
+	    (garbage-collect)
+	    (setq gc-cons-threshold
+		  (car (get 'gc-cons-threshold 'standard-value)))))
+
 (defvar aim/is-darwin (eq system-type 'darwin))
 (defvar aim/is-linux (eq system-type 'gnu/linux))
 
