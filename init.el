@@ -1083,6 +1083,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package forge
   :ensure t)
 
+(use-package helm-pass
+  :ensure t)
+
 (defun aim/light-mode ()
   (interactive)
   (setq frame-background-mode 'light)
