@@ -613,6 +613,9 @@
 
 (add-hook 'auto-save-hook 'aim/desktop-save)
 
+(use-package log4j-mode
+  :ensure t)
+
 (use-package recentf
   :config
   (progn
