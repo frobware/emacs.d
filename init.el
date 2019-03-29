@@ -1089,6 +1089,12 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package helm-pass
   :ensure t)
 
+(use-package nix-mode
+  :ensure t
+  :mode "\\.nix\\'"
+  :custom
+  (nix-indent-function #'nix-indent-line))
+
 (defun aim/light-mode ()
   (interactive)
   (setq frame-background-mode 'light)
