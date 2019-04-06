@@ -13,10 +13,10 @@
 (defvar aim/is-darwin (eq system-type 'darwin))
 (defvar aim/is-linux (eq system-type 'gnu/linux))
 
-(and aim/is-darwin
-     (progn
-       (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-       (add-to-list 'default-frame-alist '(ns-appearance . dark))))
+(progn
+  (add-to-list 'default-frame-alist '(undecorated . t))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
 ;;; preferred background colour #0E0C63
 
