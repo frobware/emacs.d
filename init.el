@@ -1063,6 +1063,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package browse-at-remote
   :ensure t)
 
+(use-package git-timemachine
+  :ensure t)
+
 (defun browse-url-chromote (url &rest ignore)
   "Browse URL using browse-url-chromote."
   (interactive "sURL: ")
