@@ -1,3 +1,11 @@
+;; from https://nicolas.petton.fr/blog/emacs-dark-window-decoration.html
+(defun set-selected-frame-dark ()
+  (interactive)
+  (let ((frame-name (get-frame-name (selected-frame))))
+    (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
+(if (window-system)
+    (set-selected-frame-dark))
+
 ; from https://matthewbauer.us/bauer/#install
 ; and
 ; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
