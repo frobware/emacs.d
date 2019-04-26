@@ -1,3 +1,7 @@
+(use-package parchment-theme
+  :ensure t
+  :config (load-theme 'parchment t))
+
 ;; from https://nicolas.petton.fr/blog/emacs-dark-window-decoration.html
 (defun set-selected-frame-dark ()
   (interactive)
