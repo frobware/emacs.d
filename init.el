@@ -1,15 +1,3 @@
-(use-package parchment-theme
-  :ensure t
-  :config (load-theme 'parchment t))
-
-;; from https://nicolas.petton.fr/blog/emacs-dark-window-decoration.html
-(defun set-selected-frame-dark ()
-  (interactive)
-  (let ((frame-name (get-frame-name (selected-frame))))
-    (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
-(if (window-system)
-    (set-selected-frame-dark))
-
 ; from https://matthewbauer.us/bauer/#install
 ; and
 ; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
@@ -26,7 +14,7 @@
 (defvar aim/is-linux (eq system-type 'gnu/linux))
 
 (progn
-  (add-to-list 'default-frame-alist '(undecorated . t))
+  (add-to-list 'default-frame-alist '(undecorated . nil))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
@@ -89,7 +77,6 @@
  '(custom-safe-themes
    (quote
     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(frame-background-mode nil)
  '(global-magit-file-mode nil)
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
@@ -1119,3 +1106,12 @@ save it in `ffap-file-at-point-line-number' variable."
   (interactive)
   (setq frame-background-mode 'dark)
   (mapc 'frame-set-background-mode (list (selected-frame))))
+
+;; from https://nicolas.petton.fr/blog/emacs-dark-window-decoration.html
+(defun set-selected-frame-dark ()
+  (interactive)
+  (let ((frame-name (get-frame-name (selected-frame))))
+    (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
+(if (window-system)
+    (set-selected-frame-dark))
+
