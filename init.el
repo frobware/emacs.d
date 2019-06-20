@@ -1100,6 +1100,8 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package deadgrep
   :ensure t)
 
+(global-set-key (kbd "<f5>") #'deadgrep)
+
 (defun aim/light-mode ()
   (interactive)
   (setq frame-background-mode 'light)
