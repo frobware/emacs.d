@@ -43,7 +43,7 @@
       package-archive-priorities
       '(("GNU ELPA"     . 10)
         ("MELPA Stable" . 5)
-        ("MELPA"        . 0)))
+        ("MELPA"        . 15)))
 
 (package-initialize)
 
@@ -81,6 +81,7 @@
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
+ '(lsp-enable-snippet nil)
  '(magit-diff-refine-hunk (quote all))
  '(notmuch-archive-tags (quote ("-inbox" "-unread")))
  '(notmuch-hello-tag-list-make-query "tag:unread")
@@ -116,7 +117,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (mu4e-maildirs-extension mu4e github-notifier paradox browse-url-dwim browse-at-remote dired+ kubernetes kubernetes-tramp adoc-mode pinentry dumb-jump ini-mode jinja2-mode smart-shift go-add-tags counsel counsel-notmuch helm-system-packages helm-notmuch weechat slack go-impl hide-lines atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+    (flymake-go company-lsp lsp-mode nix-mode helm-pass forge git-timemachine unfill use-package-ensure-system-package log4j-mode mu4e-maildirs-extension mu4e github-notifier paradox browse-url-dwim browse-at-remote dired+ kubernetes kubernetes-tramp adoc-mode pinentry dumb-jump ini-mode jinja2-mode smart-shift go-add-tags counsel counsel-notmuch helm-system-packages helm-notmuch weechat slack go-impl hide-lines atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
@@ -437,21 +438,7 @@
     ;; to your emacs-config:
     (add-hook 'go-mode-hook (lambda ()
 			      (set (make-local-variable 'company-backends) '(company-go))
-			      (company-mode))))
-  ;;(flycheck-mode)
-  ;;#'go-guru-hl-identifier-mode)))
-  :config
-  (progn
-    (use-package godoctor)
-    ;;(bind-key "C-c C-P" 'aim/occur-go-public-functions)
-    (bind-key "C-c C-f" 'gofmt go-mode-map)
-    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
-    (bind-key "C-c C-k" 'godoc go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
-    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-    (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "<tab>" 'company-complete go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
+			      (company-mode)))))
 
 (use-package go-dlv
   :ensure t)
@@ -1120,3 +1107,25 @@ save it in `ffap-file-at-point-line-number' variable."
 (if (window-system)
     (set-selected-frame-dark))
 
+(use-package flymake
+  :ensure t)
+
+(use-package flymake-go
+  :ensure t)
+
+(use-package lsp-mode
+  :ensure t
+  :hook (go-mode . lsp-deferred)
+  :commands (lsp lsp-deferred))
+
+;;(add-hook 'go-mode-hook #'lsp-deferred)
+
+;; optional - provides fancier overlays
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode)
+
+;; if you use company-mode for completion (otherwise, complete-at-point works out of the box):
+;; (use-package company-lsp
+;;   :ensure t
+;;   :commands company-lsp)
