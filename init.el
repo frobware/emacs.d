@@ -43,7 +43,7 @@
       package-archive-priorities
       '(("GNU ELPA"     . 10)
         ("MELPA Stable" . 5)
-        ("MELPA"        . 15)))
+        ("MELPA"        . 0)))
 
 (package-initialize)
 
@@ -117,7 +117,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (flymake-go company-lsp lsp-mode nix-mode helm-pass forge git-timemachine unfill use-package-ensure-system-package log4j-mode mu4e-maildirs-extension mu4e github-notifier paradox browse-url-dwim browse-at-remote dired+ kubernetes kubernetes-tramp adoc-mode pinentry dumb-jump ini-mode jinja2-mode smart-shift go-add-tags counsel counsel-notmuch helm-system-packages helm-notmuch weechat slack go-impl hide-lines atomic-chrome notmuch-labeler notmuch-orgmode notmuch-org-mode notmuch gnus-desktop-notify magithub go-stacktracer golint irony rtags fringe-helper git-gutter company magit go-projectile terraform-mode direnv w3m gist pass kubernetes-overview helm-ls-git yaml-mode wgrep-ag vcl-mode use-package smex racer python-mode protobuf-mode peep-dired markdown-mode magit-gh-pulls itail helm-rtags helm-gtags guide-key google-c-style godoctor go-guru go-eldoc go-dlv git-gutter-fringe dockerfile-mode company-irony company-go cmake-mode cmake-ide clang-format cargo ag)))
+    (diff-hl lsp-mode flymake-go deadgrep helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode pinentry dumb-jump ini-mode jinja2-mode smart-shift atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git helm-gtags cmake-ide company-irony irony helm-rtags rtags racer cargo vcl-mode google-c-style clang-format peep-dired log4j-mode guide-key itail go-guru go-dlv godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode go-stacktracer go-add-tags golint go-eldoc company yaml-mode smex magit-gh-pulls wgrep-ag ag cmake-mode use-package nix-mode magit)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
@@ -236,6 +236,12 @@
 	  magit-pull-arguments nil)))
 
 ;;'(magit-diff-hunk-heading-highlight ((t (:background "grey30" :foreground "grey90")))))
+
+(use-package diff-hl
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
+  (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode))
 
 (use-package magit-gh-pulls
   :ensure t
@@ -1071,9 +1077,6 @@ save it in `ffap-file-at-point-line-number' variable."
 (when (file-exists-p (expand-file-name "~/emacs-libvterm/vterm-module.so"))
   (add-to-list 'load-path (expand-file-name "~/emacs-libvterm"))
   (require 'vterm))
-
-(use-package forge
-  :ensure t)
 
 (use-package helm-pass
   :ensure t)
