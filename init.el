@@ -1174,6 +1174,9 @@ other, future frames."
 (define-key global-map (kbd "C--") 'hrs/decrease-font-size)
 
 (hrs/reset-font-size)
+(use-package forge
+  :ensure t)
+
 (use-package multi-term
   :ensure t)
 
