@@ -1,6 +1,11 @@
-; from https://matthewbauer.us/bauer/#install
-; and
-; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
+;; http://seclists.org/oss-sec/2017/q3/422
+(eval-after-load "enriched"
+  '(defun enriched-decode-display-prop (start end &optional param)
+     (list start end)))
+
+;; from https://matthewbauer.us/bauer/#install and
+;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold
       most-positive-fixnum)
 
@@ -9,18 +14,6 @@
 	    (garbage-collect)
 	    (setq gc-cons-threshold
 		  (car (get 'gc-cons-threshold 'standard-value)))))
-
-(defvar aim/is-darwin (eq system-type 'darwin))
-(defvar aim/is-linux (eq system-type 'gnu/linux))
-
-(progn
-  (add-to-list 'default-frame-alist '(undecorated . nil))
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
-
-;;; preferred background colour #0E0C63
-
-(setq abbrev-file-name (expand-file-name "~/.abbrevs"))
 
 (require 'package)
 
@@ -31,8 +24,8 @@
         ("MELPA Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
-      '(("GNU ELPA"     . 10)
-        ("MELPA Stable" . 5)
+      '(("GNU ELPA"     . 5)
+        ("MELPA Stable" . 10)
         ("MELPA"        . 0)))
 
 (package-initialize)
@@ -44,13 +37,26 @@
 (eval-when-compile
   (require 'use-package))
 
-(require 'bind-key)
+;; Always compile packages, and use the newest version available.
+(use-package auto-compile
+  :ensure t
+  :config (auto-compile-on-load-mode))
 
-;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
-;; http://seclists.org/oss-sec/2017/q3/422
-(eval-after-load "enriched"
-  '(defun enriched-decode-display-prop (start end &optional param)
-     (list start end)))
+(setq load-prefer-newer t)
+
+(require 'use-package-ensure)
+
+(setq use-package-always-ensure nil)
+
+(defvar aim/is-darwin (eq system-type 'darwin))
+(defvar aim/is-linux (eq system-type 'gnu/linux))
+
+(progn
+  (add-to-list 'default-frame-alist '(undecorated . nil))
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
+
+(setq abbrev-file-name (expand-file-name "~/.abbrevs"))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -64,9 +70,10 @@
      (java-mode . "java")
      (awk-mode . "awk")
      (other . "gnu"))))
+ '(custom-enabled-themes (quote (sanityinc-tomorrow-blue)))
  '(custom-safe-themes
    (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
+    ("82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(global-magit-file-mode nil)
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
@@ -107,7 +114,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (diff-hl lsp-mode flymake-go deadgrep helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode pinentry dumb-jump ini-mode jinja2-mode smart-shift atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git helm-gtags cmake-ide company-irony irony helm-rtags rtags racer cargo vcl-mode google-c-style clang-format peep-dired log4j-mode guide-key itail go-guru go-dlv godoctor company-go python-mode markdown-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode go-stacktracer go-add-tags golint go-eldoc company yaml-mode smex magit-gh-pulls wgrep-ag ag cmake-mode use-package nix-mode magit)))
+    (multi-term color-theme-sanityinc-tomorrow-colors nix-mode yaml-mode wgrep-ag vcl-mode use-package-ensure-system-package unfill terraform-mode smex smart-shift racer python-mode protobuf-mode projectile pinentry peep-dired pass notmuch moody minions magit-gh-pulls lsp-mode log4j-mode jinja2-mode itail ini-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key google-c-style golint godoctor go-stacktracer go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge flymake-go exec-path-from-shell dumb-jump dockerfile-mode direnv diff-hl deadgrep company-irony company-go color-theme-sanityinc-tomorrow cmake-mode cmake-ide clang-format cargo browse-at-remote auto-compile atomic-chrome ag adoc-mode)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
@@ -180,7 +187,6 @@
 	tool-bar-mode))
 
 (require 'use-package)
-(require 'bind-key)
 
 (use-package cc-mode
   :ensure t
@@ -1122,6 +1128,20 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (use-package company-lsp
 ;;   :ensure t
 ;;   :commands company-lsp)
+
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+
+(use-package projectile
+  :ensure t
+  :bind
+  ("C-c v" . 'projectile-ag)
+
+  :config
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-switch-project-action 'projectile-dired)
+  (setq projectile-require-project-root nil))
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :ensure t
