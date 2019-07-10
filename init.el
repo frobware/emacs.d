@@ -295,7 +295,7 @@
 (use-package go-eldoc
   :ensure go-eldoc
   :commands go-eldoc-setup
-  :init (add-hook 'go-mode-hook 'go-eldoc-setup))
+  :config (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 (use-package golint
   :ensure golint)
@@ -348,7 +348,7 @@
 (aim/add-to-load-path "lisp")
 
 (use-package uniquify
-  :init
+  :config
   (progn
     (setq uniquify-buffer-name-style 'reverse)
     (setq uniquify-separator "|")
@@ -410,13 +410,13 @@
 
 (use-package python-mode
   :ensure t
-  :init (progn
+  :config (progn
 	  (set-variable 'py-indent-offset 4)
 	  (set-variable 'indent-tabs-mode nil)))
 
 (use-package company-go
   :ensure company-go
-  :init (add-to-list 'company-backends 'company-go))
+  :config (add-to-list 'company-backends 'company-go))
 
 (use-package godoctor
   :ensure t)
@@ -425,7 +425,7 @@
   :ensure go-mode
   :mode "\\.go\\'"
   :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
-  :init
+  :config
   (progn
     (setq gofmt-command "goimports")
     (add-hook 'before-save-hook 'gofmt-before-save)
@@ -797,7 +797,7 @@
 
 (use-package helm-gtags
   :ensure t
-  :init
+  :config
   (progn
     (setq helm-gtags-ignore-case t
 	  helm-gtags-auto-update t
