@@ -22,16 +22,6 @@
 
 (setq abbrev-file-name (expand-file-name "~/.abbrevs"))
 
-;; melpa went AWAL
-;;
-;; clone mirror:
-;; $ git clone --depth 1 git@github.com:d12frosted/elpa-mirror.git ~/.elpa-mirror
-
-;; (setq package-archives
-;;       `(("melpa" . (expand-file-name "~/.elpa-mirror/melpa/"))
-;; 	("org"   . (expand-file-name "~/.elpa-mirror/org/"))
-;; 	("gnu"   . (expand-file-name "~/.elpa-mirror/gnu/"))))
-
 (require 'package)
 
 (setq package-enable-at-startup nil)
