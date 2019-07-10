@@ -1174,3 +1174,8 @@ other, future frames."
 (define-key global-map (kbd "C--") 'hrs/decrease-font-size)
 
 (hrs/reset-font-size)
+(use-package multi-term
+  :ensure t)
+
+(global-set-key (kbd "C-c t") 'multi-term)
+(setq multi-term-program-switches "--login")
