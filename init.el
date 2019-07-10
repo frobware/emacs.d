@@ -78,7 +78,6 @@
  '(helm-gtags-prefix-key "g")
  '(helm-gtags-suggested-key-mapping t)
  '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
- '(lsp-enable-snippet nil)
  '(magit-diff-refine-hunk (quote all))
  '(notmuch-archive-tags (quote ("-inbox" "-unread")))
  '(notmuch-hello-tag-list-make-query "tag:unread")
@@ -440,7 +439,21 @@
     ;; to your emacs-config:
     (add-hook 'go-mode-hook (lambda ()
 			      (set (make-local-variable 'company-backends) '(company-go))
-			      (company-mode)))))
+			      (company-mode))))
+  ;;(flycheck-mode)
+  ;;#'go-guru-hl-identifier-mode)))
+  :config
+  (progn
+    (use-package godoctor)
+    ;;(bind-key "C-c C-P" 'aim/occur-go-public-functions)
+    (bind-key "C-c C-f" 'gofmt go-mode-map)
+    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
+    (bind-key "C-c C-k" 'godoc go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
+    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+    (bind-key "M-." 'godef-jump go-mode-map)
+    (bind-key "<tab>" 'company-complete go-mode-map)
+    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
 (use-package go-dlv
   :ensure t)
@@ -1106,28 +1119,6 @@ save it in `ffap-file-at-point-line-number' variable."
 (if (window-system)
     (set-selected-frame-dark))
 
-(use-package flymake
-  :ensure t)
-
-(use-package flymake-go
-  :ensure t)
-
-(use-package lsp-mode
-  :ensure t
-  :hook (go-mode . lsp-deferred)
-  :commands (lsp lsp-deferred))
-
-;;(add-hook 'go-mode-hook #'lsp-deferred)
-
-;; optional - provides fancier overlays
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode)
-
-;; if you use company-mode for completion (otherwise, complete-at-point works out of the box):
-;; (use-package company-lsp
-;;   :ensure t
-;;   :commands company-lsp)
 
 (use-package auto-compile
   :config (auto-compile-on-load-mode))
