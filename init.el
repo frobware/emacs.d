@@ -1135,3 +1135,9 @@ other, future frames."
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
+
+(use-package almost-mono-themes
+  :ensure t
+  :config
+  (load-theme 'almost-mono-black t))
+;;  (load-theme 'almost-mono-white t))
