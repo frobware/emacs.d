@@ -1136,7 +1136,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 
 (setq hrs/default-font "Inconsolata")
-(setq hrs/default-font-size 20)
+(setq hrs/default-font-size 14)
 (setq hrs/current-font-size hrs/default-font-size)
 
 (setq hrs/font-change-increment 1.1)
