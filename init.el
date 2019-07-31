@@ -37,9 +37,11 @@
 (eval-when-compile
   (require 'use-package))
 
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
+
 ;; Always compile packages, and use the newest version available.
 (use-package auto-compile
-  :ensure t
   :config (auto-compile-on-load-mode))
 
 (setq load-prefer-newer t)
@@ -113,7 +115,7 @@
  '(ns-command-modifier (quote meta))
  '(package-selected-packages
    (quote
-    (multi-term color-theme-sanityinc-tomorrow-colors nix-mode yaml-mode wgrep-ag vcl-mode use-package-ensure-system-package unfill terraform-mode smex smart-shift racer python-mode protobuf-mode projectile pinentry peep-dired pass notmuch moody minions magit-gh-pulls lsp-mode log4j-mode jinja2-mode itail ini-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key google-c-style golint godoctor go-stacktracer go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge flymake-go exec-path-from-shell dumb-jump dockerfile-mode direnv diff-hl deadgrep company-irony company-go color-theme-sanityinc-tomorrow cmake-mode cmake-ide clang-format cargo browse-at-remote auto-compile atomic-chrome ag adoc-mode)))
+    (magit multi-term color-theme-sanityinc-tomorrow-colors nix-mode yaml-mode wgrep-ag vcl-mode use-package-ensure-system-package unfill terraform-mode smex smart-shift racer python-mode protobuf-mode projectile pinentry peep-dired pass notmuch moody minions magit-gh-pulls lsp-mode log4j-mode jinja2-mode itail ini-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key google-c-style golint godoctor go-stacktracer go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge flymake-go exec-path-from-shell dumb-jump dockerfile-mode direnv diff-hl deadgrep company-irony company-go color-theme-sanityinc-tomorrow cmake-mode cmake-ide clang-format cargo browse-at-remote auto-compile atomic-chrome ag adoc-mode)))
  '(send-mail-function (quote smtpmail-send-it))
  '(smtpmail-smtp-server "smtp.gmail.com")
  '(smtpmail-smtp-service 25))
@@ -188,7 +190,6 @@
 (require 'use-package)
 
 (use-package cc-mode
-  :ensure t
   :bind ("C-M-m" . cmake-ide-compile))
 
 (use-package dired-x
@@ -200,10 +201,8 @@
 
 (use-package cmake-mode
   :mode ("\\.cmake$" . cmake-mode)
-  :ensure t)
 
 (use-package ag
-  :ensure t
   :config
   (progn
     (setq ag-highlight-search t
@@ -214,15 +213,12 @@
   :config
   (progn
     (setq wgrep-auto-save-buffer t))
-  :ensure t)
 
 (use-package wgrep
-  :ensure t)
 
 (use-package magit
   :bind ("C-c i" . magit-status)
   :commands magit-status
-  :ensure t
   :config
   (progn
     (setq magit-refresh-status-buffer nil
@@ -233,7 +229,6 @@
 ;;'(magit-diff-hunk-heading-highlight ((t (:background "grey30" :foreground "grey90")))))
 
 (use-package magit-gh-pulls
-  :ensure t
   :commands turn-on-magit-gh-pulls
   :config
   (progn
@@ -244,7 +239,6 @@
   :config)
 
 (use-package smex
-  :ensure t
   :bind (("M-x" . smex)
 	 ("M-X" . smex-major-mode-commands))
   :commands smex
@@ -280,7 +274,6 @@
     (bind-key "C-c C-j" 'aj-toggle-fold yaml-mode-map)))
 
 (use-package browse-url
-  :ensure t)
 
 (use-package company
   :ensure company
@@ -303,10 +296,8 @@
   :ensure go-add-tags)
 
 (use-package go-stacktracer
-  :ensure t)
 
 ;; (use-package flycheck
-;;   :ensure t
 ;;   :config
 ;;   (progn
 ;;     (setq flycheck-highlighting-mode 'lines)
@@ -355,7 +346,6 @@
     (setq uniquify-ignore-buffers-re "^\\*")))
 
 (use-package dockerfile-mode
-  :ensure t)
 
 (use-package lisp-mode
   :config
@@ -367,16 +357,13 @@
   :config (ffap-bindings))
 
 (use-package git-gutter
-  :ensure t
   :config
   (global-git-gutter-mode +1))
 
 (use-package fringe-helper
-  :ensure t)
 
 (and window-system
      (use-package git-gutter-fringe
-       :ensure t))
 
 (use-package markdown-mode
   :ensure markdown-mode)
@@ -408,7 +395,6 @@
   :bind ("M-/" . hippie-expand))
 
 (use-package python-mode
-  :ensure t
   :config (progn
 	  (set-variable 'py-indent-offset 4)
 	  (set-variable 'indent-tabs-mode nil)))
@@ -418,7 +404,6 @@
   :config (add-to-list 'company-backends 'company-go))
 
 (use-package godoctor
-  :ensure t)
 
 (use-package go-mode
   :ensure go-mode
@@ -450,13 +435,10 @@
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
 (use-package go-dlv
-  :ensure t)
 
 (use-package go-guru
-  :ensure t)
 
 (use-package itail
-  :ensure t)
 
 (use-package tramp
   :defer nil
@@ -481,7 +463,6 @@
 	   "-o ControlPersist=yes"))))
 
 (use-package guide-key
-  :ensure t
   :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
 
 (use-package aim-functions
@@ -609,7 +590,6 @@
 (add-hook 'auto-save-hook 'aim/desktop-save)
 
 (use-package log4j-mode
-  :ensure t)
 
 (use-package recentf
   :config
@@ -635,13 +615,11 @@
   (uniquify-all-lines-region (point-min) (point-max)))
 
 (use-package peep-dired
-  :ensure t
   :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
   :bind (:map dired-mode-map
 	      ("P" . peep-dired)))
 
 ;; (use-package dumb-jump
-;;   :ensure t
 ;;   :config
 ;;   (global-set-key (kbd "M-.") 'dumb-jump-go))
 
@@ -705,13 +683,10 @@
 ;;      (set-face-foreground 'diff-removed "brightred")))
 
 (use-package go-guru
-  :ensure t)
 
 (use-package clang-format
-  :ensure t)
 
 (use-package google-c-style
-  :ensure t
   :config
   (c-add-style "WebKit" '("Google"
 			  (c-basic-offset . 4)
@@ -726,10 +701,8 @@
 (defalias 'ttl 'toggle-truncate-lines)
 
 (use-package vcl-mode
-  :ensure t)
 
 (use-package cargo
-  :ensure t)
 
 ;; In the environment you'll need:
 ;;    export RUST_SRC_PATH="$(rustc --print sysroot)/lib/rustlib/src/rust/src"
@@ -737,7 +710,6 @@
 ;; And you'll need the actual src component:
 ;;     $ rustup component add rust-src
 (use-package racer
-  :ensure t
   :config
   (progn
     (add-hook 'rust-mode-hook #'racer-mode)
@@ -748,12 +720,10 @@
   :config (progn
 	    (setq rust-format-on-save t)
 	    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common))
-  :ensure t)
 
 (setq company-tooltip-align-annotations t)
 
 (use-package rtags
-  :ensure t
   :config
   (progn
     (setq rtags-completions-enabled t)
@@ -771,10 +741,8 @@
 ;;   '(add-to-list 'company-backends 'company-irony))
 
 (use-package helm-rtags
-  :ensure t)
 
 (use-package irony
-  :ensure t
   :config
   (add-hook 'c++-mode-hook 'irony-mode)
   (add-hook 'c-mode-hook 'irony-mode)
@@ -782,14 +750,12 @@
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
 (use-package company-irony
-  :ensure t
   :config
   (progn
     (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
     (add-hook 'c-mode-common-hook 'company-mode)))
 
 ;; (use-package projectile
-;;   :ensure t
 ;;   :config
 ;;   (projectile-global-mode))
 
@@ -804,12 +770,10 @@
   (function rtags-location-stack-back))
 
 (use-package cmake-ide
-  :ensure t
   :config
   (cmake-ide-setup))
 
 (use-package helm-gtags
-  :ensure t
   :config
   (progn
     (setq helm-gtags-ignore-case t
@@ -851,37 +815,28 @@
   (add-hook 'c-mode-common-hook 'elide-head))
 
 (use-package helm
-  :ensure t)
 
 (use-package helm-ls-git
-  :ensure t
   :config
   (global-set-key (kbd "C-c C-l") 'helm-ls-git-ls))
 
 (use-package protobuf-mode
-  :ensure t)
 
 (use-package terraform-mode
-  :ensure t)
 
 (use-package pass
-  :ensure t)
 
 (use-package gist
-  :ensure t)
 
 (use-package go-stacktracer
-  :ensure t)
 
 (use-package direnv
-  :ensure t
   :config
   (progn
     (direnv-mode)
     (setq direnv-always-show-summary nil)))
 
 (use-package notmuch
-  :ensure t
   :config
   (setq notmuch-hello-thousands-separator ","))
 
@@ -899,23 +854,19 @@
     retval))
 
 (use-package atomic-chrome
-  :ensure t
   :config
   (when (not (atomic-chrome-server-running-p))
     (atomic-chrome-start-server)))
 
 (use-package smart-shift
-  :ensure t
   :config
   (global-smart-shift-mode t))
 
 (use-package jinja2-mode
-  :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.j2\\'" . jinja2-mode)))
 
 (use-package ini-mode
-  :ensure t)
 
 ;;(add-hook 'after-init-hook 'global-company-mode)
 
@@ -1002,19 +953,14 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("M-g x" . dumb-jump-go-prefer-external)
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'helm) ;;(setq dumb-jump-selector 'ivy)
-  :ensure t)
 
 (use-package pinentry
-  :ensure t)
 
 (use-package adoc-mode
-  :ensure t)
 
 (use-package use-package-ensure-system-package
-  :ensure t)
 
 (use-package unfill
-  :ensure t
   :bind ([remap fill-paragraph] . unfill-toggle))
 
 (defun aim/frame-colours-unspecified (frame)
@@ -1056,10 +1002,8 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; This package is easiest way to open particular link on
 ;; github/gitlab/bitbucket/stash/git.savannah.gnu.org from Emacs
 (use-package browse-at-remote
-  :ensure t)
 
 (use-package git-timemachine
-  :ensure t)
 
 (defun browse-url-chromote (url &rest ignore)
   "Browse URL using browse-url-chromote."
@@ -1082,16 +1026,13 @@ save it in `ffap-file-at-point-line-number' variable."
   (require 'vterm))
 
 (use-package helm-pass
-  :ensure t)
 
 (use-package nix-mode
-  :ensure t
   :mode "\\.nix\\'"
   :custom
   (nix-indent-function #'nix-indent-line))
 
 (use-package deadgrep
-  :ensure t)
 
 (global-set-key (kbd "<f5>") #'deadgrep)
 
@@ -1118,7 +1059,6 @@ save it in `ffap-file-at-point-line-number' variable."
   :config (auto-compile-on-load-mode))
 
 (use-package projectile
-  :ensure t
   :bind
   ("C-c v" . 'projectile-ag)
 
@@ -1129,7 +1069,6 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
-  :ensure t
   :config
   (exec-path-from-shell-initialize))
 
@@ -1179,14 +1118,12 @@ other, future frames."
 (define-key global-map (kbd "C--") 'hrs/decrease-font-size)
 
 (hrs/reset-font-size)
+
 (use-package ghub
-  :ensure t)
 
 (use-package forge
-  :ensure t)
 
 (use-package multi-term
-  :ensure t)
 
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
