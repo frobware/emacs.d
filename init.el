@@ -232,12 +232,6 @@
 
 ;;'(magit-diff-hunk-heading-highlight ((t (:background "grey30" :foreground "grey90")))))
 
-(use-package diff-hl
-  :ensure t
-  :config
-  (add-hook 'prog-mode-hook 'turn-on-diff-hl-mode)
-  (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode))
-
 (use-package magit-gh-pulls
   :ensure t
   :commands turn-on-magit-gh-pulls
