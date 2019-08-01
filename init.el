@@ -1139,5 +1139,6 @@ other, future frames."
 (use-package almost-mono-themes
   :ensure t
   :config
-  (load-theme 'almost-mono-black t))
+  (load-theme 'almost-mono-white t))
 ;;  (load-theme 'almost-mono-white t))
+;; (load-theme 'almost-mono-white t)
