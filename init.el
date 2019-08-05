@@ -32,12 +32,12 @@
 
 (setq package-archives
       `(("melpa" . ,(concat aim/elpa-mirror-dir "/melpa/"))
-        ("melpa-stable" . ,(concat aim/elpa-mirror-dir "/melpa-stable/"))
+        ("stable-melpa" . ,(concat aim/elpa-mirror-dir "/stable-melpa/"))
 	("org" . ,(concat aim/elpa-mirror-dir "/org/"))
 	("gnu" . ,(concat aim/elpa-mirror-dir "/gnu/")))
       package-archive-priorities
       `(("melpa" . 5)
-        ("melpa-stable" . 100)
+        ("stable-melpa" . 100)
         ("org"   . 50)
         ("gnu"   . 0)))
 
