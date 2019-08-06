@@ -1,9 +1,3 @@
-;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
-;; http://seclists.org/oss-sec/2017/q3/422
-(eval-after-load "enriched"
-  '(defun enriched-decode-display-prop (start end &optional param)
-     (list start end)))
-
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold
@@ -15,17 +9,78 @@
 	    (setq gc-cons-threshold
 		  (car (get 'gc-cons-threshold 'standard-value)))))
 
+(fset 'yes-or-no-p 'y-or-n-p)
+
+(put 'narrow-to-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'set-goal-column 'disabled nil)
+
+;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
+;; thanks man!
+
+(setq hrs/default-font "Inconsolata")
+(setq hrs/default-font-size 18)
+(setq hrs/current-font-size hrs/default-font-size)
+
+(setq hrs/font-change-increment 1.1)
+
+(defun hrs/font-code ()
+  "Return a string representing the current font (like \"Inconsolata-14\")."
+  (concat hrs/default-font "-" (number-to-string hrs/current-font-size)))
+
+(defun hrs/set-font-size ()
+  "Set the font to `hrs/default-font' at `hrs/current-font-size'.
+Set that for the current frame, and also make it the default for
+other, future frames."
+  (let ((font-code (hrs/font-code)))
+    (add-to-list 'default-frame-alist (cons 'font font-code))
+    (set-frame-font font-code)))
+
+(defun hrs/reset-font-size ()
+  "Change font size back to `hrs/default-font-size'."
+  (interactive)
+  (setq hrs/current-font-size hrs/default-font-size)
+  (hrs/set-font-size))
+
+(defun hrs/increase-font-size ()
+  "Increase current font size by a factor of `hrs/font-change-increment'."
+  (interactive)
+  (setq hrs/current-font-size
+        (ceiling (* hrs/current-font-size hrs/font-change-increment)))
+  (hrs/set-font-size))
+
+(defun hrs/decrease-font-size ()
+  "Decrease current font size by a factor of `hrs/font-change-increment', down to a minimum size of 1."
+  (interactive)
+  (setq hrs/current-font-size
+        (max 1
+             (floor (/ hrs/current-font-size hrs/font-change-increment))))
+  (hrs/set-font-size))
+
+(define-key global-map (kbd "C-)") 'hrs/reset-font-size)
+(define-key global-map (kbd "C-+") 'hrs/increase-font-size)
+(define-key global-map (kbd "C--") 'hrs/decrease-font-size)
+
+(hrs/reset-font-size)
+
+;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
+;; http://seclists.org/oss-sec/2017/q3/422
+(eval-after-load "enriched"
+  '(defun enriched-decode-display-prop (start end &optional param)
+     (list start end)))
+
 (setq aim/elpa-mirror-dir
       (expand-file-name (concat user-emacs-directory ".elpa-mirror")))
 
 ;; If there's no .elpa-mirror then clone as:
 ;;   git clone --depth 1 git@github.com:d12frosted/elpa-mirror.git ~/.emacs.d/.elpa-mirror
 
- (setq package-archives
+(setq package-archives
       '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
         ("MELPA Stable" . "https://stable.melpa.org/packages/")
         ("MELPA"        . "https://melpa.org/packages/"))
-       package-archive-priorities
+      package-archive-priorities
       '(("GNU ELPA"     . 5)
         ("MELPA Stable" . 10)
         ("MELPA"        . 0)))
@@ -53,9 +108,14 @@
 (eval-when-compile
   (require 'use-package))
 
-(require 'use-package)
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+
+;; Always compile packages, and use the newest version available.
+(use-package auto-compile
+  :config (auto-compile-on-load-mode))
+
+(setq load-prefer-newer t)
 
 (defvar aim/is-darwin (eq system-type 'darwin))
 (defvar aim/is-linux (eq system-type 'gnu/linux))
@@ -68,95 +128,25 @@
 (setq abbrev-file-name
       (expand-file-name (concat user-emacs-directory "/.abbrevs")))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ag-arguments (quote ("--smart-case" "--stats" "--follow" "--silent")))
- '(c-default-style
-   (quote
-    ((c-mode . "linux")
-     (java-mode . "java")
-     (awk-mode . "awk")
-     (other . "gnu"))))
- '(custom-enabled-themes (quote (sanityinc-tomorrow-blue)))
- '(custom-safe-themes
-   (quote
-    ("82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(global-magit-file-mode nil)
- '(helm-gtags-prefix-key "g")
- '(helm-gtags-suggested-key-mapping t)
- '(helm-locate-project-list (quote ("~/frobware/meerkat" "~/linux-4.11")))
- '(magit-diff-refine-hunk (quote all))
- '(nix-indent-function (quote nix-indent-line) t)
- '(notmuch-archive-tags (quote ("-inbox" "-unread")))
- '(notmuch-hello-tag-list-make-query "tag:unread")
- '(notmuch-message-headers (quote ("Subject" "To" "Cc" "Bcc" "Date" "Reply-To")))
- '(notmuch-multipart/alternative-discouraged (quote ("text/html")) t)
- '(notmuch-saved-searches
-   (quote
-    ((:name "Assigned" :query "from:notifications@github.com cc:assigned.noreply@github.com")
-     (:name "aos-pod" :query "tag:lists/aos-pod" :key "p" :sort-order newest-first :search-type nil)
-     (:name "today" :query "date:today" :key "T" :sort-order oldest-first)
-     (:name "inbox" :query "tag:inbox" :key "i")
-     (:name "unread" :query "tag:unread" :key "u")
-     (:name "flagged" :query "tag:flagged" :key "f")
-     (:name "sent" :query "tag:sent" :key "t")
-     (:name "drafts" :query "tag:draft" :key "d")
-     (:name "gh" :query "tag:gh is:unread" :key "g")
-     (:name "RRs" :query "Review requested to:amcdermo from:notifications@github.com is:unread" :key "R")
-     (:name "ImageQualify" :query "ImageQualify")
-     (:name "me" :query "date:today to:me is:unread"))))
- '(notmuch-search-line-faces
-   (quote
-    (("deleted" :foreground "red")
-     ("unread" :weight bold)
-     ("flagged" :foreground "yellow"))))
- '(notmuch-search-oldest-first nil)
- '(notmuch-show-all-multipart/alternative-parts nil)
- '(notmuch-show-all-tags-list nil)
- '(notmuch-show-insert-text/plain-hook
-   (quote
-    (notmuch-wash-convert-inline-patch-to-part notmuch-wash-tidy-citations notmuch-wash-elide-blank-lines notmuch-wash-excerpt-citations notmuch-wash-wrap-long-lines)))
- '(notmuch-show-logo nil)
- '(notmuch-wash-wrap-lines-length 80)
- '(ns-command-modifier (quote meta))
- '(package-selected-packages
-   (quote
-    (ghub use-package irony rtags company magit wgrep-ag multi-term forge git-gutter-fringe nix-mode yaml-mode wgrep use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch markdown-mode magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter gist fringe-helper exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome ag adoc-mode)))
- '(send-mail-function (quote smtpmail-send-it))
- '(smtpmail-smtp-server "smtp.gmail.com")
- '(smtpmail-smtp-service 25))
+;; If this code is being evaluated by emacs --daemon, ensure that each
+;; subsequent frame is themed appropriately.
+(defun transparency (value)
+  "Sets the transparency of the frame window. 0=transparent/100=opaque."
+  (interactive "nTransparency Value 0 - 100 opaque:")
+  (set-frame-parameter (selected-frame) 'alpha value))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(diff-file-header ((t (:background "grey30" :weight bold))))
- '(ediff-even-diff-A ((t (:background "dim gray"))))
- '(ediff-even-diff-B ((t (:background "dim gray"))))
- '(ediff-odd-diff-B ((t (:background "dim gray")))))
+(use-package almost-mono-themes)
 
-;; Perls of wisdom:
-;;   http://emacshorrors.com/posts/come-in-and-find-out.html
-;; (unless (window-system)
-;;   (or frame-background-mode
-;;       (setq frame-background-mode 'dark)))
-
-(defun aim/set-cursor-colour nil
+(defun hrs/apply-theme ()
   (interactive)
-  (if (and (display-graphic-p) aim/is-linux)
-      (set-face-background 'cursor "yellow")
-    (shell-command (format "echo -ne '\\033]12;#00ff00\\007' > /proc/%d/fd/1" (emacs-pid)))))
+  (load-theme 'almost-mono-black t)
+  (transparency 100))
 
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(put 'narrow-to-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-(put 'set-goal-column 'disabled nil)
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (with-selected-frame frame (hrs/apply-theme))))
+  (hrs/apply-theme))
 
 ;; Store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
@@ -262,7 +252,17 @@
   (progn
     (smex-initialize)))
 
-(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+(use-package flyspell
+  :config
+  (add-hook 'text-mode-hook 'turn-on-auto-fill)
+  (add-hook 'gfm-mode-hook 'flyspell-mode)
+  (add-hook 'org-mode-hook 'flyspell-mode)
+
+  (add-hook 'git-commit-mode-hook 'flyspell-mode)
+  (add-hook 'mu4e-compose-mode-hook 'flyspell-mode))
+
+;; (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+
 ;; Setting ‘flyspell-issue-message-flag’ to nil, as printing messages
 ;; for every word (when checking the entire buffer) causes an enormous
 ;; slowdown.
@@ -1077,53 +1077,6 @@ save it in `ffap-file-at-point-line-number' variable."
   :config
   (exec-path-from-shell-initialize))
 
-;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
-
-(setq hrs/default-font "Inconsolata")
-(setq hrs/default-font-size 14)
-(setq hrs/current-font-size hrs/default-font-size)
-
-(setq hrs/font-change-increment 1.1)
-
-(defun hrs/font-code ()
-  "Return a string representing the current font (like \"Inconsolata-14\")."
-  (concat hrs/default-font "-" (number-to-string hrs/current-font-size)))
-
-(defun hrs/set-font-size ()
-  "Set the font to `hrs/default-font' at `hrs/current-font-size'.
-Set that for the current frame, and also make it the default for
-other, future frames."
-  (let ((font-code (hrs/font-code)))
-    (add-to-list 'default-frame-alist (cons 'font font-code))
-    (set-frame-font font-code)))
-
-(defun hrs/reset-font-size ()
-  "Change font size back to `hrs/default-font-size'."
-  (interactive)
-  (setq hrs/current-font-size hrs/default-font-size)
-  (hrs/set-font-size))
-
-(defun hrs/increase-font-size ()
-  "Increase current font size by a factor of `hrs/font-change-increment'."
-  (interactive)
-  (setq hrs/current-font-size
-        (ceiling (* hrs/current-font-size hrs/font-change-increment)))
-  (hrs/set-font-size))
-
-(defun hrs/decrease-font-size ()
-  "Decrease current font size by a factor of `hrs/font-change-increment', down to a minimum size of 1."
-  (interactive)
-  (setq hrs/current-font-size
-        (max 1
-             (floor (/ hrs/current-font-size hrs/font-change-increment))))
-  (hrs/set-font-size))
-
-(define-key global-map (kbd "C-)") 'hrs/reset-font-size)
-(define-key global-map (kbd "C-+") 'hrs/increase-font-size)
-(define-key global-map (kbd "C--") 'hrs/decrease-font-size)
-
-(hrs/reset-font-size)
-
 (defvar emacsql-sqlite-executable
   (expand-file-name (concat user-emacs-directory "/emacsql-sqlite")))
 
@@ -1135,10 +1088,3 @@ other, future frames."
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
-
-(use-package almost-mono-themes
-  :ensure t
-  :config
-  (load-theme 'almost-mono-white t))
-;;  (load-theme 'almost-mono-white t))
-;; (load-theme 'almost-mono-white t)
