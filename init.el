@@ -1,24 +1,13 @@
 (custom-set-variables
- '(helm-gtags-prefix-key "^Cg")
-
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
     ("cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" default)))
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(custom-set-faces)
 
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
@@ -806,29 +795,6 @@ other, future frames."
 ;;   :defer t
 ;;   :config
 ;;   (cmake-ide-setup))
-
-(use-package helm-gtags
-  :config
-  (progn
-    (setq helm-gtags-ignore-case t
-	  helm-gtags-auto-update t
-	  helm-gtags-use-input-at-cursor t
-	  helm-gtags-pulse-at-cursor t
-	  helm-gtags-prefix-key "\C-cg"
-	  helm-gtags-suggested-key-mapping t)
-    (add-hook 'dired-mode-hook 'helm-gtags-mode)
-    (add-hook 'eshell-mode-hook 'helm-gtags-mode)
-    (add-hook 'c-mode-hook 'helm-gtags-mode)
-    (add-hook 'c++-mode-hook 'helm-gtags-mode)
-    (add-hook 'java-mode-hook 'helm-gtags-mode)
-    (add-hook 'asm-mode-hook 'helm-gtags-mode)
-    (with-eval-after-load 'helm-gtags
-      (define-key helm-gtags-mode-map (kbd "C-c g a") 'helm-gtags-tags-in-this-function)
-      (define-key helm-gtags-mode-map (kbd "C-j") 'helm-gtags-select)
-      (define-key helm-gtags-mode-map (kbd "M-.") 'helm-gtags-dwim)
-      (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
-      (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-      (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history))))
 
 (defadvice gdb-inferior-filter
     (around gdb-inferior-filter-without-stealing)
