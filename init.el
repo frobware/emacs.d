@@ -137,9 +137,25 @@ other, future frames."
 
 (use-package almost-mono-themes)
 
+(defun get-frame-name (&optional frame)
+  (interactive)
+  "Return the string that names FRAME (a frame).  Default is selected frame."
+  (unless frame (setq frame (selected-frame)))
+  (if (framep frame)
+      (cdr (assq 'name (frame-parameters frame)))
+    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
+
+;; from https://nicolas.petton.fr/blog/emacs-dark-window-decoration.html
+(defun set-selected-frame-dark-window-decoration ()
+  (interactive)
+  (let ((frame-name (get-frame-name (selected-frame))))
+    (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
+
 (defun hrs/apply-theme ()
   (interactive)
   (load-theme 'almost-mono-black t)
+  (if (window-system)
+      (set-selected-frame-dark-window-decoration))
   (transparency 100))
 
 (if (daemonp)
@@ -303,6 +319,7 @@ other, future frames."
 (use-package go-eldoc
   :ensure go-eldoc
   :commands go-eldoc-setup
+  :requires go-mode
   :config (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 (use-package go-add-tags
@@ -640,14 +657,6 @@ other, future frames."
 ;; (use-package dumb-jump
 ;;   :config
 ;;   (global-set-key (kbd "M-.") 'dumb-jump-go))
-
-(defun get-frame-name (&optional frame)
-  (interactive)
-  "Return the string that names FRAME (a frame).  Default is selected frame."
-  (unless frame (setq frame (selected-frame)))
-  (if (framep frame)
-      (cdr (assq 'name (frame-parameters frame)))
-    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
 
 (defun visit-dir-as-root (hostname)
   (interactive "shost: ")
@@ -1051,15 +1060,6 @@ save it in `ffap-file-at-point-line-number' variable."
   (setq frame-background-mode 'dark)
   (mapc 'frame-set-background-mode (list (selected-frame))))
 
-;; from https://nicolas.petton.fr/blog/emacs-dark-window-decoration.html
-(defun set-selected-frame-dark ()
-  (interactive)
-  (let ((frame-name (get-frame-name (selected-frame))))
-    (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
-(if (window-system)
-    (set-selected-frame-dark))
-
-
 (use-package auto-compile
   :config (auto-compile-on-load-mode))
 
@@ -1088,3 +1088,21 @@ save it in `ffap-file-at-point-line-number' variable."
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" default)))
+ '(nix-indent-function (quote nix-indent-line) t)
+ '(package-selected-packages
+   (quote
+    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
