@@ -1,3 +1,25 @@
+(custom-set-variables
+ '(helm-gtags-prefix-key "^Cg")
+
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" default)))
+ '(nix-indent-function (quote nix-indent-line) t)
+ '(package-selected-packages
+   (quote
+    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold
@@ -1088,21 +1110,3 @@ save it in `ffap-file-at-point-line-number' variable."
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" default)))
- '(nix-indent-function (quote nix-indent-line) t)
- '(package-selected-packages
-   (quote
-    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git helm-gtags guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
