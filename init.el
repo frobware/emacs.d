@@ -5,7 +5,7 @@
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist forge exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
 
 (custom-set-faces)
 
@@ -1067,9 +1067,6 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (defvar emacsql-sqlite-executable
   (expand-file-name (concat user-emacs-directory "/emacsql-sqlite")))
-
-(use-package ghub)
-(use-package forge)
 
 (use-package multi-term)
 
