@@ -1073,3 +1073,19 @@ save it in `ffap-file-at-point-line-number' variable."
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ffap-machine-p-known (quote reject))
+ '(nix-indent-function (quote nix-indent-line) t)
+ '(package-selected-packages
+   (quote
+    (go-stacktracer gnus-desktop-notify w3m multi-term forge ghub exec-path-from-shell projectile nix-mode helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode dumb-jump jinja2-mode atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git helm-gtags company-irony irony helm-rtags rtags racer cargo guide-key go-guru go-dlv godoctor company-go python-mode fringe-helper git-gutter dockerfile-mode go-add-tags go-eldoc company yaml-mode smex markdown-mode magit-gh-pulls magit ag wgrep-ag cmake-mode almost-mono-themes auto-compile use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
