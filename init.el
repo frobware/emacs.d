@@ -1,13 +1,23 @@
 (custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
     ("cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" default)))
+ '(ffap-machine-p-known (quote reject))
  '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (better-defaults uniquify nix-mode yaml-mode wgrep-ag use-package-ensure-system-package unfill terraform-mode smex racer python-mode protobuf-mode projectile pass notmuch multi-term magit-gh-pulls jinja2-mode helm-rtags helm-pass helm-ls-git guide-key godoctor go-guru go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist exec-path-from-shell dumb-jump dockerfile-mode direnv company-irony company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+    (go-autocomplete go-stacktracer gnus-desktop-notify w3m multi-term forge ghub exec-path-from-shell projectile nix-mode helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode dumb-jump jinja2-mode atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git helm-gtags irony helm-rtags rtags racer cargo guide-key go-guru go-dlv godoctor python-mode fringe-helper git-gutter dockerfile-mode go-add-tags go-eldoc yaml-mode smex markdown-mode magit-gh-pulls magit ag wgrep-ag cmake-mode almost-mono-themes auto-compile use-package))))
 
-(custom-set-faces)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
@@ -318,15 +328,6 @@ other, future frames."
 
 (use-package browse-url)
 
-(use-package company
-  :ensure company
-  :config
-  (setq company-idle-delay 0.3
-	company-tooltip-limit 20
-	company-minimum-prefix-length 2
-	company-echo-delay 0
-	company-auto-complete nil))
-
 (use-package go-eldoc
   :ensure go-eldoc
   :commands go-eldoc-setup
@@ -393,14 +394,6 @@ other, future frames."
 (use-package dockerfile-mode)
 
 (require 'lisp-mode)
-;;(bind-key "M-/" 'company-complete emacs-lisp-mode-map)
-(add-hook 'emacs-lisp-mode-hook 'company-mode t)
-
-;; (use-package lisp-mode
-;;   :config
-;;   (progn
-;;     (bind-key "M-/" 'company-complete emacs-lisp-mode-map)
-;;     (add-hook 'emacs-lisp-mode-hook 'company-mode t)))
 
 (use-package ffap
   :config (ffap-bindings))
@@ -448,10 +441,6 @@ other, future frames."
 	  (set-variable 'py-indent-offset 4)
 	  (set-variable 'indent-tabs-mode nil)))
 
-(use-package company-go
-  :ensure company-go
-  :config (add-to-list 'company-backends 'company-go))
-
 (use-package godoctor)
 
 (use-package go-mode
@@ -461,13 +450,7 @@ other, future frames."
   :config
   (progn
     (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    ;; By default company-mode loads every backend it has. If you want
-    ;; to only have company-mode enabled in go-mode add the following
-    ;; to your emacs-config:
-    (add-hook 'go-mode-hook (lambda ()
-			      (set (make-local-variable 'company-backends) '(company-go))
-			      (company-mode))))
+    (add-hook 'before-save-hook 'gofmt-before-save))
   ;;(flycheck-mode)
   ;;#'go-guru-hl-identifier-mode)))
   :config
@@ -480,7 +463,6 @@ other, future frames."
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
     (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
     (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "<tab>" 'company-complete go-mode-map)
     (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
 
 (use-package go-dlv)
@@ -735,15 +717,11 @@ other, future frames."
   :config
   (progn
     (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'racer-mode-hook #'eldoc-mode)
-    (add-hook 'racer-mode-hook #'company-mode)))
+    (add-hook 'racer-mode-hook #'eldoc-mode)))
 
 (use-package rust-mode
   :config (progn
-	    (setq rust-format-on-save t)
-	    (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)))
-
-(setq company-tooltip-align-annotations t)
+	    (setq rust-format-on-save t)))
 
 (use-package rtags
   :config
@@ -759,9 +737,6 @@ other, future frames."
 ;;   (function rtags-find-references-at-point))
 ;; See https://github.com/Andersbakken/rtags/issues/832))
 
-;; (eval-after-load 'company
-;;   '(add-to-list 'company-backends 'company-irony))
-
 (use-package helm-rtags)
 
 (use-package irony
@@ -770,12 +745,6 @@ other, future frames."
   (add-hook 'c-mode-hook 'irony-mode)
   (add-hook 'objc-mode-hook 'irony-mode)
   (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-(use-package company-irony
-  :config
-  (progn
-    (define-key c-mode-base-map (kbd "M-RET") 'company-irony)
-    (add-hook 'c-mode-common-hook 'company-mode)))
 
 ;; (use-package projectile
 ;;   :config
@@ -867,8 +836,6 @@ other, future frames."
 
 ;; (use-package ini-mode
 ;;   :ensure t)
-
-;;(add-hook 'after-init-hook 'global-company-mode)
 
 (message "Done")
 ;;; Taken from:
@@ -1017,10 +984,7 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)
-(add-hook 'racer-mode-hook #'company-mode)
 (require 'rust-mode)
-(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
-(setq company-tooltip-align-annotations t)
 
 (when (file-exists-p (expand-file-name "~/emacs-libvterm/vterm-module.so"))
   (add-to-list 'load-path (expand-file-name "~/emacs-libvterm"))
@@ -1073,19 +1037,10 @@ save it in `ffap-file-at-point-line-number' variable."
 (global-set-key (kbd "C-c t") 'multi-term)
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ffap-machine-p-known (quote reject))
- '(nix-indent-function (quote nix-indent-line) t)
- '(package-selected-packages
-   (quote
-    (go-stacktracer gnus-desktop-notify w3m multi-term forge ghub exec-path-from-shell projectile nix-mode helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode dumb-jump jinja2-mode atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git helm-gtags company-irony irony helm-rtags rtags racer cargo guide-key go-guru go-dlv godoctor company-go python-mode fringe-helper git-gutter dockerfile-mode go-add-tags go-eldoc company yaml-mode smex markdown-mode magit-gh-pulls magit ag wgrep-ag cmake-mode almost-mono-themes auto-compile use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+(use-package go-autocomplete
+  :ensure t)
+
+(require 'go-autocomplete)
+(require 'auto-complete-config)
+(ac-config-default)
