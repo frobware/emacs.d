@@ -1,24 +1,3 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("cbd85ab34afb47003fa7f814a462c24affb1de81ebf172b78cb4e65186ba59d2" default)))
- '(ffap-machine-p-known (quote reject))
- '(nix-indent-function (quote nix-indent-line) t)
- '(package-selected-packages
-   (quote
-    (go-autocomplete go-stacktracer gnus-desktop-notify w3m multi-term forge ghub exec-path-from-shell projectile nix-mode helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode dumb-jump jinja2-mode atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git helm-gtags irony helm-rtags rtags racer cargo guide-key go-guru go-dlv godoctor python-mode fringe-helper git-gutter dockerfile-mode go-add-tags go-eldoc yaml-mode smex markdown-mode magit-gh-pulls magit ag wgrep-ag cmake-mode almost-mono-themes auto-compile use-package))))
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold
@@ -500,7 +479,7 @@ other, future frames."
 (use-package aim-global-keybindings
   :load-path "lisp/")
 
-(add-hook 'lisp-mode #'(complete-mode 1))
+;;(add-hook 'lisp-mode #'(complete-mode 1))
 
 (defadvice kill-line (before check-position activate)
   (if (and (eolp) (not (bolp)))
@@ -1044,3 +1023,17 @@ save it in `ffap-file-at-point-line-number' variable."
 (require 'go-autocomplete)
 (require 'auto-complete-config)
 (ac-config-default)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (go-autocomplete multi-term exec-path-from-shell projectile nix-mode helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode dumb-jump jinja2-mode atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git irony helm-rtags rtags racer cargo guide-key go-guru go-dlv godoctor python-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode go-add-tags go-eldoc yaml-mode smex markdown-mode magit-gh-pulls magit ag wgrep-ag cmake-mode almost-mono-themes auto-compile use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
