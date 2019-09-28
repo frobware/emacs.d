@@ -1049,3 +1049,6 @@ save it in `ffap-file-at-point-line-number' variable."
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
   :ensure)
+
+(use-package xcscope)
+(cscope-setup)
