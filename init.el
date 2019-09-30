@@ -1,3 +1,5 @@
+(setq package-check-signature nil)
+
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold
@@ -423,28 +425,6 @@ other, future frames."
 
 (use-package godoctor)
 
-(use-package go-mode
-  :ensure go-mode
-  :mode "\\.go\\'"
-  :commands (godoc gofmt gofmt-before-save go-remove-unused-imports)
-  :config
-  (progn
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save))
-  ;;(flycheck-mode)
-  ;;#'go-guru-hl-identifier-mode)))
-  :config
-  (progn
-    (use-package godoctor)
-    ;;(bind-key "C-c C-P" 'aim/occur-go-public-functions)
-    (bind-key "C-c C-f" 'gofmt go-mode-map)
-    (bind-key "C-c C-g" 'go-goto-imports go-mode-map)
-    (bind-key "C-c C-k" 'godoc go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)
-    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-    (bind-key "M-." 'godef-jump go-mode-map)
-    (bind-key "C-c C-r" 'go-remove-unused-imports go-mode-map)))
-
 (use-package go-dlv)
 
 (use-package go-guru)
@@ -605,6 +585,9 @@ other, future frames."
 	  recentf-max-saved-items 100)
     (recentf-mode 1)))
 
+(add-to-list 'recentf-exclude
+             (expand-file-name "~/.emacs.d/elpa"))
+
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
   (interactive "*r")
@@ -703,47 +686,12 @@ other, future frames."
   :config (progn
 	    (setq rust-format-on-save t)))
 
-(use-package rtags
-  :config
-  (progn
-    (setq rtags-completions-enabled t)
-    (rtags-enable-standard-keybindings)
-    (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)))
-
-(define-key c-mode-base-map (kbd "M-.")
-  (function rtags-find-symbol-at-point))
-
-;; (define-key c-mode-base-map (kbd "M-,")
-;;   (function rtags-find-references-at-point))
-;; See https://github.com/Andersbakken/rtags/issues/832))
-
-(use-package helm-rtags)
-
-(use-package irony
-  :config
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
-;; (use-package projectile
-;;   :config
-;;   (projectile-global-mode))
-
 (unless (fboundp 'xref-push-marker-stack)
   (defalias 'xref-pop-marker-stack 'pop-tag-mark)
 
   (defun xref-push-marker-stack (&optional m)
     "Add point to the marker stack."
     (ring-insert find-tag-marker-ring (or m (point-marker)))))
-
-(define-key c-mode-base-map (kbd "M-,")
-  (function rtags-location-stack-back))
-
-;; (use-package cmake-ide
-;;   :defer t
-;;   :config
-;;   (cmake-ide-setup))
 
 (defadvice gdb-inferior-filter
     (around gdb-inferior-filter-without-stealing)
@@ -764,6 +712,7 @@ other, future frames."
   (add-hook 'c-mode-common-hook 'elide-head))
 
 (use-package helm)
+(use-package helm-company)
 
 (use-package helm-ls-git
   :config
@@ -1018,37 +967,80 @@ save it in `ffap-file-at-point-line-number' variable."
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
 
-(use-package go-autocomplete
-  :ensure t)
-
-(require 'go-autocomplete)
-(require 'auto-complete-config)
-(ac-config-default)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (go-autocomplete multi-term exec-path-from-shell projectile nix-mode helm-pass git-timemachine browse-at-remote unfill use-package-ensure-system-package adoc-mode dumb-jump jinja2-mode atomic-chrome notmuch direnv gist pass terraform-mode protobuf-mode helm-ls-git irony helm-rtags rtags racer cargo guide-key go-guru go-dlv godoctor python-mode git-gutter-fringe fringe-helper git-gutter dockerfile-mode go-add-tags go-eldoc yaml-mode smex markdown-mode magit-gh-pulls magit ag wgrep-ag cmake-mode almost-mono-themes auto-compile use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-(use-package ivy)
-
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
          ("M-g j" . dumb-jump-go)
          ("M-g i" . dumb-jump-go-prompt)
          ("M-g x" . dumb-jump-go-prefer-external)
          ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+  ;;:config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
   :ensure)
 
-(use-package xcscope)
-(cscope-setup)
+;;Load auto-complete
+;; (use-package go-autocomplete)
+;; (ac-config-default)
+;; (require 'auto-complete-config)
+;; (require 'go-autocomplete)
+
+;; suggest things when company has nothing to say
+(setq-default tab-always-indent 'complete)
+
+;; turn off annoying tooltips
+(use-package company
+  :config (setq company-frontends nil)
+  :hook (after-init . global-company-mode)
+  :config
+  :ensure company
+  :config
+  (setq company-idle-delay 0.3
+	company-tooltip-limit 20
+	company-minimum-prefix-length 2
+	company-echo-delay 0
+	company-require-match nil
+	company-auto-complete nil))
+
+(use-package company-go
+  :after company
+  :ensure company-go
+  :config (add-to-list 'company-backends 'company-go))
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
+
+(with-eval-after-load 'company
+  '(progn
+     (define-key company-active-map (kbd "TAB") 'company-select-previous)
+     (define-key company-active-map (kbd "<tab>") 'company-select-previous)
+     (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)))
+
+(setq company-frontends
+      '(company-pseudo-tooltip-unless-just-one-frontend
+        company-preview-frontend
+        company-echo-metadata-frontend))
+
+(setq company-auto-complete 'never)
+;;(company-tng-configure-default)
+
+(use-package go-mode
+  :ensure go-mode
+  :mode "\\.go\\'"
+  :config
+  (progn
+    (setq gofmt-command "goimports")
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    ;; By default company-mode loads every backend it has. If you want
+    ;; to only have company-mode enabled in go-mode add the following
+    ;; to your emacs-config:
+    (add-hook 'go-mode-hook
+	  (lambda ()
+            (set (make-local-variable 'company-backends) '(company-go))
+            (company-mode))))
+  :config
+  (progn
+    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+    (bind-key "C-M-i" 'helm-company go-mode-map)
+    (bind-key "M-." 'godef-jump go-mode-map)))
