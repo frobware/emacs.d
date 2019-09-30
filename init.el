@@ -49,15 +49,15 @@ other, future frames."
   "Increase current font size by a factor of `hrs/font-change-increment'."
   (interactive)
   (setq hrs/current-font-size
-        (ceiling (* hrs/current-font-size hrs/font-change-increment)))
+	(ceiling (* hrs/current-font-size hrs/font-change-increment)))
   (hrs/set-font-size))
 
 (defun hrs/decrease-font-size ()
   "Decrease current font size by a factor of `hrs/font-change-increment', down to a minimum size of 1."
   (interactive)
   (setq hrs/current-font-size
-        (max 1
-             (floor (/ hrs/current-font-size hrs/font-change-increment))))
+	(max 1
+	     (floor (/ hrs/current-font-size hrs/font-change-increment))))
   (hrs/set-font-size))
 
 (define-key global-map (kbd "C-)") 'hrs/reset-font-size)
@@ -80,23 +80,23 @@ other, future frames."
 
 (setq package-archives
       '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-        ("MELPA Stable" . "https://stable.melpa.org/packages/")
-        ("MELPA"        . "https://melpa.org/packages/"))
+	("MELPA Stable" . "https://stable.melpa.org/packages/")
+	("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
       '(("GNU ELPA"     . 5)
-        ("MELPA Stable" . 10)
-        ("MELPA"        . 0)))
+	("MELPA Stable" . 10)
+	("MELPA"        . 0)))
 
 (setq package-archives
       `(("melpa" . ,(concat aim/elpa-mirror-dir "/melpa/"))
-        ("stable-melpa" . ,(concat aim/elpa-mirror-dir "/stable-melpa/"))
+	("stable-melpa" . ,(concat aim/elpa-mirror-dir "/stable-melpa/"))
 	("org" . ,(concat aim/elpa-mirror-dir "/org/"))
 	("gnu" . ,(concat aim/elpa-mirror-dir "/gnu/")))
       package-archive-priorities
       `(("melpa" . 5)
-        ("stable-melpa" . 100)
-        ("org"   . 50)
-        ("gnu"   . 0)))
+	("stable-melpa" . 100)
+	("org"   . 50)
+	("gnu"   . 0)))
 
 (require 'package)
 (package-initialize)
@@ -162,8 +162,8 @@ other, future frames."
 
 (if (daemonp)
     (add-hook 'after-make-frame-functions
-              (lambda (frame)
-                (with-selected-frame frame (hrs/apply-theme))))
+	      (lambda (frame)
+		(with-selected-frame frame (hrs/apply-theme))))
   (hrs/apply-theme))
 
 ;; Store all backup and autosave files in the tmp dir
@@ -420,8 +420,8 @@ other, future frames."
 
 (use-package python-mode
   :config (progn
-	  (set-variable 'py-indent-offset 4)
-	  (set-variable 'indent-tabs-mode nil)))
+	    (set-variable 'py-indent-offset 4)
+	    (set-variable 'indent-tabs-mode nil)))
 
 (use-package godoctor)
 
@@ -586,7 +586,7 @@ other, future frames."
     (recentf-mode 1)))
 
 (add-to-list 'recentf-exclude
-             (expand-file-name "~/.emacs.d/elpa"))
+	     (expand-file-name "~/.emacs.d/elpa"))
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
@@ -608,7 +608,7 @@ other, future frames."
 ;;   :ensure t
 ;;   :defer t ; don't access `dired-mode-map' until `peep-dired' is loaded
 ;;   :bind (:map dired-mode-map
-;; 	      ("P" . peep-dired)))
+;;	      ("P" . peep-dired)))
 
 ;; (use-package dumb-jump
 ;;   :config
@@ -969,10 +969,10 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
-         ("M-g j" . dumb-jump-go)
-         ("M-g i" . dumb-jump-go-prompt)
-         ("M-g x" . dumb-jump-go-prefer-external)
-         ("M-g z" . dumb-jump-go-prefer-external-other-window))
+	 ("M-g j" . dumb-jump-go)
+	 ("M-g i" . dumb-jump-go-prompt)
+	 ("M-g x" . dumb-jump-go-prefer-external)
+	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
   ;;:config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
   :ensure)
 
@@ -1046,21 +1046,21 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (if aim/prefer-ac-complete
     (progn
-    (use-package go-autocomplete)
-    (require 'go-autocomplete)
-    (require 'auto-complete-config)
-    (ac-config-default)
-    (define-key ac-complete-mode-map "\t" 'ac-expand)
-    (define-key ac-complete-mode-map "\r" 'ac-complete)
-    (define-key ac-complete-mode-map "\C-n" 'ac-next)
-    (define-key ac-complete-mode-map "\C-p" 'ac-previous)
-    (set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
+      (use-package go-autocomplete)
+      (require 'go-autocomplete)
+      (require 'auto-complete-config)
+      (ac-config-default)
+      (define-key ac-complete-mode-map "\t" 'ac-expand)
+      (define-key ac-complete-mode-map "\r" 'ac-complete)
+      (define-key ac-complete-mode-map "\C-n" 'ac-next)
+      (define-key ac-complete-mode-map "\C-p" 'ac-previous)
+      (set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
   (progn
-      (use-package company-go
-	:after company
-	:ensure company-go
-	:config (add-to-list 'company-backends 'company-go))
-      (add-hook 'go-mode-hook
-		(lambda ()
-		  (set (make-local-variable 'company-backends) '(company-go))
-		  (company-mode)))))
+    (use-package company-go
+      :after company
+      :ensure company-go
+      :config (add-to-list 'company-backends 'company-go))
+    (add-hook 'go-mode-hook
+	      (lambda ()
+		(set (make-local-variable 'company-backends) '(company-go))
+		(company-mode)))))
