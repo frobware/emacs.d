@@ -1044,3 +1044,11 @@ save it in `ffap-file-at-point-line-number' variable."
     (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
     (bind-key "C-M-i" 'helm-company go-mode-map)
     (bind-key "M-." 'godef-jump go-mode-map)))
+    
+(use-package apropospriate-theme
+  :ensure t
+  :config
+  (load-theme 'apropospriate-dark t)
+  ;; or
+  ;;(load-theme 'apropospriate-light t)
+  )
