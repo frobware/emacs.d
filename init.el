@@ -988,7 +988,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; turn off annoying tooltips
 (use-package company
   :config (setq company-frontends nil)
-  :hook (after-init . global-company-mode)
+  ;;:hook (after-init . global-company-mode)
   :config
   :ensure company
   :config
@@ -998,11 +998,6 @@ save it in `ffap-file-at-point-line-number' variable."
 	company-echo-delay 0
 	company-require-match nil
 	company-auto-complete nil))
-
-(use-package company-go
-  :after company
-  :ensure company-go
-  :config (add-to-list 'company-backends 'company-go))
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -1019,8 +1014,8 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (setq company-frontends
       '(company-pseudo-tooltip-unless-just-one-frontend
-        company-preview-frontend
-        company-echo-metadata-frontend))
+	company-preview-frontend
+	company-echo-metadata-frontend))
 
 (setq company-auto-complete 'never)
 ;;(company-tng-configure-default)
@@ -1031,24 +1026,41 @@ save it in `ffap-file-at-point-line-number' variable."
   :config
   (progn
     (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save)
-    ;; By default company-mode loads every backend it has. If you want
-    ;; to only have company-mode enabled in go-mode add the following
-    ;; to your emacs-config:
-    (add-hook 'go-mode-hook
-	  (lambda ()
-            (set (make-local-variable 'company-backends) '(company-go))
-            (company-mode))))
+    (add-hook 'before-save-hook 'gofmt-before-save))
   :config
   (progn
     (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
     (bind-key "C-M-i" 'helm-company go-mode-map)
     (bind-key "M-." 'godef-jump go-mode-map)))
-    
-(use-package apropospriate-theme
-  :ensure t
-  :config
-  (load-theme 'apropospriate-dark t)
-  ;; or
-  ;;(load-theme 'apropospriate-light t)
-  )
+
+(and nil
+     (use-package apropospriate-theme
+       :ensure t
+       :config
+       (load-theme 'apropospriate-dark t)
+       ;; or
+       ;;(load-theme 'apropospriate-light t)
+       ))
+
+(setq aim/prefer-ac-complete t)
+
+(if aim/prefer-ac-complete
+    (progn
+    (use-package go-autocomplete)
+    (require 'go-autocomplete)
+    (require 'auto-complete-config)
+    (ac-config-default)
+    (define-key ac-complete-mode-map "\t" 'ac-expand)
+    (define-key ac-complete-mode-map "\r" 'ac-complete)
+    (define-key ac-complete-mode-map "\C-n" 'ac-next)
+    (define-key ac-complete-mode-map "\C-p" 'ac-previous)
+    (set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
+  (progn
+      (use-package company-go
+	:after company
+	:ensure company-go
+	:config (add-to-list 'company-backends 'company-go))
+      (add-hook 'go-mode-hook
+		(lambda ()
+		  (set (make-local-variable 'company-backends) '(company-go))
+		  (company-mode)))))
