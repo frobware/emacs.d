@@ -137,7 +137,7 @@ other, future frames."
   (interactive "nTransparency Value 0 - 100 opaque:")
   (set-frame-parameter (selected-frame) 'alpha value))
 
-;;(use-package almost-mono-themes)
+(use-package almost-mono-themes)
 
 (defun get-frame-name (&optional frame)
   (interactive)
@@ -155,7 +155,7 @@ other, future frames."
 
 (defun hrs/apply-theme ()
   (interactive)
-  ;;(load-theme 'almost-mono-black t)
+  (load-theme 'almost-mono-black t)
   (if (window-system)
       (set-selected-frame-dark-window-decoration))
   (transparency 100))
