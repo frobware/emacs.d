@@ -137,7 +137,7 @@ other, future frames."
   (interactive "nTransparency Value 0 - 100 opaque:")
   (set-frame-parameter (selected-frame) 'alpha value))
 
-(use-package almost-mono-themes)
+;;(use-package almost-mono-themes)
 
 (defun get-frame-name (&optional frame)
   (interactive)
@@ -155,7 +155,7 @@ other, future frames."
 
 (defun hrs/apply-theme ()
   (interactive)
-  (load-theme 'almost-mono-black t)
+  ;;(load-theme 'almost-mono-black t)
   (if (window-system)
       (set-selected-frame-dark-window-decoration))
   (transparency 100))
@@ -968,12 +968,14 @@ save it in `ffap-file-at-point-line-number' variable."
 (put 'magit-clean 'disabled nil)
 
 (use-package dumb-jump
+  :after ivy
   :bind (("M-g o" . dumb-jump-go-other-window)
 	 ("M-g j" . dumb-jump-go)
 	 ("M-g i" . dumb-jump-go-prompt)
 	 ("M-g x" . dumb-jump-go-prefer-external)
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  ;;:config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+  :config (setq dumb-jump-selector 'ivy)
+  ;; (setq dumb-jump-selector 'helm)
   :ensure)
 
 ;;Load auto-complete
@@ -1064,9 +1066,50 @@ save it in `ffap-file-at-point-line-number' variable."
 	    (lambda ()
 	      (set (make-local-variable 'company-backends) '(company-go))
 	      (company-mode))))
-  
+
 (setq aim/prefer-ac-complete t)
 
 (if aim/prefer-ac-complete
     (aim/setup-ac-complete)
   (aim/setup-company-complete))
+
+(use-package counsel
+  :config
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c a") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+
+(use-package ivy
+  :config
+  (setq ivy-use-selectable-prompt t
+	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
+	ivy-height 10
+	ivy-count-format "(%d/%d) "
+	ivy-on-del-error-function nil
+	ivy-initial-inputs-alist nil))
+
+(use-package ivy-posframe
+  :config
+  (setq ivy-posframe-height-alist '((swiper . 10)
+                                    (t      . 5)))
+  (setq ivy-posframe-display-functions-alist
+	'((swiper          . nil)
+          (complete-symbol . ivy-posframe-display-at-point)
+          (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
+          (t               . ivy-posframe-display)))
+  (ivy-posframe-mode 1))
+
+(use-package swiper
+  :config
+  (global-set-key (kbd "C-s") 'swiper))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ivy-posframe ((t (:background "grey20" :foreground "yellow")))))
