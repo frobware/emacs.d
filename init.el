@@ -1042,25 +1042,31 @@ save it in `ffap-file-at-point-line-number' variable."
        ;;(load-theme 'apropospriate-light t)
        ))
 
+(defun aim/setup-ac-complete nil
+  (interactive)
+  (use-package go-autocomplete)
+  (require 'go-autocomplete)
+  (require 'auto-complete-config)
+  (ac-config-default)
+  (define-key ac-complete-mode-map "\t" 'ac-expand)
+  (define-key ac-complete-mode-map "\r" 'ac-complete)
+  (define-key ac-complete-mode-map "\C-n" 'ac-next)
+  (define-key ac-complete-mode-map "\C-p" 'ac-previous)
+  (set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
+
+(defun aim/setup-company-complete nil
+  (interactive)
+  (use-package company-go
+    :after company
+    :ensure company-go
+    :config (add-to-list 'company-backends 'company-go))
+  (add-hook 'go-mode-hook
+	    (lambda ()
+	      (set (make-local-variable 'company-backends) '(company-go))
+	      (company-mode))))
+  
 (setq aim/prefer-ac-complete t)
 
 (if aim/prefer-ac-complete
-    (progn
-      (use-package go-autocomplete)
-      (require 'go-autocomplete)
-      (require 'auto-complete-config)
-      (ac-config-default)
-      (define-key ac-complete-mode-map "\t" 'ac-expand)
-      (define-key ac-complete-mode-map "\r" 'ac-complete)
-      (define-key ac-complete-mode-map "\C-n" 'ac-next)
-      (define-key ac-complete-mode-map "\C-p" 'ac-previous)
-      (set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
-  (progn
-    (use-package company-go
-      :after company
-      :ensure company-go
-      :config (add-to-list 'company-backends 'company-go))
-    (add-hook 'go-mode-hook
-	      (lambda ()
-		(set (make-local-variable 'company-backends) '(company-go))
-		(company-mode)))))
+    (aim/setup-ac-complete)
+  (aim/setup-company-complete))
