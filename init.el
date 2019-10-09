@@ -955,6 +955,14 @@ save it in `ffap-file-at-point-line-number' variable."
   (setq projectile-switch-project-action 'projectile-dired)
   (setq projectile-require-project-root nil))
 
+;; https://tuhdo.github.io/helm-projectile.html
+(use-package helm-projectile)
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+(setq projectile-switch-project-action 'helm-projectile-find-file)
+(setq projectile-switch-project-action 'helm-projectile)
+
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :config
@@ -1060,11 +1068,45 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (setq aim/prefer-ac-complete t)
 
-(use-package smartparens)
-
 ;; (if aim/prefer-ac-complete
 ;;     (aim/setup-ac-complete)
 ;;   (aim/setup-company-complete))
+
+(use-package smartparens)
+
+(use-package counsel
+  :config
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c a") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+
+(use-package ivy
+  :config
+  (setq ivy-use-selectable-prompt t
+	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
+	ivy-height 10
+	ivy-count-format "(%d/%d) "
+	ivy-on-del-error-function nil
+	ivy-initial-inputs-alist nil))
+
+(use-package ivy-posframe
+  :config
+  (setq ivy-posframe-height-alist '((swiper . 10)
+                                    (t      . 5)))
+  (setq ivy-posframe-display-functions-alist
+	'((swiper          . nil)
+          (complete-symbol . ivy-posframe-display-at-point)
+          (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
+          (t               . ivy-posframe-display)))
+  (ivy-posframe-mode 1))
+
+(use-package swiper
+  :config
+  (global-set-key (kbd "C-s") 'swiper))
 
 (use-package yasnippet)
 
@@ -1137,6 +1179,8 @@ save it in `ffap-file-at-point-line-number' variable."
 
 ;; (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
 ;; (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+
+;; (defun my-test-prefix (project-type) "_test")
 
 ;;(setq projectile-project-search-path '("~/go-projects/" "~/frobware/"))
 
