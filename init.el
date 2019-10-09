@@ -319,6 +319,14 @@ other, future frames."
 (use-package go-add-tags
   :ensure go-add-tags)
 
+(use-package flycheck
+  :config
+  (setq flycheck-highlighting-mode 'lines))
+
+(use-package flycheck-golangci-lint)
+
+(add-hook 'go-mode-hook 'flycheck-mode)
+
 ;; (use-package flycheck
 ;;   :config
 ;;   (progn
@@ -949,7 +957,7 @@ save it in `ffap-file-at-point-line-number' variable."
   ("C-c v" . 'projectile-ag)
 
   :config
-  (setq projectile-completion-system 'ivy)
+  (setq projectile-completion-system 'ido)
   (setq projectile-switch-project-action 'projectile-dired)
   (setq projectile-require-project-root nil))
 
@@ -968,14 +976,12 @@ save it in `ffap-file-at-point-line-number' variable."
 (put 'magit-clean 'disabled nil)
 
 (use-package dumb-jump
-  :after ivy
   :bind (("M-g o" . dumb-jump-go-other-window)
 	 ("M-g j" . dumb-jump-go)
 	 ("M-g i" . dumb-jump-go-prompt)
 	 ("M-g x" . dumb-jump-go-prefer-external)
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy)
-  ;; (setq dumb-jump-selector 'helm)
+  ;;:config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
   :ensure)
 
 ;;Load auto-complete
@@ -994,12 +1000,13 @@ save it in `ffap-file-at-point-line-number' variable."
   :config
   :ensure company
   :config
-  (setq company-idle-delay 0.3
+  (setq company-idle-delay 0
 	company-tooltip-limit 20
-	company-minimum-prefix-length 2
+	company-minimum-prefix-length 3
 	company-echo-delay 0
 	company-require-match nil
-	company-auto-complete nil))
+	company-auto-complete nil)
+  (global-company-mode 1))
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -1026,23 +1033,12 @@ save it in `ffap-file-at-point-line-number' variable."
   :ensure go-mode
   :mode "\\.go\\'"
   :config
-  (progn
-    (setq gofmt-command "goimports")
-    (add-hook 'before-save-hook 'gofmt-before-save))
-  :config
-  (progn
-    (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-    (bind-key "C-M-i" 'helm-company go-mode-map)
-    (bind-key "M-." 'godef-jump go-mode-map)))
-
-(and nil
-     (use-package apropospriate-theme
-       :ensure t
-       :config
-       (load-theme 'apropospriate-dark t)
-       ;; or
-       ;;(load-theme 'apropospriate-light t)
-       ))
+  (add-hook 'go-mode 'before-save-hook 'gofmt-before-save 'flycheck-mode)
+  (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+  (setq gofmt-command "goimports")
+  (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+  (bind-key "C-M-i" 'helm-company go-mode-map)
+  (bind-key "M-." 'godef-jump go-mode-map))
 
 (defun aim/setup-ac-complete nil
   (interactive)
@@ -1054,7 +1050,8 @@ save it in `ffap-file-at-point-line-number' variable."
   (define-key ac-complete-mode-map "\r" 'ac-complete)
   (define-key ac-complete-mode-map "\C-n" 'ac-next)
   (define-key ac-complete-mode-map "\C-p" 'ac-previous)
-  (set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer)))
+  ;;(set-default 'ac-sources '(ac-source-abbrev ac-source-words-in-buffer))
+  )
 
 (defun aim/setup-company-complete nil
   (interactive)
@@ -1069,47 +1066,83 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (setq aim/prefer-ac-complete t)
 
-(if aim/prefer-ac-complete
-    (aim/setup-ac-complete)
-  (aim/setup-company-complete))
+(use-package smartparens)
 
-(use-package counsel
+;; (if aim/prefer-ac-complete
+;;     (aim/setup-ac-complete)
+;;   (aim/setup-company-complete))
+
+(use-package yasnippet)
+
+(use-package yasnippet
+  :init
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets)
+;;(use-package yasnippet-classic-snippets)
+
+(use-package projectile
+  :ensure t
+  :bind (:map projectile-mode-map
+              ("C-c p" . 'projectile-command-map))
+
+  :config 
+  (projectile-mode +1))
+
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :custom
+  (lsp-auto-guess-root nil)
+  (lsp-prefer-flymake nil) ; Use flycheck instead of flymake
   :config
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c a") 'counsel-ag)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+  (setq lsp-auto-guess-root t)
+  (setq lsp-inhibit-message t)
+  ;;(setq lsp-message-project-root-warning t)
+  :bind (:map lsp-mode-map ("C-c C-f" . lsp-format-buffer))
+  :hook ((go-mode c-mode c++-mode) . lsp))
 
-(use-package ivy
+(use-package lsp-ui
+  :after lsp-mode
+  :diminish
+  :commands lsp-ui-mode
+  ;; :custom-face
+  ;; (lsp-ui-doc-background ((t (:background nil))))
+  ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
+  :bind (:map lsp-ui-mode-map
+              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-header t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-position 'top)
+  (lsp-ui-doc-border (face-foreground 'default))
+  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-ignore-duplicate t)
+  (lsp-ui-sideline-show-code-actions nil)
   :config
-  (setq ivy-use-selectable-prompt t
-	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
-	ivy-height 10
-	ivy-count-format "(%d/%d) "
-	ivy-on-del-error-function nil
-	ivy-initial-inputs-alist nil))
+  ;; Use lsp-ui-doc-webkit only in GUI
+  (setq lsp-ui-doc-use-webkit t)
+  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+  ;; https://github.com/emacs-lsp/lsp-ui/issues/243
+  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+    (setq mode-line-format nil)))
 
-(use-package ivy-posframe
+(use-package company-lsp
+  :commands company-lsp
   :config
-  (setq ivy-posframe-height-alist '((swiper . 10)
-                                    (t      . 5)))
-  (setq ivy-posframe-display-functions-alist
-	'((swiper          . nil)
-          (complete-symbol . ivy-posframe-display-at-point)
-          (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
-          (t               . ivy-posframe-display)))
-  (ivy-posframe-mode 1))
+  (push 'company-lsp company-backends))
 
-(use-package swiper
-  :config
-  (global-set-key (kbd "C-s") 'swiper))
+;; from https://lupan.pl/dotemacs/
+;; Go/speedbar integration
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ivy-posframe ((t (:background "grey20" :foreground "yellow")))))
+(eval-after-load 'speedbar
+  '(speedbar-add-supported-extension ".go"))
+
+;; (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+;; (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+
+;;(setq projectile-project-search-path '("~/go-projects/" "~/frobware/"))
+
