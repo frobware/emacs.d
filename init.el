@@ -928,9 +928,7 @@ save it in `ffap-file-at-point-line-number' variable."
   :custom
   (nix-indent-function #'nix-indent-line))
 
-;; (use-package deadgrep
-;;   :ensure t)
-
+(use-package deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
 
 (defun aim/light-mode ()
