@@ -1403,3 +1403,6 @@ _p_rev       _u_pper              _=_: upper/lower       _r_esolve
     (company-lsp-async t)
     (company-lsp-enable-snippet t)
     (company-lsp-enable-recompletion t)))
+
+(use-package k8s-mode
+  :hook (k8s-mode . yas-minor-mode))
