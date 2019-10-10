@@ -850,7 +850,7 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("M-g i" . dumb-jump-go-prompt)
 	 ("M-g x" . dumb-jump-go-prefer-external)
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'helm))
+  :config (setq dumb-jump-selector 'ivy))
 
 ;; (use-package pinentry
 ;;   :ensure t)
@@ -949,7 +949,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package projectile
   :bind
   ("C-c v" . 'projectile-ag)
-
+  ("C-c v" . 'projectile-deadgrep)
   :config
   (setq projectile-completion-system 'ido)
   (setq projectile-switch-project-action 'projectile-dired)
@@ -962,6 +962,10 @@ save it in `ffap-file-at-point-line-number' variable."
 (helm-projectile-on)
 (setq projectile-switch-project-action 'helm-projectile-find-file)
 (setq projectile-switch-project-action 'helm-projectile)
+
+(use-package helm-ag
+  :after
+  projectile)
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -984,6 +988,7 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("M-g x" . dumb-jump-go-prefer-external)
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
   ;;:config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
+  :config (setq dumb-jump-selector 'helm)
   :ensure)
 
 ;;Load auto-complete
@@ -1042,6 +1047,21 @@ save it in `ffap-file-at-point-line-number' variable."
   (bind-key "C-M-i" 'helm-company go-mode-map)
   (bind-key "M-." 'godef-jump go-mode-map))
 
+(use-package go-mode
+  :mode "\\.go\\'"
+  :custom (gofmt-command "goimports")
+  :bind (:map go-mode-map
+              ("C-c C-n" . go-run)
+              ("C-c ."   . go-test-current-test)
+              ("C-c f"   . go-test-current-file)
+              ("C-c a"   . go-test-current-project))
+  :config
+  (add-hook 'before-save-hook #'gofmt-before-save)
+  (setq gofmt-command "goimports")
+  (use-package gotest)
+  (use-package go-tag
+    :config (setq go-tag-args (list "-transform" "camelcase"))))
+
 (defun aim/setup-ac-complete nil
   (interactive)
   (use-package go-autocomplete)
@@ -1072,7 +1092,14 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;     (aim/setup-ac-complete)
 ;;   (aim/setup-company-complete))
 
-(use-package smartparens)
+(use-package smartparens
+  :ensure t
+  :config
+  (setq sp-show-pair-from-inside nil)
+  (require 'smartparens-config)
+  :diminish smartparens-mode)
+
+(use-package flx)
 
 (use-package counsel
   :config
@@ -1091,7 +1118,30 @@ save it in `ffap-file-at-point-line-number' variable."
 	ivy-height 10
 	ivy-count-format "(%d/%d) "
 	ivy-on-del-error-function nil
-	ivy-initial-inputs-alist nil))
+	ivy-initial-inputs-alist nil
+	ivy-count-format " "
+	ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
+
+(use-package ivy
+  :ensure t
+  :diminish (ivy-mode . "")
+  :bind
+  (:map ivy-mode-map
+	("C-'" . ivy-avy))
+  :config
+  (ivy-mode 1)
+  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+  (setq ivy-use-virtual-buffers t)
+  ;; number of result lines to display
+  (setq ivy-height 10)
+  ;; does not count candidates
+  (setq ivy-count-format "")
+  ;; no regexp by default
+  (setq ivy-initial-inputs-alist nil)
+  ;; configure regexp engine.
+  (setq ivy-re-builders-alist
+	;; allow input not in order
+        '((t . ivy--regex-ignore-order))))
 
 (use-package ivy-posframe
   :config
@@ -1108,8 +1158,6 @@ save it in `ffap-file-at-point-line-number' variable."
   :config
   (global-set-key (kbd "C-s") 'swiper))
 
-(use-package yasnippet)
-
 (use-package yasnippet
   :init
   (yas-global-mode 1))
@@ -1121,7 +1169,6 @@ save it in `ffap-file-at-point-line-number' variable."
   :ensure t
   :bind (:map projectile-mode-map
               ("C-c p" . 'projectile-command-map))
-
   :config 
   (projectile-mode +1))
 
@@ -1168,19 +1215,191 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package company-lsp
   :commands company-lsp
+  :custom
+  (company-lsp-cache-candidates t) ;; auto, t(always using a cache), or nil
+  (company-lsp-async t)
+  (company-lsp-enable-snippet t)
+  (company-lsp-enable-recompletion t)
   :config
   (push 'company-lsp company-backends))
 
-;; from https://lupan.pl/dotemacs/
-;; Go/speedbar integration
+(use-package hydra)
 
-(eval-after-load 'speedbar
-  '(speedbar-add-supported-extension ".go"))
+;; https://ladicle.com/post/config/#git-remote
+(use-package smerge-mode
+  :diminish
+  :preface
+  (with-eval-after-load 'hydra
+    (defhydra smerge-hydra
+      (:color pink :hint nil :post (smerge-auto-leave))
+      "
+^Move^       ^Keep^               ^Diff^                 ^Other^
+^^-----------^^-------------------^^---------------------^^-------
+_n_ext       _b_ase               _<_: upper/base        _C_ombine
+_p_rev       _u_pper              _=_: upper/lower       _r_esolve
+^^           _l_ower              _>_: base/lower        _k_ill current
+^^           _a_ll                _R_efine
+^^           _RET_: current       _E_diff
+"
+      ("n" smerge-next)
+      ("p" smerge-prev)
+      ("b" smerge-keep-base)
+      ("u" smerge-keep-upper)
+      ("l" smerge-keep-lower)
+      ("a" smerge-keep-all)
+      ("RET" smerge-keep-current)
+      ("\C-m" smerge-keep-current)
+      ("<" smerge-diff-base-upper)
+      ("=" smerge-diff-upper-lower)
+      (">" smerge-diff-base-lower)
+      ("R" smerge-refine)
+      ("E" smerge-ediff)
+      ("C" smerge-combine-with-next)
+      ("r" smerge-resolve)
+      ("k" smerge-kill-current)
+      ("ZZ" (lambda ()
+              (interactive)
+              (save-buffer)
+              (bury-buffer))
+       "Save and bury buffer" :color blue)
+      ("q" nil "cancel" :color blue)))
+  :hook ((find-file . (lambda ()
+                        (save-excursion
+                          (goto-char (point-min))
+                          (when (re-search-forward "^<<<<<<< " nil t)
+                            (smerge-mode 1)))))
+         (magit-diff-visit-file . (lambda ()
+                                    (when smerge-mode
+                                      (smerge-hydra/body))))))
 
-;; (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-;; (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-lsp-async t)
+ '(company-lsp-cache-candidates t)
+ '(company-lsp-enable-recompletion t)
+ '(company-lsp-enable-snippet t)
+ '(lsp-auto-guess-root t)
+ '(lsp-prefer-flymake t)
+ '(lsp-ui-doc-border "#ffffff")
+ '(lsp-ui-doc-enable nil)
+ '(lsp-ui-doc-header t)
+ '(lsp-ui-doc-include-signature nil)
+ '(lsp-ui-doc-position (quote at-point))
+ '(lsp-ui-sideline-enable nil)
+ '(lsp-ui-sideline-ignore-duplicate t)
+ '(lsp-ui-sideline-show-code-actions t)
+ '(nix-indent-function (quote nix-indent-line) t)
+ '(package-selected-packages
+   (quote
+    (dap-mode hydra go-tag gotest counsel-projectile counsel-test counsel-tramp counsel-notmuch yasnippet-snippets yasnippet-classic-snippets yaml-mode wgrep-ag w3m use-package-ensure-system-package unfill terraform-mode smex smartparens racer python-mode protobuf-mode projectile-direnv pass notmuch nix-mode multi-term magit-gh-pulls lsp-ui kubernetes-tramp kubernetes kubel jinja2-mode ivy-posframe helm-projectile helm-pass helm-ls-git helm-company helm-ag guide-key godoctor go-guru go-eldoc go-dlv go-add-tags gnus-desktop-notify git-timemachine git-gutter-fringe gist flycheck-golangci-lint flx exec-path-from-shell dumb-jump dockerfile-mode direnv counsel company-lsp cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
-;; (defun my-test-prefix (project-type) "_test")
+(use-package lsp-mode
+  :custom
+  ;; debug
+  (lsp-print-io nil)
+  (lsp-trace nil)
+  (lsp-print-performance nil)
+  ;; general
+  (lsp-auto-guess-root t)
+  (lsp-document-sync-method 'incremental) ;; none, full, incremental, or nil
+  (lsp-response-timeout 10)
+  (lsp-prefer-flymake t) ;; t(flymake), nil(lsp-ui), or :none
+  ;; go-client
+  (lsp-clients-go-server-args '("--cache-style=always" "--diagnostics-style=onsave" "--format-style=goimports"))
+  :hook
+  ((go-mode c-mode c++-mode) . lsp)
+  :bind
+  (:map lsp-mode-map
+	("C-c r"   . lsp-rename))
+  :config
+  (require 'lsp-clients)
+  ;; LSP UI tools
+  (use-package lsp-ui
+    :custom
+    ;; lsp-ui-doc
+    (lsp-ui-doc-enable nil)
+    (lsp-ui-doc-header t)
+    (lsp-ui-doc-include-signature nil)
+    (lsp-ui-doc-position 'at-point) ;; top, bottom, or at-point
+    (lsp-ui-doc-max-width 120)
+    (lsp-ui-doc-max-height 30)
+    (lsp-ui-doc-use-childframe t)
+    (lsp-ui-doc-use-webkit t)
+    ;; lsp-ui-flycheck
+    (lsp-ui-flycheck-enable nil)
+    ;; lsp-ui-sideline
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-sideline-ignore-duplicate t)
+    (lsp-ui-sideline-show-symbol t)
+    (lsp-ui-sideline-show-hover t)
+    (lsp-ui-sideline-show-diagnostics nil)
+    (lsp-ui-sideline-show-code-actions t)
+    (lsp-ui-sideline-code-actions-prefix "")
+    ;; lsp-ui-imenu
+    (lsp-ui-imenu-enable t)
+    (lsp-ui-imenu-kind-position 'top)
+    ;; lsp-ui-peek
+    (lsp-ui-peek-enable t)
+    (lsp-ui-peek-peek-height 20)
+    (lsp-ui-peek-list-width 50)
+    (lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
+    :preface
+    (defun ladicle/toggle-lsp-ui-doc ()
+      (interactive)
+      (if lsp-ui-doc-mode
+	  (progn
+	    (lsp-ui-doc-mode -1)
+	    (lsp-ui-doc--hide-frame))
+	(lsp-ui-doc-mode 1)))
+    :bind
+    (:map lsp-mode-map
+	  ("C-c C-r" . lsp-ui-peek-find-references)
+	  ("C-c C-j" . lsp-ui-peek-find-definitions)
+	  ("C-c i"   . lsp-ui-peek-find-implementation)
+	  ("C-c m"   . lsp-ui-imenu)
+	  ("C-c s"   . lsp-ui-sideline-mode)
+	  ("C-c d"   . ladicle/toggle-lsp-ui-doc))
+    :hook
+    (lsp-mode . lsp-ui-mode))
 
-;;(setq projectile-project-search-path '("~/go-projects/" "~/frobware/"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection
+				     (lambda () (cons "bingo"
+						      lsp-clients-go-server-args)))
+		    :major-modes '(go-mode)
+		    :priority 2
+		    :initialization-options 'lsp-clients-go--make-init-options
+		    :server-id 'go-bingo
+		    :library-folders-fn (lambda (_workspace)
+					  lsp-clients-go-library-directories)))
 
+  ;; DAP
+  (use-package dap-mode
+    :custom
+    (dap-go-debug-program `("node" "~/.extensions/go/out/src/debugAdapter/goDebug.js"))
+    :config
+    (dap-mode 1)
+    (require 'dap-hydra)
+    (require 'dap-gdb-lldb) ; download and expand lldb-vscode to the =~/.extensions/webfreak.debug=
+    (require 'dap-go) ; download and expand vscode-go-extenstion to the =~/.extensions/go=
+    (use-package dap-ui
+      :ensure nil
+      :config
+      (dap-ui-mode 1)))
+
+  ;; Lsp completion
+  (use-package company-lsp
+    :custom
+    (company-lsp-cache-candidates t) ;; auto, t(always using a cache), or nil
+    (company-lsp-async t)
+    (company-lsp-enable-snippet t)
+    (company-lsp-enable-recompletion t)))
