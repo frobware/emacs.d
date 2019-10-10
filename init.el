@@ -1108,6 +1108,7 @@ save it in `ffap-file-at-point-line-number' variable."
   (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
   (global-set-key (kbd "C-c a") 'counsel-ag)
+  (global-set-key (kbd "C-c r") 'counsel-rg)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
