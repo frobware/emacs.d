@@ -435,8 +435,6 @@ other, future frames."
 
 (use-package go-dlv)
 
-(use-package go-guru)
-
 (use-package tramp
   :defer nil
   :config
@@ -672,8 +670,6 @@ other, future frames."
 ;;      (set-face-foreground 'diff-added "brightgreen")
 ;;      (set-face-foreground 'diff-changed "bold white")
 ;;      (set-face-foreground 'diff-removed "brightred")))
-
-(use-package go-guru)
 
 (defalias 'ttl 'toggle-truncate-lines)
 
