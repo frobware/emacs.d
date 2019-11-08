@@ -317,22 +317,6 @@ other, future frames."
 (use-package go-add-tags
   :ensure go-add-tags)
 
-(use-package flycheck
-  :config
-  (setq flycheck-highlighting-mode 'lines))
-
-(use-package flycheck-golangci-lint)
-
-(add-hook 'go-mode-hook 'flycheck-mode)
-
-;; (use-package flycheck
-;;   :config
-;;   (progn
-;;     (setq flycheck-highlighting-mode 'lines)
-;;     (set-face-underline 'flycheck-error nil)
-;;     (set-face-background 'flycheck-error nil)
-;;     (set-face-underline 'flycheck-warning nil)))
-
 (use-package ibuffer
   :config
   (progn
@@ -925,8 +909,8 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package nix-mode
   :mode "\\.nix\\'"
-  :custom
-  (nix-indent-function #'nix-indent-line))
+  :config
+  (setq nix-indent-function #'nix-indent-line))
 
 (use-package deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
@@ -1011,7 +995,8 @@ save it in `ffap-file-at-point-line-number' variable."
 	company-echo-delay 0
 	company-require-match nil
 	company-auto-complete nil)
-  (global-company-mode 1))
+  ;;(global-company-mode 1)
+  )
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
@@ -1031,15 +1016,15 @@ save it in `ffap-file-at-point-line-number' variable."
 	company-preview-frontend
 	company-echo-metadata-frontend))
 
-(setq company-auto-complete 'never)
+;;(setq company-auto-complete 'never)
 ;;(company-tng-configure-default)
 
 (use-package go-mode
   :ensure go-mode
   :mode "\\.go\\'"
   :config
-  (add-hook 'go-mode 'before-save-hook 'gofmt-before-save 'flycheck-mode)
-  (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+  (add-hook 'go-mode 'gofmt-before-save)
+  ;;(remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
   (setq gofmt-command "goimports")
   (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
   (bind-key "C-M-i" 'helm-company go-mode-map)
@@ -1084,11 +1069,11 @@ save it in `ffap-file-at-point-line-number' variable."
 	      (set (make-local-variable 'company-backends) '(company-go))
 	      (company-mode))))
 
-(setq aim/prefer-ac-complete t)
+(setq aim/prefer-ac-complete nil)
 
-;; (if aim/prefer-ac-complete
-;;     (aim/setup-ac-complete)
-;;   (aim/setup-company-complete))
+(if aim/prefer-ac-complete
+    (aim/setup-ac-complete)
+  (aim/setup-company-complete))
 
 (use-package smartparens
   :ensure t
@@ -1099,63 +1084,63 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package flx)
 
-(use-package counsel
-  :config
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c a") 'counsel-ag)
-  (global-set-key (kbd "C-c r") 'counsel-rg)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
+;; (use-package counsel
+;;   :config
+;;   (global-set-key (kbd "M-x") 'counsel-M-x)
+;;   ;;(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;;   (global-set-key (kbd "C-c g") 'counsel-git)
+;;   (global-set-key (kbd "C-c j") 'counsel-git-grep)
+;;   (global-set-key (kbd "C-c a") 'counsel-ag)
+;;   (global-set-key (kbd "C-c r") 'counsel-rg)
+;;   (global-set-key (kbd "C-x l") 'counsel-locate)
+;;   (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history))
 
-(use-package ivy
-  :config
-  (setq ivy-use-selectable-prompt t
-	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
-	ivy-height 10
-	ivy-count-format "(%d/%d) "
-	ivy-on-del-error-function nil
-	ivy-initial-inputs-alist nil
-	ivy-count-format " "
-	ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
+;; (use-package ivy
+;;   :config
+;;   (setq ivy-use-selectable-prompt t
+;; 	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
+;; 	ivy-height 10
+;; 	ivy-count-format "(%d/%d) "
+;; 	ivy-on-del-error-function nil
+;; 	ivy-initial-inputs-alist nil
+;; 	ivy-count-format " "
+;; 	ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
 
-(use-package ivy
-  :ensure t
-  :diminish (ivy-mode . "")
-  :bind
-  (:map ivy-mode-map
-	("C-'" . ivy-avy))
-  :config
-  (ivy-mode 1)
-  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
-  (setq ivy-use-virtual-buffers t)
-  ;; number of result lines to display
-  (setq ivy-height 10)
-  ;; does not count candidates
-  (setq ivy-count-format "")
-  ;; no regexp by default
-  (setq ivy-initial-inputs-alist nil)
-  ;; configure regexp engine.
-  (setq ivy-re-builders-alist
-	;; allow input not in order
-        '((t . ivy--regex-ignore-order))))
+;; (use-package ivy
+;;   :ensure t
+;;   :diminish (ivy-mode . "")
+;;   :bind
+;;   (:map ivy-mode-map
+;; 	("C-'" . ivy-avy))
+;;   :config
+;;   (ivy-mode 1)
+;;   ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+;;   (setq ivy-use-virtual-buffers t)
+;;   ;; number of result lines to display
+;;   (setq ivy-height 10)
+;;   ;; does not count candidates
+;;   (setq ivy-count-format "")
+;;   ;; no regexp by default
+;;   (setq ivy-initial-inputs-alist nil)
+;;   ;; configure regexp engine.
+;;   (setq ivy-re-builders-alist
+;; 	;; allow input not in order
+;;         '((t . ivy--regex-ignore-order))))
 
-(use-package ivy-posframe
-  :config
-  (setq ivy-posframe-height-alist '((swiper . 10)
-                                    (t      . 5)))
-  (setq ivy-posframe-display-functions-alist
-	'((swiper          . nil)
-          (complete-symbol . ivy-posframe-display-at-point)
-          (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
-          (t               . ivy-posframe-display)))
-  (ivy-posframe-mode 1))
+;; (use-package ivy-posframe
+;;   :config
+;;   (setq ivy-posframe-height-alist '((swiper . 10)
+;;                                     (t      . 5)))
+;;   (setq ivy-posframe-display-functions-alist
+;; 	'((swiper          . nil)
+;;           (complete-symbol . ivy-posframe-display-at-point)
+;;           (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
+;;           (t               . ivy-posframe-display)))
+;;   (ivy-posframe-mode 1))
 
-(use-package swiper
-  :config
-  (global-set-key (kbd "C-s") 'swiper))
+;; (use-package swiper
+;;   :config
+;;   (global-set-key (kbd "C-s") 'swiper))
 
 (use-package yasnippet
   :init
@@ -1171,237 +1156,70 @@ save it in `ffap-file-at-point-line-number' variable."
   :config 
   (projectile-mode +1))
 
-(use-package lsp-mode
-  :ensure t
-  :commands lsp
-  :custom
-  (lsp-auto-guess-root nil)
-  (lsp-prefer-flymake nil) ; Use flycheck instead of flymake
-  :config
-  (setq lsp-auto-guess-root t)
-  (setq lsp-inhibit-message t)
-  ;;(setq lsp-message-project-root-warning t)
-  :bind (:map lsp-mode-map ("C-c C-f" . lsp-format-buffer))
-  :hook ((go-mode c-mode c++-mode) . lsp))
+;; (use-package lsp-mode
+;;   :ensure t
+;;   :commands lsp
+;;   :custom
+;;   (lsp-auto-guess-root nil)
+;;   ;;(lsp-prefer-flymake nil) ; Use flycheck instead of flymake
+;;   :config
+;;   (setq lsp-auto-guess-root t)
+;;   (setq lsp-inhibit-message t)
+;;   ;;(setq lsp-message-project-root-warning t)
+;;   :bind (:map lsp-mode-map ("C-c C-f" . lsp-format-buffer))
+;;   :hook ((go-mode c-mode c++-mode) . lsp))
 
-(use-package lsp-ui
-  :after lsp-mode
-  :diminish
-  :commands lsp-ui-mode
-  ;; :custom-face
-  ;; (lsp-ui-doc-background ((t (:background nil))))
-  ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
-  :bind (:map lsp-ui-mode-map
-              ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ([remap xref-find-references] . lsp-ui-peek-find-references)
-              ("C-c u" . lsp-ui-imenu))
-  :custom
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-header t)
-  (lsp-ui-doc-include-signature t)
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-border (face-foreground 'default))
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-sideline-ignore-duplicate t)
-  (lsp-ui-sideline-show-code-actions nil)
-  :config
-  ;; Use lsp-ui-doc-webkit only in GUI
-  (setq lsp-ui-doc-use-webkit t)
-  ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
-  ;; https://github.com/emacs-lsp/lsp-ui/issues/243
-  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-    (setq mode-line-format nil)))
+;; (use-package lsp-ui
+;;   :after lsp-mode
+;;   :diminish
+;;   :commands lsp-ui-mode
+;;   ;; :custom-face
+;;   ;; (lsp-ui-doc-background ((t (:background nil))))
+;;   ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
+;;   :bind (:map lsp-ui-mode-map
+;;               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+;;               ([remap xref-find-references] . lsp-ui-peek-find-references)
+;;               ("C-c u" . lsp-ui-imenu))
+;;   :custom
+;;   (lsp-ui-doc-enable t)
+;;   (lsp-ui-doc-header t)
+;;   (lsp-ui-doc-include-signature t)
+;;   (lsp-ui-doc-position 'top)
+;;   (lsp-ui-doc-border (face-foreground 'default))
+;;   (lsp-ui-sideline-enable nil)
+;;   (lsp-ui-sideline-ignore-duplicate t)
+;;   (lsp-ui-sideline-show-code-actions nil)
+;;   :config
+;;   ;; Use lsp-ui-doc-webkit only in GUI
+;;   (setq lsp-ui-doc-use-webkit t)
+;;   ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+;;   ;; https://github.com/emacs-lsp/lsp-ui/issues/243
+;;   (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+;;     (setq mode-line-format nil)))
 
-(use-package company-lsp
-  :commands company-lsp
-  :custom
-  (company-lsp-cache-candidates t) ;; auto, t(always using a cache), or nil
-  (company-lsp-async t)
-  (company-lsp-enable-snippet t)
-  (company-lsp-enable-recompletion t)
-  :config
-  (push 'company-lsp company-backends))
+;; (use-package company-lsp
+;;   :commands company-lsp
+;;   :custom
+;;   (company-lsp-cache-candidates t) ;; auto, t(always using a cache), or nil
+;;   (company-lsp-async t)
+;;   (company-lsp-enable-snippet t)
+;;   (company-lsp-enable-recompletion t)
+;;   :config
+;;   (push 'company-lsp company-backends))
 
-(use-package hydra)
-
-;; https://ladicle.com/post/config/#git-remote
-(use-package smerge-mode
-  :diminish
-  :preface
-  (with-eval-after-load 'hydra
-    (defhydra smerge-hydra
-      (:color pink :hint nil :post (smerge-auto-leave))
-      "
-^Move^       ^Keep^               ^Diff^                 ^Other^
-^^-----------^^-------------------^^---------------------^^-------
-_n_ext       _b_ase               _<_: upper/base        _C_ombine
-_p_rev       _u_pper              _=_: upper/lower       _r_esolve
-^^           _l_ower              _>_: base/lower        _k_ill current
-^^           _a_ll                _R_efine
-^^           _RET_: current       _E_diff
-"
-      ("n" smerge-next)
-      ("p" smerge-prev)
-      ("b" smerge-keep-base)
-      ("u" smerge-keep-upper)
-      ("l" smerge-keep-lower)
-      ("a" smerge-keep-all)
-      ("RET" smerge-keep-current)
-      ("\C-m" smerge-keep-current)
-      ("<" smerge-diff-base-upper)
-      ("=" smerge-diff-upper-lower)
-      (">" smerge-diff-base-lower)
-      ("R" smerge-refine)
-      ("E" smerge-ediff)
-      ("C" smerge-combine-with-next)
-      ("r" smerge-resolve)
-      ("k" smerge-kill-current)
-      ("ZZ" (lambda ()
-              (interactive)
-              (save-buffer)
-              (bury-buffer))
-       "Save and bury buffer" :color blue)
-      ("q" nil "cancel" :color blue)))
-  :hook ((find-file . (lambda ()
-                        (save-excursion
-                          (goto-char (point-min))
-                          (when (re-search-forward "^<<<<<<< " nil t)
-                            (smerge-mode 1)))))
-         (magit-diff-visit-file . (lambda ()
-                                    (when smerge-mode
-                                      (smerge-hydra/body))))))
-
+(use-package k8s-mode
+  :hook (k8s-mode . yas-minor-mode))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(company-lsp-async t)
- '(company-lsp-cache-candidates t)
- '(company-lsp-enable-recompletion t)
- '(company-lsp-enable-snippet t)
- '(lsp-auto-guess-root t)
- '(lsp-prefer-flymake t)
- '(lsp-ui-doc-border "#ffffff")
- '(lsp-ui-doc-enable nil)
- '(lsp-ui-doc-header t)
- '(lsp-ui-doc-include-signature nil)
- '(lsp-ui-doc-position (quote at-point))
- '(lsp-ui-sideline-enable nil)
- '(lsp-ui-sideline-ignore-duplicate t)
- '(lsp-ui-sideline-show-code-actions t)
- '(nix-indent-function (quote nix-indent-line) t)
  '(package-selected-packages
    (quote
-    (dap-mode hydra go-tag gotest counsel-projectile counsel-test counsel-tramp counsel-notmuch yasnippet-snippets yasnippet-classic-snippets yaml-mode wgrep-ag w3m use-package-ensure-system-package unfill terraform-mode smex smartparens racer python-mode protobuf-mode projectile-direnv pass notmuch nix-mode multi-term magit-gh-pulls lsp-ui kubernetes-tramp kubernetes kubel jinja2-mode ivy-posframe helm-projectile helm-pass helm-ls-git helm-company helm-ag guide-key godoctor go-guru go-eldoc go-dlv go-add-tags gnus-desktop-notify git-timemachine git-gutter-fringe gist flycheck-golangci-lint flx exec-path-from-shell dumb-jump dockerfile-mode direnv counsel company-lsp cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+    (company-go yasnippet-snippets yasnippet-classic-snippets wgrep-ag w3m use-package-ensure-system-package unfill terraform-mode smex smartparens racer python-mode protobuf-mode projectile-direnv pass nix-mode multi-term magit-gh-pulls lsp-ui kubernetes-tramp kubernetes kubel k8s-mode jinja2-mode ivy-posframe hydra helm-projectile helm-pass helm-ls-git helm-company helm-ag guide-key gotest godoctor go-tag go-guru go-eldoc go-dlv go-add-tags gnus-desktop-notify git-timemachine git-gutter-fringe gist flycheck-golangci-lint flx exec-path-from-shell dumb-jump dockerfile-mode docker-tramp direnv deadgrep dap-mode counsel-tramp counsel-test counsel-projectile counsel-notmuch company-lsp cmake-mode cargo browse-at-remote auto-compile atomic-chrome atom-one-dark-theme atom-dark-theme almost-mono-themes ag adoc-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-(use-package lsp-mode
-  :custom
-  ;; debug
-  (lsp-print-io nil)
-  (lsp-trace nil)
-  (lsp-print-performance nil)
-  ;; general
-  (lsp-auto-guess-root t)
-  (lsp-document-sync-method 'incremental) ;; none, full, incremental, or nil
-  (lsp-response-timeout 10)
-  (lsp-prefer-flymake t) ;; t(flymake), nil(lsp-ui), or :none
-  ;; go-client
-  (lsp-clients-go-server-args '("--cache-style=always" "--diagnostics-style=onsave" "--format-style=goimports"))
-  :hook
-  ((go-mode c-mode c++-mode) . lsp)
-  :bind
-  (:map lsp-mode-map
-	("C-c r"   . lsp-rename))
-  :config
-  (require 'lsp-clients)
-  ;; LSP UI tools
-  (use-package lsp-ui
-    :custom
-    ;; lsp-ui-doc
-    (lsp-ui-doc-enable nil)
-    (lsp-ui-doc-header t)
-    (lsp-ui-doc-include-signature nil)
-    (lsp-ui-doc-position 'at-point) ;; top, bottom, or at-point
-    (lsp-ui-doc-max-width 120)
-    (lsp-ui-doc-max-height 30)
-    (lsp-ui-doc-use-childframe t)
-    (lsp-ui-doc-use-webkit t)
-    ;; lsp-ui-flycheck
-    (lsp-ui-flycheck-enable nil)
-    ;; lsp-ui-sideline
-    (lsp-ui-sideline-enable nil)
-    (lsp-ui-sideline-ignore-duplicate t)
-    (lsp-ui-sideline-show-symbol t)
-    (lsp-ui-sideline-show-hover t)
-    (lsp-ui-sideline-show-diagnostics nil)
-    (lsp-ui-sideline-show-code-actions t)
-    (lsp-ui-sideline-code-actions-prefix "")
-    ;; lsp-ui-imenu
-    (lsp-ui-imenu-enable t)
-    (lsp-ui-imenu-kind-position 'top)
-    ;; lsp-ui-peek
-    (lsp-ui-peek-enable t)
-    (lsp-ui-peek-peek-height 20)
-    (lsp-ui-peek-list-width 50)
-    (lsp-ui-peek-fontify 'on-demand) ;; never, on-demand, or always
-    :preface
-    (defun ladicle/toggle-lsp-ui-doc ()
-      (interactive)
-      (if lsp-ui-doc-mode
-	  (progn
-	    (lsp-ui-doc-mode -1)
-	    (lsp-ui-doc--hide-frame))
-	(lsp-ui-doc-mode 1)))
-    :bind
-    (:map lsp-mode-map
-	  ("C-c C-r" . lsp-ui-peek-find-references)
-	  ("C-c C-j" . lsp-ui-peek-find-definitions)
-	  ("C-c i"   . lsp-ui-peek-find-implementation)
-	  ("C-c m"   . lsp-ui-imenu)
-	  ("C-c s"   . lsp-ui-sideline-mode)
-	  ("C-c d"   . ladicle/toggle-lsp-ui-doc))
-    :hook
-    (lsp-mode . lsp-ui-mode))
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection
-				     (lambda () (cons "bingo"
-						      lsp-clients-go-server-args)))
-		    :major-modes '(go-mode)
-		    :priority 2
-		    :initialization-options 'lsp-clients-go--make-init-options
-		    :server-id 'go-bingo
-		    :library-folders-fn (lambda (_workspace)
-					  lsp-clients-go-library-directories)))
-
-  ;; DAP
-  (use-package dap-mode
-    :custom
-    (dap-go-debug-program `("node" "~/.extensions/go/out/src/debugAdapter/goDebug.js"))
-    :config
-    (dap-mode 1)
-    (require 'dap-hydra)
-    (require 'dap-gdb-lldb) ; download and expand lldb-vscode to the =~/.extensions/webfreak.debug=
-    (require 'dap-go) ; download and expand vscode-go-extenstion to the =~/.extensions/go=
-    (use-package dap-ui
-      :ensure nil
-      :config
-      (dap-ui-mode 1)))
-
-  ;; Lsp completion
-  (use-package company-lsp
-    :custom
-    (company-lsp-cache-candidates t) ;; auto, t(always using a cache), or nil
-    (company-lsp-async t)
-    (company-lsp-enable-snippet t)
-    (company-lsp-enable-recompletion t)))
-
-(use-package k8s-mode
-  :hook (k8s-mode . yas-minor-mode))
