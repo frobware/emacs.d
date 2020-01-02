@@ -202,9 +202,6 @@ other, future frames."
 	menu-bar-mode
 	tool-bar-mode))
 
-(use-package cc-mode
-  :bind ("C-M-m" . cmake-ide-compile))
-
 (require 'dired-x)
 (global-set-key (kbd "C-x C-j") 'dired-jump)
 (setq-default dired-omit-mode t)
