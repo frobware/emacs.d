@@ -1220,3 +1220,10 @@ save it in `ffap-file-at-point-line-number' variable."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; Making it easier to discover Emacs key presses.
+(use-package which-key
+  :diminish
+  :config (which-key-mode)
+  (which-key-setup-side-window-bottom)
+  (setq which-key-idle-delay 3.50))
