@@ -1227,3 +1227,8 @@ save it in `ffap-file-at-point-line-number' variable."
   :config (which-key-mode)
   (which-key-setup-side-window-bottom)
   (setq which-key-idle-delay 3.50))
+
+;; Get org-headers to look pretty! E.g., * → ⊙, ** ↦ ◯, *** ↦ ★
+;; https://github.com/emacsorphanage/org-bullets
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
