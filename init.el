@@ -430,6 +430,11 @@ other, future frames."
     ;; (add-to-list 'tramp-default-proxies-alist
     ;;		 '((regexp-quote (system-name)) nil nil))
     ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+    ;; I added the ".*" for NixOS
+    (setq tramp-shell-prompt-pattern
+         "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*")
+    (add-to-list 'tramp-connection-properties
+		 (list ".*" "locale" "LC_ALL=C"))
     (setq tramp-ssh-controlmaster-options
 	  (concat
 	   "-o ControlPath=tramp.%%r@%%h:%%p "
