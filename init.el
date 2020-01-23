@@ -1244,6 +1244,8 @@ save it in `ffap-file-at-point-line-number' variable."
     (tramp-cleanup-all-connections)
     (tramp-cleanup-all-buffers))
 
+(use-package docker-tramp
+  :ensure t)
 (org-babel-do-load-languages 'org-babel-load-languages
     '(
         (shell . t)
