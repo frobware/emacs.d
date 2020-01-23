@@ -1237,3 +1237,8 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; https://github.com/emacsorphanage/org-bullets
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
+
+(defun aim/tramp-borked ()
+    (interactive)
+    (tramp-cleanup-all-connections)
+    (tramp-cleanup-all-buffers))
