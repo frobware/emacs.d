@@ -1246,6 +1246,11 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package docker-tramp
   :ensure t)
+
+(use-package eshell-bookmark
+  :after eshell
+  :config
+  (add-hook 'eshell-mode-hook #'eshell-bookmark-setup))
 (org-babel-do-load-languages 'org-babel-load-languages
     '(
         (shell . t)
