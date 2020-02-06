@@ -1238,6 +1238,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
+(use-package ssh-config-mode)
 (defun aim/tramp-borked ()
     (interactive)
     (tramp-cleanup-all-connections)
