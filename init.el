@@ -930,22 +930,22 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package auto-compile
   :config (auto-compile-on-load-mode))
 
-(use-package projectile
-  :bind
-  ("C-c v" . 'projectile-ag)
-  ("C-c v" . 'projectile-deadgrep)
-  :config
-  (setq projectile-completion-system 'ido)
-  (setq projectile-switch-project-action 'projectile-dired)
-  (setq projectile-require-project-root nil))
+;; (use-package projectile
+;;   :bind
+;;   ("C-c v" . 'projectile-ag)
+;;   ("C-c v" . 'projectile-deadgrep)
+;;   :config
+;;   (setq projectile-completion-system 'ido)
+;;   (setq projectile-switch-project-action 'projectile-dired)
+;;   (setq projectile-require-project-root nil))
 
 ;; https://tuhdo.github.io/helm-projectile.html
-(use-package helm-projectile)
-(projectile-global-mode)
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
-(setq projectile-switch-project-action 'helm-projectile-find-file)
-(setq projectile-switch-project-action 'helm-projectile)
+;; (use-package helm-projectile)
+;; (projectile-global-mode)
+;; (setq projectile-completion-system 'helm)
+;; (helm-projectile-on)
+;; (setq projectile-switch-project-action 'helm-projectile-find-file)
+;; (setq projectile-switch-project-action 'helm-projectile)
 
 (use-package helm-ag
   :after
