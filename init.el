@@ -1243,3 +1243,11 @@ save it in `ffap-file-at-point-line-number' variable."
     (interactive)
     (tramp-cleanup-all-connections)
     (tramp-cleanup-all-buffers))
+
+(org-babel-do-load-languages 'org-babel-load-languages
+    '(
+        (shell . t)
+    )
+)
+
+(setq org-confirm-babel-evaluate nil)
