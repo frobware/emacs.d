@@ -1251,3 +1251,9 @@ save it in `ffap-file-at-point-line-number' variable."
 )
 
 (setq org-confirm-babel-evaluate nil)
+
+;; from the internets
+(use-package dracula-theme
+  :config (load-theme 'dracula t)
+  (set-face-background 'mode-line "#510370")
+  (set-face-background 'mode-line-inactive "#212020"))
