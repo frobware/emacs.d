@@ -838,8 +838,9 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'ivy))
 
-;; (use-package pinentry
-;;   :ensure t)
+(use-package pinentry
+  :config
+  (setq epa-pinentry-mode 'loopback))
 
 (use-package adoc-mode)
 
