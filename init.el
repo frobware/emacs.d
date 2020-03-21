@@ -1270,3 +1270,7 @@ save it in `ffap-file-at-point-line-number' variable."
   :config (load-theme 'dracula t)
   (set-face-background 'mode-line "#510370")
   (set-face-background 'mode-line-inactive "#212020"))
+
+(use-package modus-operandi-theme)
+;;(load-theme 'modus-operandi t)          ; Light theme
+(load-theme 'modus-vivendi t)
