@@ -117,6 +117,11 @@ other, future frames."
 
 (setq load-prefer-newer t)
 
+(use-package gotham-theme
+  :ensure t
+  :config
+  (load-theme 'gotham t))
+
 (defvar aim/is-darwin (eq system-type 'darwin))
 (defvar aim/is-linux (eq system-type 'gnu/linux))
 
