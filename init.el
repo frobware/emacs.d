@@ -1,3 +1,5 @@
+(setq package-check-signature nil)
+
 ;; from https://matthewbauer.us/bauer/#install and
 ;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 (setq gc-cons-threshold
@@ -20,10 +22,9 @@
 ;; thanks man!
 
 (setq hrs/default-font "DejaVu Sans Mono")
-(setq hrs/default-font-size 14)
+(setq hrs/default-font-size 16)
 (setq hrs/current-font-size hrs/default-font-size)
-
-(setq hrs/font-change-increment 1.1)
+(setq hrs/font-change-increment 1.2)
 
 (defun hrs/font-code ()
   "Return a string representing the current font (like \"Inconsolata-14\")."
@@ -51,7 +52,8 @@ other, future frames."
   (hrs/set-font-size))
 
 (defun hrs/decrease-font-size ()
-  "Decrease current font size by a factor of `hrs/font-change-increment', down to a minimum size of 1."
+  "Decrease current font size by a factor of
+`hrs/font-change-increment', down to a minimum size of 1."
   (interactive)
   (setq hrs/current-font-size
 	(max 1
@@ -117,11 +119,6 @@ other, future frames."
 
 (setq load-prefer-newer t)
 
-(use-package gotham-theme
-  :ensure t
-  :config
-  (load-theme 'gotham t))
-
 (defvar aim/is-darwin (eq system-type 'darwin))
 (defvar aim/is-linux (eq system-type 'gnu/linux))
 
@@ -156,18 +153,18 @@ other, future frames."
   (let ((frame-name (get-frame-name (selected-frame))))
     (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
 
-(defun hrs/apply-theme ()
-  (interactive)
-  (load-theme 'almost-mono-black t)
-  (if (window-system)
-      (set-selected-frame-dark-window-decoration))
-  (transparency 100))
+;; (defun hrs/apply-theme ()
+;;   (interactive)
+;;   ;;(load-theme 'almost-mono-black t)
+;;   (if (window-system)
+;;       (set-selected-frame-dark-window-decoration))
+;;   (transparency 100))
 
-(if (daemonp)
-    (add-hook 'after-make-frame-functions
-	      (lambda (frame)
-		(with-selected-frame frame (hrs/apply-theme))))
-  (hrs/apply-theme))
+;; (if (daemonp)
+;;     (add-hook 'after-make-frame-functions
+;; 	      (lambda (frame)
+;; 		(with-selected-frame frame (hrs/apply-theme))))
+;;   (hrs/apply-theme))
 
 ;; Store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
@@ -222,9 +219,6 @@ other, future frames."
 (use-package cmake-mode
   :mode ("\\.cmake$" . cmake-mode))
 
-(use-package wgrep-ag
-  :ensure t)
-
 (use-package ag
   :config
   (progn
@@ -234,11 +228,7 @@ other, future frames."
 
 (use-package wgrep-ag
   :config
-  (progn
-    (setq wgrep-auto-save-buffer t))
-  :ensure wgrep)
-
-(use-package wgrep)
+  (setq wgrep-auto-save-buffer t))
 
 (use-package magit
   :bind ("C-c i" . magit-status)
@@ -1217,20 +1207,6 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package k8s-mode
   :hook (k8s-mode . yas-minor-mode))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (company-go yasnippet-snippets yasnippet-classic-snippets wgrep-ag w3m use-package-ensure-system-package unfill terraform-mode smex smartparens racer python-mode protobuf-mode projectile-direnv pass nix-mode multi-term magit-gh-pulls lsp-ui kubernetes-tramp kubernetes kubel k8s-mode jinja2-mode ivy-posframe hydra helm-projectile helm-pass helm-ls-git helm-company helm-ag guide-key gotest godoctor go-tag go-guru go-eldoc go-dlv go-add-tags gnus-desktop-notify git-timemachine git-gutter-fringe gist flycheck-golangci-lint flx exec-path-from-shell dumb-jump dockerfile-mode docker-tramp direnv deadgrep dap-mode counsel-tramp counsel-test counsel-projectile counsel-notmuch company-lsp cmake-mode cargo browse-at-remote auto-compile atomic-chrome atom-one-dark-theme atom-dark-theme almost-mono-themes ag adoc-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; Making it easier to discover Emacs key presses.
 (use-package which-key
@@ -1265,12 +1241,6 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (setq org-confirm-babel-evaluate nil)
 
-;; from the internets
-(use-package dracula-theme
-  :config (load-theme 'dracula t)
-  (set-face-background 'mode-line "#510370")
-  (set-face-background 'mode-line-inactive "#212020"))
-
 (use-package modus-operandi-theme)
 ;;(load-theme 'modus-operandi t)          ; Light theme
-(load-theme 'modus-vivendi t)
+(load-theme 'modus-vivendi t) 
