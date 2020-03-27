@@ -1,3 +1,7 @@
+(add-hook 'after-init-hook
+	  (lambda ()
+	    (load-theme 'modus-vivendi t)))
+
 (setq package-check-signature nil)
 
 ;; from https://matthewbauer.us/bauer/#install and
@@ -162,8 +166,8 @@ other, future frames."
 
 ;; (if (daemonp)
 ;;     (add-hook 'after-make-frame-functions
-;; 	      (lambda (frame)
-;; 		(with-selected-frame frame (hrs/apply-theme))))
+;;	      (lambda (frame)
+;;		(with-selected-frame frame (hrs/apply-theme))))
 ;;   (hrs/apply-theme))
 
 ;; Store all backup and autosave files in the tmp dir
@@ -427,7 +431,7 @@ other, future frames."
     ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     ;; I added the ".*" for NixOS
     (setq tramp-shell-prompt-pattern
-         "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*")
+	 "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*")
     (add-to-list 'tramp-connection-properties
 		 (list ".*" "locale" "LC_ALL=C"))
     (setq tramp-ssh-controlmaster-options
@@ -1032,10 +1036,10 @@ save it in `ffap-file-at-point-line-number' variable."
   :mode "\\.go\\'"
   :custom (gofmt-command "goimports")
   :bind (:map go-mode-map
-              ("C-c C-n" . go-run)
-              ("C-c ."   . go-test-current-test)
-              ("C-c f"   . go-test-current-file)
-              ("C-c a"   . go-test-current-project))
+	      ("C-c C-n" . go-run)
+	      ("C-c ."   . go-test-current-test)
+	      ("C-c f"   . go-test-current-file)
+	      ("C-c a"   . go-test-current-project))
   :config
   (add-hook 'before-save-hook #'gofmt-before-save)
   (setq gofmt-command "goimports")
@@ -1096,20 +1100,20 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (use-package ivy
 ;;   :config
 ;;   (setq ivy-use-selectable-prompt t
-;; 	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
-;; 	ivy-height 10
-;; 	ivy-count-format "(%d/%d) "
-;; 	ivy-on-del-error-function nil
-;; 	ivy-initial-inputs-alist nil
-;; 	ivy-count-format " "
-;; 	ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
+;;	ivy-use-virtual-buffers t       ; Enable bookmarks and recentf
+;;	ivy-height 10
+;;	ivy-count-format "(%d/%d) "
+;;	ivy-on-del-error-function nil
+;;	ivy-initial-inputs-alist nil
+;;	ivy-count-format " "
+;;	ivy-re-builders-alist '((t . ivy--regex-fuzzy))))
 
 ;; (use-package ivy
 ;;   :ensure t
 ;;   :diminish (ivy-mode . "")
 ;;   :bind
 ;;   (:map ivy-mode-map
-;; 	("C-'" . ivy-avy))
+;;	("C-'" . ivy-avy))
 ;;   :config
 ;;   (ivy-mode 1)
 ;;   ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
@@ -1122,7 +1126,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;   (setq ivy-initial-inputs-alist nil)
 ;;   ;; configure regexp engine.
 ;;   (setq ivy-re-builders-alist
-;; 	;; allow input not in order
+;;	;; allow input not in order
 ;;         '((t . ivy--regex-ignore-order))))
 
 ;; (use-package ivy-posframe
@@ -1130,7 +1134,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;   (setq ivy-posframe-height-alist '((swiper . 10)
 ;;                                     (t      . 5)))
 ;;   (setq ivy-posframe-display-functions-alist
-;; 	'((swiper          . nil)
+;;	'((swiper          . nil)
 ;;           (complete-symbol . ivy-posframe-display-at-point)
 ;;           (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
 ;;           (t               . ivy-posframe-display)))
@@ -1150,8 +1154,8 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package projectile
   :ensure t
   :bind (:map projectile-mode-map
-              ("C-c p" . 'projectile-command-map))
-  :config 
+	      ("C-c p" . 'projectile-command-map))
+  :config
   (projectile-mode +1))
 
 ;; (use-package lsp-mode
@@ -1235,7 +1239,7 @@ save it in `ffap-file-at-point-line-number' variable."
   (add-hook 'eshell-mode-hook #'eshell-bookmark-setup))
 (org-babel-do-load-languages 'org-babel-load-languages
     '(
-        (shell . t)
+	(shell . t)
     )
 )
 
@@ -1243,4 +1247,63 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package modus-operandi-theme)
 ;;(load-theme 'modus-operandi t)          ; Light theme
-(load-theme 'modus-vivendi t) 
+;;(load-theme 'modus-vivendi t)
+
+(use-package heaven-and-hell
+  :ensure t
+  :init
+  (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
+  (setq heaven-and-hell-themes
+	'((light . modus-operandi)
+	  (dark . modus-vivendi))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+  (setq heaven-and-hell-load-theme-no-confirm t)
+  :hook (after-init . heaven-and-hell-init-hook)
+  :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
+	 ("<f6>" . heaven-and-hell-toggle-theme)))
+
+(require 'dbus)
+
+(defun auto-display-battery-toggle-display-battery (_string values _)
+  "Toggle function `display-battery-mode' depending if line power is online.
+VALUES is an alist from the \"line_power_AC\" signal."
+  (if (caadr (assoc-string "Online" values))
+      (display-battery-mode -1)
+    (display-battery-mode)))
+
+;;;###autoload
+(define-minor-mode auto-display-battery-mode
+  "Automatically show hide battery status of your Laptop."
+  :global t
+  (if (not auto-display-battery-mode)
+      (dbus-unregister-service :system
+        "org.freedesktop.UPower")
+
+    (dbus-register-signal :system
+      "org.freedesktop.UPower"
+      "/org/freedesktop/UPower/devices/line_power_AC"
+      "org.freedesktop.DBus.Properties"
+      "PropertiesChanged"
+      #'auto-display-battery-toggle-display-battery)
+
+    (when (car (dbus-call-method :system
+                 "org.freedesktop.UPower"
+                 "/org/freedesktop/UPower/devices/line_power_AC"
+                 "org.freedesktop.DBus.Properties"
+                 "Get" "org.freedesktop.UPower.Device" "Online"))
+      (display-battery-mode))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (modus-operandi)))
+ '(gofmt-command "goimports")
+ '(package-selected-packages
+   (quote
+    (vterm yasnippet-snippets which-key wgrep-ag use-package-ensure-system-package unfill terraform-mode ssh-config-mode smex smartparens racer python-mode protobuf-mode projectile pinentry pass org-bullets notmuch nix-mode multi-term modus-vivendi-theme modus-operandi-theme magit-gh-pulls k8s-mode jinja2-mode helm-pass helm-ls-git helm-company helm-ag heaven-and-hell guide-key gotham-theme gotest godoctor go-tag go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist flx exec-path-from-shell eshell-bookmark dumb-jump dracula-theme dockerfile-mode docker-tramp direnv deadgrep company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
