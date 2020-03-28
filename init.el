@@ -1244,6 +1244,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (setq org-confirm-babel-evaluate nil)
 
 (use-package modus-operandi-theme)
+(use-package modus-vivendi-theme)
 ;;(load-theme 'modus-operandi t)          ; Light theme
 ;;(load-theme 'modus-vivendi t)
 
