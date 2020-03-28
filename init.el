@@ -26,7 +26,7 @@
 ;; thanks man!
 
 (setq hrs/default-font "DejaVu Sans Mono")
-(setq hrs/default-font-size 16)
+(setq hrs/default-font-size 12)
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.2)
 
@@ -947,9 +947,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (setq projectile-switch-project-action 'helm-projectile-find-file)
 ;; (setq projectile-switch-project-action 'helm-projectile)
 
-(use-package helm-ag
-  :after
-  projectile)
+(use-package helm-ag)
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
@@ -1151,12 +1149,12 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package yasnippet-snippets)
 ;;(use-package yasnippet-classic-snippets)
 
-(use-package projectile
-  :ensure t
-  :bind (:map projectile-mode-map
-	      ("C-c p" . 'projectile-command-map))
-  :config
-  (projectile-mode +1))
+;;(use-package projectile
+;;  :ensure t
+;;  :bind (:map projectile-mode-map
+;;              ("C-c p" . 'projectile-command-map))
+;;  :config
+;;  (projectile-mode +1))
 
 ;; (use-package lsp-mode
 ;;   :ensure t
