@@ -265,21 +265,17 @@ other, future frames."
   (progn
     (smex-initialize)))
 
-(use-package flyspell
+(use-package git-commit)
+;;  :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
+
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+
+(use-package ispell
   :config
-  (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (add-hook 'gfm-mode-hook 'flyspell-mode)
-  (add-hook 'org-mode-hook 'flyspell-mode)
-
-  (add-hook 'git-commit-mode-hook 'flyspell-mode)
-  (add-hook 'mu4e-compose-mode-hook 'flyspell-mode))
-
-;; (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-
-;; Setting ‘flyspell-issue-message-flag’ to nil, as printing messages
-;; for every word (when checking the entire buffer) causes an enormous
-;; slowdown.
-(setq flyspell-issue-message-flag nil)
+  ;; Setting ‘flyspell-issue-message-flag’ to nil, as printing
+  ;; messages for every word (when checking the entire buffer) causes
+  ;; an enormous slowdown.
+  (setq flyspell-issue-message-flag nil))
 
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
@@ -303,12 +299,6 @@ other, future frames."
     (bind-key "C-c C-j" 'aj-toggle-fold yaml-mode-map)))
 
 (use-package browse-url)
-
-(use-package go-eldoc
-  :ensure go-eldoc
-  :commands go-eldoc-setup
-  :requires go-mode
-  :config (add-hook 'go-mode-hook 'go-eldoc-setup))
 
 (use-package go-add-tags
   :ensure go-add-tags)
@@ -368,12 +358,19 @@ other, future frames."
 
 (use-package git-gutter
   :config
-  (global-git-gutter-mode +1))
-
-(use-package fringe-helper)
-
-(and window-system
-     (use-package git-gutter-fringe))
+  (global-git-gutter-mode t)
+  (setq git-gutter:modified-sign " "
+	git-gutter:added-sign " "
+	git-gutter:deleted-sign " "
+	git-gutter:lighter " GG")
+  (set-face-background 'git-gutter:modified "DarkGoldenrod4")
+  (set-face-foreground 'git-gutter:added "dark green")
+  (set-face-foreground 'git-gutter:deleted "dark red")
+  ;; (global-set-key (kbd "C-x C-g") 'git-gutter)
+  ;; (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
+  ;; Jump to next/previous hunk
+  (global-set-key (kbd "C-x p") 'git-gutter:previous-hunk)
+  (global-set-key (kbd "C-x n") 'git-gutter:next-hunk))
 
 (use-package markdown-mode
   :ensure markdown-mode)
@@ -599,10 +596,6 @@ other, future frames."
 ;;   :bind (:map dired-mode-map
 ;;	      ("P" . peep-dired)))
 
-;; (use-package dumb-jump
-;;   :config
-;;   (global-set-key (kbd "M-.") 'dumb-jump-go))
-
 (defun visit-dir-as-root (hostname)
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/" hostname hostname)))
@@ -721,7 +714,8 @@ other, future frames."
 
 (use-package notmuch
   :config
-  (setq notmuch-hello-thousands-separator ","))
+  (setq notmuch-hello-thousands-separator ",")
+  (setq notmuch-search-oldest-first nil))
 
 (defun atomic-chrome-server-running-p ()
   "Returns t if the atomic-chrome server is currently running, otherwise nil."
@@ -828,14 +822,6 @@ save it in `ffap-file-at-point-line-number' variable."
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
     (itail filename)))
-
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-	 ("M-g j" . dumb-jump-go)
-	 ("M-g i" . dumb-jump-go-prompt)
-	 ("M-g x" . dumb-jump-go-prefer-external)
-	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config (setq dumb-jump-selector 'ivy))
 
 (use-package pinentry
   :config
@@ -963,16 +949,6 @@ save it in `ffap-file-at-point-line-number' variable."
 (setq multi-term-program-switches "--login")
 (put 'magit-clean 'disabled nil)
 
-(use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-	 ("M-g j" . dumb-jump-go)
-	 ("M-g i" . dumb-jump-go-prompt)
-	 ("M-g x" . dumb-jump-go-prefer-external)
-	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  ;;:config (setq dumb-jump-selector 'ivy) ;; (setq dumb-jump-selector 'helm)
-  :config (setq dumb-jump-selector 'helm)
-  :ensure)
-
 ;;Load auto-complete
 ;; (use-package go-autocomplete)
 ;; (ac-config-default)
@@ -982,7 +958,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; suggest things when company has nothing to say
 (setq-default tab-always-indent 'complete)
 
-;; turn off annoying tooltips
+;; ;; turn off annoying tooltips
 (use-package company
   :config (setq company-frontends nil)
   ;;:hook (after-init . global-company-mode)
@@ -995,6 +971,7 @@ save it in `ffap-file-at-point-line-number' variable."
 	company-echo-delay 0
 	company-require-match nil
 	company-auto-complete nil)
+  :hook (prog-mode . company-mode)
   ;;(global-company-mode 1)
   )
 
@@ -1019,31 +996,67 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(setq company-auto-complete 'never)
 ;;(company-tng-configure-default)
 
-(use-package go-mode
-  :ensure go-mode
-  :mode "\\.go\\'"
-  :config
-  (add-hook 'go-mode 'gofmt-before-save)
-  ;;(remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-  (setq gofmt-command "goimports")
-  (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-  (bind-key "C-M-i" 'helm-company go-mode-map)
-  (bind-key "M-." 'godef-jump go-mode-map))
+;; (use-package go-mode
+;;   :ensure go-mode
+;;   :mode "\\.go\\'"
+;;   :config
+;;   ;; (add-hook 'go-mode 'gofmt-before-save)
+;;   ;; (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+;;   ;; (setq gofmt-command "goimports")
+;;   (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
+;;   (bind-key "C-M-i" 'helm-company go-mode-map)
+;;   ;;(bind-key "M-." 'godef-jump go-mode-map)
+;;   )
+
+;; (use-package go-mode
+;;   :mode "\\.go\\'"
+;;   :custom (gofmt-command "goimports")
+;;   :bind (:map go-mode-map
+;;	      ("C-c C-n" . go-run)
+;;	      ("C-c ."   . go-test-current-test)
+;;	      ("C-c f"   . go-test-current-file)
+;;	      ("C-c a"   . go-test-current-project))
+;;   :config
+;;   (add-hook 'before-save-hook #'gofmt-before-save)
+;;   (setq gofmt-command "goimports")
+;;   (use-package gotest)
+;;   (use-package go-tag
+;;     :config (setq go-tag-args (list "-transform" "camelcase"))))
+
+;; from https://lupan.pl/dotemacs/
+(defun my-go-electric-brace ()
+  "Insert an opening brace may be with the closing one.
+If there is a space before the brace also adds new line with
+properly indented closing brace and moves cursor to another line
+inserted between the braces between the braces."
+  (interactive)
+  (insert "{")
+  (when (looking-back " {")
+    (newline)
+    (indent-according-to-mode)
+    (save-excursion
+      (newline)
+      (insert "}")
+      (indent-according-to-mode))))
+
+(defun my-godoc-package ()
+  "Display godoc for given package (with completion)."
+  (interactive)
+  (godoc (or (helm :sources (helm-build-sync-source "Go packages"
+			    :candidates (go-packages))
+		   :buffer "*godoc packages*")
+	     (signal 'quit nil))))
 
 (use-package go-mode
-  :mode "\\.go\\'"
-  :custom (gofmt-command "goimports")
-  :bind (:map go-mode-map
-	      ("C-c C-n" . go-run)
-	      ("C-c ."   . go-test-current-test)
-	      ("C-c f"   . go-test-current-file)
-	      ("C-c a"   . go-test-current-project))
-  :config
-  (add-hook 'before-save-hook #'gofmt-before-save)
-  (setq gofmt-command "goimports")
-  (use-package gotest)
-  (use-package go-tag
-    :config (setq go-tag-args (list "-transform" "camelcase"))))
+  :init
+  (setq go-fontify-function-calls nil)
+  :bind
+  (:map go-mode-map
+	("C-c e g" . godoc)
+	("C-c P" . my-godoc-package)
+	("{" . my-go-electric-brace))
+  :hook ((go-mode . lsp)
+	 (go-mode . smartparens-mode)))
 
 (defun aim/setup-ac-complete nil
   (interactive)
@@ -1156,6 +1169,8 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;  :config
 ;;  (projectile-mode +1))
 
+;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+;; (setq lsp-keymap-prefix "s-l")
 ;; (use-package lsp-mode
 ;;   :ensure t
 ;;   :commands lsp
@@ -1260,49 +1275,77 @@ save it in `ffap-file-at-point-line-number' variable."
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
 	 ("<f6>" . heaven-and-hell-toggle-theme)))
 
-(require 'dbus)
+;; (setq lsp-gopls-staticcheck t)
+;; (setq lsp-eldoc-render-all t)
+;; (setq lsp-gopls-complete-unimported t)
 
-(defun auto-display-battery-toggle-display-battery (_string values _)
-  "Toggle function `display-battery-mode' depending if line power is online.
-VALUES is an alist from the \"line_power_AC\" signal."
-  (if (caadr (assoc-string "Online" values))
-      (display-battery-mode -1)
-    (display-battery-mode)))
+(use-package lsp-mode
+  :config
+  ;;(lsp-prefer-flycheck t) ; Use flycheck instead of flymake
+  :commands (lsp lsp-deferred)
+  :hook ((before-save . lsp-format-buffer)
+	 (before-save . lsp-organize-imports))
+  :bind (("C-c d" . lsp-describe-thing-at-point)
+	 ("C-c e n" . flymake-goto-next-error)
+	 ("C-c e p" . flymake-goto-prev-error)
+	 ("C-c e r" . lsp-find-references)
+	 ("C-c e R" . lsp-rename)
+	 ("C-c e i" . lsp-find-implementation)
+	 ("C-c e t" . lsp-find-type-definition))
+  :hook (go-mode . lsp-deferred))
 
-;;;###autoload
-(define-minor-mode auto-display-battery-mode
-  "Automatically show hide battery status of your Laptop."
-  :global t
-  (if (not auto-display-battery-mode)
-      (dbus-unregister-service :system
-        "org.freedesktop.UPower")
+;;Set up before-save hooks to format buffer and add/delete imports.
+;;Make sure you don't have other gofmt/goimports hooks enabled.
 
-    (dbus-register-signal :system
-      "org.freedesktop.UPower"
-      "/org/freedesktop/UPower/devices/line_power_AC"
-      "org.freedesktop.DBus.Properties"
-      "PropertiesChanged"
-      #'auto-display-battery-toggle-display-battery)
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
-    (when (car (dbus-call-method :system
-                 "org.freedesktop.UPower"
-                 "/org/freedesktop/UPower/devices/line_power_AC"
-                 "org.freedesktop.DBus.Properties"
-                 "Get" "org.freedesktop.UPower.Device" "Online"))
-      (display-battery-mode))))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (modus-operandi)))
- '(gofmt-command "goimports")
- '(package-selected-packages
-   (quote
-    (vterm yasnippet-snippets which-key wgrep-ag use-package-ensure-system-package unfill terraform-mode ssh-config-mode smex smartparens racer python-mode protobuf-mode projectile pinentry pass org-bullets notmuch nix-mode multi-term modus-vivendi-theme modus-operandi-theme magit-gh-pulls k8s-mode jinja2-mode helm-pass helm-ls-git helm-company helm-ag heaven-and-hell guide-key gotham-theme gotest godoctor go-tag go-eldoc go-dlv go-add-tags git-timemachine git-gutter-fringe gist flx exec-path-from-shell eshell-bookmark dumb-jump dracula-theme dockerfile-mode docker-tramp direnv deadgrep company-go cmake-mode cargo browse-at-remote auto-compile atomic-chrome almost-mono-themes ag adoc-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;;Optional - provides fancier overlays.
+;; (use-package lsp-ui)
+
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+;;Optional - provides snippet support.
+(use-package yasnippet
+  :ensure t
+  :commands yas-minor-mode
+  :hook (go-mode . yas-minor-mode))
+
+(setq lsp-ui-doc-enable nil
+      lsp-ui-peek-enable nil
+      lsp-ui-sideline-enable nil
+      lsp-ui-imenu-enable nil
+      lsp-ui-flycheck-enable t)
+
+(defun my-dumb-jump-mode-hook ()
+    (define-key dumb-jump-mode-map (kbd "C-M-g") nil)
+    (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
+    (define-key dumb-jump-mode-map (kbd "C-M-q") nil))
+
+(use-package dumb-jump
+  :bind (("M-g o" . dumb-jump-go-other-window)
+	 ("M-g j" . dumb-jump-go)
+	 ("M-g b" . dumb-jump-back)
+	 ("M-g i" . dumb-jump-go-prompt)
+	 ("M-g x" . dumb-jump-go-prefer-external)
+	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
+  :config (setq dumb-jump-selector 'helm
+		dumb-jump-debug nil
+		dumb-jump-prefer-searcher 'rg)
+  :hook (prog-mode . dumb-jump-mode)
+  :ensure t)
+
+(eval-after-load "dumb-jump"
+  (add-hook 'go-mode 'my-dumb-jump-mode-hook))
+
+;; Fix trailing spaces but only in modified lines
+(use-package ws-butler
+  :hook (prog-mode . ws-butler-mode))
+
+(use-package server
+  :config (or (server-running-p) (server-mode)))
