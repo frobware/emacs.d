@@ -1,3 +1,10 @@
+(defun aim/add-to-load-path (path)
+  (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
+
+(aim/add-to-load-path "gcmh")
+(require 'gcmh)
+(gcmh-mode 1)
+
 (add-hook 'after-init-hook
 	  (lambda ()
 	    (load-theme 'modus-vivendi t)))
@@ -184,9 +191,6 @@ other, future frames."
 ;; When saving files, set execute permission if #! is in first line.
 (add-hook 'after-save-hook
 	  'executable-make-buffer-file-executable-if-script-p)
-
-(defun aim/add-to-load-path (path)
-  (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
 
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
@@ -1381,3 +1385,10 @@ inserted between the braces between the braces."
 ;; Provides only the command “restart-emacs”.
 (use-package restart-emacs
   :commands restart-emacs)
+
+;; Set default font
+(set-face-attribute 'default nil
+		    :family "Source Code"
+		    :height 180
+		    :weight 'semibold
+		    :width 'normal)
