@@ -269,18 +269,6 @@ other, future frames."
   (progn
     (smex-initialize)))
 
-(use-package git-commit)
-;;  :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
-
-(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
-
-(use-package ispell
-  :config
-  ;; Setting ‘flyspell-issue-message-flag’ to nil, as printing
-  ;; messages for every word (when checking the entire buffer) causes
-  ;; an enormous slowdown.
-  (setq flyspell-issue-message-flag nil))
-
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
 	 ("\\.cmake\\'" . cmake-mode)))
@@ -1359,3 +1347,14 @@ inserted between the braces between the braces."
   (setq langtool-http-server-host "localhost"
 	langtool-http-server-port 8081
 	langtool-default-language "en-US"))
+
+(use-package ispell
+  :config
+  ;; Setting ‘flyspell-issue-message-flag’ to nil, as printing
+  ;; messages for every word (when checking the entire buffer) causes
+  ;; an enormous slowdown.
+  (setq flyspell-issue-message-flag nil))
+
+(use-package git-commit
+  :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
+
