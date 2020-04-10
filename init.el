@@ -1343,10 +1343,11 @@ inserted between the braces between the braces."
   :config (or (server-running-p) (server-mode)))
 
 (use-package langtool
+  :bind ("C-x `" . langtool-correct-buffer)
   :config
   (setq langtool-http-server-host "localhost"
 	langtool-http-server-port 8081
-	langtool-default-language "en-US"))
+	langtool-default-language "en-GB"))
 
 (use-package ispell
   :config
@@ -1369,8 +1370,12 @@ inserted between the braces between the braces."
   (add-hook 'TeX-mode-hook 'flyspell-mode)
   (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode))
 
-(use-package git-commit
-  :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
+(use-package git-commit)
+(add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+
+(add-hook 'git-commit-mode-hook
+	  (lambda ()
+	    (add-hook 'after-save-hook 'langtool-check nil 'make-it-local)))
 
 ;; Provides only the command “restart-emacs”.
 (use-package restart-emacs
