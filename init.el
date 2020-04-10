@@ -1372,3 +1372,6 @@ inserted between the braces between the braces."
 (use-package git-commit
   :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
 
+;; Provides only the command “restart-emacs”.
+(use-package restart-emacs
+  :commands restart-emacs)
