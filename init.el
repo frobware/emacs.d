@@ -1397,9 +1397,35 @@ inserted between the braces between the braces."
 (use-package restart-emacs
   :commands restart-emacs)
 
+(use-package copy-as-format
+  :ensure t
+  :custom
+  (copy-as-format-default "slack")
+  :bind
+  (:map mode-specific-map
+	:prefix-map copy-as-format-prefix-map
+	:prefix "f"
+	("f" . copy-as-format)
+	("a" . copy-as-format-asciidoc)
+	("b" . copy-as-format-bitbucket)
+	("d" . copy-as-format-disqus)
+	("g" . copy-as-format-github)
+	("l" . copy-as-format-gitlab)
+	("c" . copy-as-format-hipchat)
+	("h" . copy-as-format-html)
+	("j" . copy-as-format-jira)
+	("m" . copy-as-format-markdown)
+	("w" . copy-as-format-mediawiki)
+	("o" . copy-as-format-org-mode)
+	("p" . copy-as-format-pod)
+	("r" . copy-as-format-rst)
+	("s" . copy-as-format-slack)))
+
 ;; Set default font
 (set-face-attribute 'default nil
 		    :family "Source Code"
 		    :height 180
 		    :weight 'semibold
 		    :width 'normal)
+
+(global-set-key (kbd "M-x") 'helm-M-x)
