@@ -26,7 +26,7 @@
 ;; thanks man!
 
 (setq hrs/default-font "DejaVu Sans Mono")
-(setq hrs/default-font-size 12)
+(setq hrs/default-font-size 14)
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.2)
 
