@@ -103,6 +103,10 @@ other, future frames."
 	("gnu"   . 0)))
 
 (require 'package)
+
+(eval-after-load 'package
+  (defun package--save-selected-packages (&rest opt) nil))
+
 (package-initialize)
 ;; Avoid loading the packages again after processing the init file.
 (setq package-enable-at-startup nil)
