@@ -1353,3 +1353,9 @@ inserted between the braces between the braces."
 
 (use-package server
   :config (or (server-running-p) (server-mode)))
+
+(use-package langtool
+  :config
+  (setq langtool-http-server-host "localhost"
+	langtool-http-server-port 8081
+	langtool-default-language "en-US"))
