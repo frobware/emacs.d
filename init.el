@@ -1355,6 +1355,20 @@ inserted between the braces between the braces."
   ;; an enormous slowdown.
   (setq flyspell-issue-message-flag nil))
 
+(use-package flyspell
+  :custom
+  (ispell-program-name "aspell")
+  ;; Default dictionary. To change do M-x ispell-change-dictionary RET.
+  ;; (aspell-dictionary "en_GB")
+  (aspell-program-name "aspell")
+  ;; (ispell-dictionary "en_GB")
+  (ispell-program-name "aspell")
+  :config
+  (define-key flyspell-mode-map [down-mouse-3] 'flyspell-correct-word)
+  (add-hook 'org-mode-hook 'flyspell-mode)
+  (add-hook 'TeX-mode-hook 'flyspell-mode)
+  (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode))
+
 (use-package git-commit
   :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
 
