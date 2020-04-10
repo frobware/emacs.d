@@ -966,10 +966,20 @@ save it in `ffap-file-at-point-line-number' variable."
 	company-minimum-prefix-length 3
 	company-echo-delay 0
 	company-require-match nil
+	company-tooltip-align-annotations t ; Align annotation to the right side.
 	company-auto-complete nil)
   :hook (prog-mode . company-mode)
   ;;(global-company-mode 1)
   )
+
+(use-package flx)
+(use-package company-flx)
+
+;; Sort candidates using completion history
+(use-package company-statistics)
+
+(with-eval-after-load 'company
+  (company-flx-mode +1))
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
