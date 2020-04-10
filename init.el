@@ -1343,7 +1343,8 @@ inserted between the braces between the braces."
   :config (or (server-running-p) (server-mode)))
 
 (use-package langtool
-  :bind ("C-x `" . langtool-correct-buffer)
+  :bind (:map git-commit-mode-map
+	      ("C-x `" . langtool-correct-buffer))
   :config
   (setq langtool-http-server-host "localhost"
 	langtool-http-server-port 8081
