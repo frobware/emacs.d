@@ -895,7 +895,10 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package nix-mode
   :mode "\\.nix\\'"
   :config
-  (setq nix-indent-function #'nix-indent-line))
+  (setq nix-indent-function #'nix-indent-line)
+  :bind
+  (:map nix-mode-map
+	("C-c C-j" . aj-toggle-fold)))
 
 (use-package deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
