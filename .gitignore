@@ -70,3 +70,8 @@ anaconda-mode/
 
 /.elpa-mirror
 /forge-database.sqlite
+
+/straight/build-cache.el
+/straight/build/
+/straight/repos/
+/straight/watcher/
