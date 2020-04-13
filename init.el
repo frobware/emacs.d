@@ -1,13 +1,35 @@
 (defun aim/add-to-load-path (path)
   (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
 
-(aim/add-to-load-path "gcmh")
-(require 'gcmh)
-(gcmh-mode 1)
+;; A big contributor to startup times is garbage collection. We up the
+;; gc threshold to temporarily prevent it from running, and then reset
+;; it later using a hook.
+(setq gc-cons-threshold most-positive-fixnum
+      gc-cons-percentage 0.6)
+
+;; Keep a ref to the actual file-name-handler
+(defvar default-file-name-handler-alist file-name-handler-alist)
+
+;; Set the file-name-handler to nil (because regexing is cpu
+;; intensive)
+(setq file-name-handler-alist nil)
+
+;; Reset file-name-handler-alist after initialization
+(add-hook 'emacs-startup-hook
+  (lambda ()
+    (setq gc-cons-threshold 16777216
+          gc-cons-percentage 0.1
+          file-name-handler-alist default-file-name-handler-alist)))
+
+;; Set default font
+;; (set-face-attribute 'default nil
+;;                     :family "Source Code Pro"
+;;                     :height 140
+;;                     :width 'normal)
 
 (add-hook 'after-init-hook
-	  (lambda ()
-	    (load-theme 'modus-vivendi t)))
+          (lambda ()
+            (load-theme 'modus-vivendi t)))
 
 (setq package-check-signature nil)
 
@@ -59,7 +81,7 @@ other, future frames."
   "Increase current font size by a factor of `hrs/font-change-increment'."
   (interactive)
   (setq hrs/current-font-size
-	(ceiling (* hrs/current-font-size hrs/font-change-increment)))
+        (ceiling (* hrs/current-font-size hrs/font-change-increment)))
   (hrs/set-font-size))
 
 (defun hrs/decrease-font-size ()
@@ -67,8 +89,8 @@ other, future frames."
 `hrs/font-change-increment', down to a minimum size of 1."
   (interactive)
   (setq hrs/current-font-size
-	(max 1
-	     (floor (/ hrs/current-font-size hrs/font-change-increment))))
+        (max 1
+             (floor (/ hrs/current-font-size hrs/font-change-increment))))
   (hrs/set-font-size))
 
 (define-key global-map (kbd "C-)") 'hrs/reset-font-size)
@@ -91,23 +113,23 @@ other, future frames."
 
 (setq package-archives
       '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
-	("MELPA Stable" . "https://stable.melpa.org/packages/")
-	("MELPA"        . "https://melpa.org/packages/"))
+        ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA"        . "https://melpa.org/packages/"))
       package-archive-priorities
       '(("GNU ELPA"     . 5)
-	("MELPA Stable" . 10)
-	("MELPA"        . 0)))
+        ("MELPA Stable" . 10)
+        ("MELPA"        . 0)))
 
 (setq package-archives
       `(("melpa" . ,(concat aim/elpa-mirror-dir "/melpa/"))
-	("stable-melpa" . ,(concat aim/elpa-mirror-dir "/stable-melpa/"))
-	("org" . ,(concat aim/elpa-mirror-dir "/org/"))
-	("gnu" . ,(concat aim/elpa-mirror-dir "/gnu/")))
+        ("stable-melpa" . ,(concat aim/elpa-mirror-dir "/stable-melpa/"))
+        ("org" . ,(concat aim/elpa-mirror-dir "/org/"))
+        ("gnu" . ,(concat aim/elpa-mirror-dir "/gnu/")))
       package-archive-priorities
       `(("melpa" . 5)
-	("stable-melpa" . 100)
-	("org"   . 50)
-	("gnu"   . 0)))
+        ("stable-melpa" . 100)
+        ("org"   . 50)
+        ("gnu"   . 0)))
 
 (require 'package)
 
@@ -142,17 +164,12 @@ other, future frames."
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark)))
 
-(setq abbrev-file-name
-      (expand-file-name (concat user-emacs-directory "/.abbrevs")))
-
 ;; If this code is being evaluated by emacs --daemon, ensure that each
 ;; subsequent frame is themed appropriately.
 (defun transparency (value)
   "Sets the transparency of the frame window. 0=transparent/100=opaque."
   (interactive "nTransparency Value 0 - 100 opaque:")
   (set-frame-parameter (selected-frame) 'alpha value))
-
-(use-package almost-mono-themes)
 
 (defun get-frame-name (&optional frame)
   (interactive)
@@ -190,7 +207,7 @@ other, future frames."
 
 ;; When saving files, set execute permission if #! is in first line.
 (add-hook 'after-save-hook
-	  'executable-make-buffer-file-executable-if-script-p)
+          'executable-make-buffer-file-executable-if-script-p)
 
 (setq inhibit-splash-screen t)
 (setq inhibit-startup-message t)
@@ -206,15 +223,15 @@ other, future frames."
       mouse-yank-at-point t)
 
 (mapc (lambda (mode)
-	(when (fboundp mode)
-	  (apply mode '(-1))))
+        (when (fboundp mode)
+          (apply mode '(-1))))
       '(blink-cursor-mode
-	column-number-mode
-	global-linum-mode
-	line-number-mode
-	scroll-bar-mode
-	menu-bar-mode
-	tool-bar-mode))
+        column-number-mode
+        global-linum-mode
+        line-number-mode
+        scroll-bar-mode
+        menu-bar-mode
+        tool-bar-mode))
 
 (require 'dired-x)
 (global-set-key (kbd "C-x C-j") 'dired-jump)
@@ -235,7 +252,7 @@ other, future frames."
   :config
   (progn
     (setq ag-highlight-search t
-	  ag-reuse-buffers t)
+          ag-reuse-buffers t)
     (add-hook 'ag-mode-hook 'wgrep-ag-setup)))
 
 (use-package wgrep-ag
@@ -249,9 +266,9 @@ other, future frames."
   (progn
     (global-magit-file-mode -1)
     (setq magit-refresh-status-buffer nil
-	  magit-auto-revert-mode nil
-	  magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
-	  magit-pull-arguments nil)))
+          magit-auto-revert-mode nil
+          magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
+          magit-pull-arguments nil)))
 
 ;;'(magit-diff-hunk-heading-highlight ((t (:background "grey30" :foreground "grey90")))))
 
@@ -267,7 +284,7 @@ other, future frames."
 
 (use-package smex
   :bind (("M-x" . smex)
-	 ("M-X" . smex-major-mode-commands))
+         ("M-X" . smex-major-mode-commands))
   :commands smex
   :config
   (progn
@@ -275,7 +292,7 @@ other, future frames."
 
 (use-package cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
-	 ("\\.cmake\\'" . cmake-mode)))
+         ("\\.cmake\\'" . cmake-mode)))
 
 (defun aj-toggle-fold ()
   "Toggle fold all lines larger than indentation on current line"
@@ -303,30 +320,30 @@ other, future frames."
   :config
   (progn
     (setq ibuffer-saved-filter-groups
-	  (quote (("default"
-		   ("dired" (mode . dired-mode))
-		   ("perl" (mode . cperl-mode))
-		   ("Go" (mode . go-mode))
-		   ("erc" (mode . erc-mode))
-		   ("planner" (or
-			       (name . "^\\*Calendar\\*$")
-			       (name . "^diary$")
-			       (mode . muse-mode)))
-		   ("emacs" (or
-			     (name . "^\\*scratch\\*$")
-			     (name . "^\\*Messages\\*$")))
-		   ("gnus" (or
-			    (mode . message-mode)
-			    (mode . bbdb-mode)
-			    (mode . mail-mode)
-			    (mode . gnus-group-mode)
-			    (mode . gnus-summary-mode)
-			    (mode . gnus-article-mode)
-			    (name . "^\\.bbdb$")
-			    (name . "^\\.newsrc-dribble")))))))
+          (quote (("default"
+                   ("dired" (mode . dired-mode))
+                   ("perl" (mode . cperl-mode))
+                   ("Go" (mode . go-mode))
+                   ("erc" (mode . erc-mode))
+                   ("planner" (or
+                               (name . "^\\*Calendar\\*$")
+                               (name . "^diary$")
+                               (mode . muse-mode)))
+                   ("emacs" (or
+                             (name . "^\\*scratch\\*$")
+                             (name . "^\\*Messages\\*$")))
+                   ("gnus" (or
+                            (mode . message-mode)
+                            (mode . bbdb-mode)
+                            (mode . mail-mode)
+                            (mode . gnus-group-mode)
+                            (mode . gnus-summary-mode)
+                            (mode . gnus-article-mode)
+                            (name . "^\\.bbdb$")
+                            (name . "^\\.newsrc-dribble")))))))
     (add-hook 'ibuffer-mode-hook
-	      (lambda ()
-		(ibuffer-switch-to-saved-filter-groups "default")))
+              (lambda ()
+                (ibuffer-switch-to-saved-filter-groups "default")))
     (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)))
 
 (aim/add-to-load-path "lisp")
@@ -356,9 +373,9 @@ other, future frames."
   :config
   (global-git-gutter-mode t)
   (setq git-gutter:modified-sign " "
-	git-gutter:added-sign " "
-	git-gutter:deleted-sign " "
-	git-gutter:lighter " GG")
+        git-gutter:added-sign " "
+        git-gutter:deleted-sign " "
+        git-gutter:lighter " GG")
   (set-face-background 'git-gutter:modified "DarkGoldenrod4")
   (set-face-foreground 'git-gutter:added "dark green")
   (set-face-foreground 'git-gutter:deleted "dark red")
@@ -377,30 +394,30 @@ other, future frames."
 
 (use-package cc-mode
   :mode (("\\.h\\'"    . c-mode)
-	 ("\\.c\\'"    . c-mode)
-	 ("\\.cpp\\'"  . c++-mode)
-	 ("\\.mm\\'"   . objc-mode)
-	 ("\\.java\\'" . java-mode)))
+         ("\\.c\\'"    . c-mode)
+         ("\\.cpp\\'"  . c++-mode)
+         ("\\.mm\\'"   . objc-mode)
+         ("\\.java\\'" . java-mode)))
 
 (use-package "hippie-exp"
   :config
   (setq hippie-expand-try-functions-list
-	'(try-expand-dabbrev
-	  try-expand-dabbrev-from-kill
-	  try-expand-dabbrev-all-buffers
-	  try-complete-file-name-partially
-	  try-complete-file-name
-	  try-expand-all-abbrevs
-	  try-expand-list
-	  try-expand-line
-	  try-complete-lisp-symbol-partially
-	  try-complete-lisp-symbol))
+        '(try-expand-dabbrev
+          try-expand-dabbrev-from-kill
+          try-expand-dabbrev-all-buffers
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-list
+          try-expand-line
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol))
   :bind ("M-/" . hippie-expand))
 
 (use-package python-mode
   :config (progn
-	    (set-variable 'py-indent-offset 4)
-	    (set-variable 'indent-tabs-mode nil)))
+            (set-variable 'py-indent-offset 4)
+            (set-variable 'indent-tabs-mode nil)))
 
 (use-package godoctor)
 
@@ -424,14 +441,14 @@ other, future frames."
     ;;    (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
     ;; I added the ".*" for NixOS
     (setq tramp-shell-prompt-pattern
-	 "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*")
+         "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*")
     (add-to-list 'tramp-connection-properties
-		 (list ".*" "locale" "LC_ALL=C"))
+                 (list ".*" "locale" "LC_ALL=C"))
     (setq tramp-ssh-controlmaster-options
-	  (concat
-	   "-o ControlPath=tramp.%%r@%%h:%%p "
-	   "-o ControlMaster=auto "
-	   "-o ControlPersist=yes"))))
+          (concat
+           "-o ControlPath=tramp.%%r@%%h:%%p "
+           "-o ControlMaster=auto "
+           "-o ControlPersist=yes"))))
 
 (use-package guide-key
   :config (setq guide-key/guide-key-sequence '("C-c p" "C-x 4")))
@@ -447,8 +464,8 @@ other, future frames."
 (defadvice kill-line (before check-position activate)
   (if (and (eolp) (not (bolp)))
       (progn (forward-char 1)
-	     (just-one-space 0)
-	     (backward-char 1))))
+             (just-one-space 0)
+             (backward-char 1))))
 
 (electric-indent-mode 1)
 
@@ -472,17 +489,17 @@ other, future frames."
 
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
-	      vc-ignore-dir-regexp
-	      tramp-file-name-regexp))
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
 
 (defmacro with-x-environment (&rest body)
   `(let ((process-environment
-	  (cons (concat "DISPLAY=" (getenv "DISPLAY" (selected-frame)))
-		process-environment)))
+          (cons (concat "DISPLAY=" (getenv "DISPLAY" (selected-frame)))
+                process-environment)))
      (if (getenv "XAUTHORITY" (selected-frame))
-	 (setq process-environment
-	       (cons (concat "XAUTHORITY=" (getenv "XAUTHORITY" (selected-frame)))
-		     process-environment)))
+         (setq process-environment
+               (cons (concat "XAUTHORITY=" (getenv "XAUTHORITY" (selected-frame)))
+                     process-environment)))
      ,@body))
 
 (defun x-terminal-copy (text)
@@ -495,7 +512,7 @@ other, future frames."
     (before x-select-text-in-tty activate)
   "Use xsel to copy to the X clipboard when running in a terminal under X."
   (when (and (eq (framep (selected-frame)) t)
-	     (getenv "DISPLAY" (selected-frame)))
+             (getenv "DISPLAY" (selected-frame)))
     (x-terminal-copy text)))
 
 (defun x-terminal-paste ()
@@ -507,7 +524,7 @@ other, future frames."
     (before x-cut-buffer-or-selection-value-in-tty activate)
   "Use xsel to paste from the X clipboard when running in a terminal under X."
   (when (and (eq (framep (selected-frame)) t)
-	     (getenv "DISPLAY" (selected-frame)))
+             (getenv "DISPLAY" (selected-frame)))
     (x-terminal-paste)))
 
 (setq x-select-enable-clipboard t
@@ -528,22 +545,42 @@ other, future frames."
 
 ;; ansi-color.
 ;; https://emacs.stackexchange.com/questions/8135/why-does-compilation-buffer-show-control-characters
-(use-package ansi-color
-  :ensure t
-  :config (progn 
-            (defun my/ansi-colorize-buffer ()
-              (let ((buffer-read-only nil))
-                (ansi-color-apply-on-region (point-min) (point-max))))
-            (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)))
+
+(use-package compile
+  :init
+  (defun compile-finish-hook (buf why)
+    (display-buffer buf)
+    (alert why :buffer buf))
+  (defun ansi-color-compilation-buf ()
+    (when (eq major-mode 'compilation-mode)
+      (interactive)
+      (ansi-color-apply-on-region compilation-filter-start (point-max))))
+  :hook ((compilation-finish-functions . compile-finish-hook)
+         (compilation-filter-hook . ansi-color-compilation-buf)))
+
+;; (use-package ansi-color
+;;   :ensure t
+;;   ;; From https://github.com/mlb-/emacs.d/blob/a818e80f7790dffa4f6a775987c88691c4113d11/init.el#L472-L482
+;;   :hook (compilation-filter . (lambda ()
+;;                              (when (eq major-mode 'compilation-mode)
+;;                                   (ansi-color-apply-on-region compilation-filter-start (point-max)))))
+  ;; :config (progn
+  ;;        (defun my/ansi-colorize-buffer ()
+  ;;          (let ((buffer-read-only nil))
+  ;;            (ansi-color-apply-on-region (point-min) (point-max))))
+  ;;        (add-hook 'compilation-filter-hook 'my/ansi-colorize-buffer))
+;;)
+
+;;(remove-hook 'compilation-filter-hook 'my/ansi-colorize-buffer)
 
 (require 'desktop)
 
 (setq desktop-buffers-not-to-save
       (concat "\\("
-	      "\\.go\\"
-	      "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
-	      "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
-	      "\\)$"))
+              "\\.go\\"
+              "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
+              "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
+              "\\)$"))
 
 (add-to-list 'desktop-modes-not-to-save 'dired-mode)
 (add-to-list 'desktop-modes-not-to-save 'Info-mode)
@@ -557,7 +594,7 @@ other, future frames."
   ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
   (unless (desktop-save-mode-off)
     (if (eq (desktop-owner) (emacs-pid))
-	(desktop-save desktop-dirname))))
+        (desktop-save desktop-dirname))))
 
 (add-hook 'auto-save-hook 'aim/desktop-save)
 
@@ -565,11 +602,11 @@ other, future frames."
   :config
   (progn
     (setq recentf-auto-cleanup 'never
-	  recentf-max-saved-items 100)
+          recentf-max-saved-items 100)
     (recentf-mode 1)))
 
 (add-to-list 'recentf-exclude
-	     (expand-file-name "~/.emacs.d/elpa"))
+             (expand-file-name "~/.emacs.d/elpa"))
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
@@ -577,10 +614,10 @@ other, future frames."
   (save-excursion
     (let ((end (copy-marker end)))
       (while
-	  (progn
-	    (goto-char start)
-	    (re-search-forward "^\\(.*\\)\n\\(\\(.*\n\\)*\\)\\1\n" end t))
-	(replace-match "\\1\n\\2")))))
+          (progn
+            (goto-char start)
+            (re-search-forward "^\\(.*\\)\n\\(\\(.*\n\\)*\\)\\1\n" end t))
+        (replace-match "\\1\n\\2")))))
 
 (defun uniquify-all-lines-buffer ()
   "Delete duplicate lines in buffer and keep first occurrence."
@@ -661,7 +698,7 @@ other, future frames."
 
 (use-package rust-mode
   :config (progn
-	    (setq rust-format-on-save t)))
+            (setq rust-format-on-save t)))
 
 (unless (fboundp 'xref-push-marker-stack)
   (defalias 'xref-pop-marker-stack 'pop-tag-mark)
@@ -680,11 +717,11 @@ other, future frames."
 (use-package elide-head
   :config
   (setq elide-head-headers-to-hide
-	(quote
-	 (("is free software[: ;] you can redistribute it" . "\\(Boston, MA 0211\\(1-1307\\|0-1301\\), USA\\|If not, see <http://www\\.gnu\\.org/licenses/>\\)\\.")
-	  ("The Regents of the University of California\\.  All rights reserved\\." . "SUCH DAMAGE\\.")
-	  ("Permission is hereby granted, free of charge" . "authorization from the X Consortium\\.")
-	  ("Copyright .* The Kubernetes Authors." . "limitations under the License."))))
+        (quote
+         (("is free software[: ;] you can redistribute it" . "\\(Boston, MA 0211\\(1-1307\\|0-1301\\), USA\\|If not, see <http://www\\.gnu\\.org/licenses/>\\)\\.")
+          ("The Regents of the University of California\\.  All rights reserved\\." . "SUCH DAMAGE\\.")
+          ("Permission is hereby granted, free of charge" . "authorization from the X Consortium\\.")
+          ("Copyright .* The Kubernetes Authors." . "limitations under the License."))))
   (add-hook 'go-mode-hook 'elide-head)
   (add-hook 'c-mode-common-hook 'elide-head))
 
@@ -718,12 +755,12 @@ other, future frames."
   "Returns t if the atomic-chrome server is currently running, otherwise nil."
   (let ((retval nil))
     (condition-case ex
-	(progn
-	  (delete-process
-	   (make-network-process
-	    :name "atomic-client-test" :host "localhost"
-	    :noquery t :service "64292"))
-	  (setq retval t))
+        (progn
+          (delete-process
+           (make-network-process
+            :name "atomic-client-test" :host "localhost"
+            :noquery t :service "64292"))
+          (setq retval t))
       ('error nil))
     retval))
 
@@ -752,20 +789,20 @@ other, future frames."
 ;; (to-do "make `find-file-line-number' work for emacsclient as well")
 ;; (to-do "make `find-file-line-number' check if the file exists")
 (defadvice find-file (around find-file-line-number
-			     (filename &optional wildcards)
-			     activate)
+                             (filename &optional wildcards)
+                             activate)
   "Turn files like file.cpp:14 into file.cpp and going to the 14-th line."
   (save-match-data
     (let* ((matched (string-match "^\\(.*\\):\\([0-9]+\\):?$" filename))
-	   (line-number (and matched
-			     (match-string 2 filename)
-			     (string-to-number (match-string 2 filename))))
-	   (filename (if matched (match-string 1 filename) filename)))
+           (line-number (and matched
+                             (match-string 2 filename)
+                             (string-to-number (match-string 2 filename))))
+           (filename (if matched (match-string 1 filename) filename)))
       ad-do-it
       (when line-number
-	;; goto-line is for interactive use
-	(goto-char (point-min))
-	(forward-line (1- line-number))))))
+        ;; goto-line is for interactive use
+        (goto-char (point-min))
+        (forward-line (1- line-number))))))
 
 (defvar ffap-file-at-point-line-number nil
   "Variable to hold line number from the last `ffap-file-at-point' call.")
@@ -774,20 +811,20 @@ other, future frames."
   "Search `ffap-string-at-point' for a line number pattern and
 save it in `ffap-file-at-point-line-number' variable."
   (let* ((string (ffap-string-at-point)) ;; string/name definition copied from `ffap-string-at-point'
-	 (name
-	  (or (condition-case nil
-		  (and (not (string-match "//" string)) ; foo.com://bar
-		       (substitute-in-file-name string))
-		(error nil))
-	      string))
-	 (line-number-string
-	  (and (string-match ":[0-9]+" name)
-	       (substring name (1+ (match-beginning 0)) (match-end 0))))
-	 (line-number
-	  (and line-number-string
-	       (string-to-number line-number-string))))
+         (name
+          (or (condition-case nil
+                  (and (not (string-match "//" string)) ; foo.com://bar
+                       (substitute-in-file-name string))
+                (error nil))
+              string))
+         (line-number-string
+          (and (string-match ":[0-9]+" name)
+               (substring name (1+ (match-beginning 0)) (match-end 0))))
+         (line-number
+          (and line-number-string
+               (string-to-number line-number-string))))
     (if (and line-number (> line-number 0))
-	(setq ffap-file-at-point-line-number line-number)
+        (setq ffap-file-at-point-line-number line-number)
       (setq ffap-file-at-point-line-number nil))))
 
 (defadvice find-file-at-point (after ffap-goto-line-number activate)
@@ -801,9 +838,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun ediff-copy-both-to-C ()
   (interactive)
   (ediff-copy-diff ediff-current-difference nil 'C nil
-		   (concat
-		    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
-		    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
+                   (concat
+                    (ediff-get-region-contents ediff-current-difference 'A ediff-control-buffer)
+                    (ediff-get-region-contents ediff-current-difference 'B ediff-control-buffer))))
 
 (defun add-d-to-ediff-mode-map ()
   (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
@@ -834,7 +871,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun aim/frame-colours-unspecified (frame)
   (interactive)
   (let ((fg (face-attribute 'default :foreground frame))
-	(bg (face-attribute 'default :background frame)))
+        (bg (face-attribute 'default :background frame)))
     (and (equal fg "unspecified-fg") (equal bg "unspecified-bg"))))
 
 (defun aim/on-frame-open (frame)
@@ -844,16 +881,16 @@ save it in `ffap-file-at-point-line-number' variable."
   (message "before FRAME foreground-mode %s" (frame-parameter frame 'foreground-mode))
   (if (not (display-graphic-p frame))
       (progn
-	(if (and (equal (frame-parameter frame 'background-mode) 'light)
-		 (aim/frame-colours-unspecified frame))
-	    (progn
-	      (set-frame-parameter frame 'background-color "#000000")
-	      (set-frame-parameter frame 'foreground-color "#FFFFFF"))
-	  (if (and (equal (frame-parameter frame 'background-mode) nil)
-		   (aim/frame-colours-unspecified frame))
-	      (progn
-		(set-frame-parameter frame 'background-color "#FFFFFF")
-		(set-frame-parameter frame 'foreground-color "#000000"))))))
+        (if (and (equal (frame-parameter frame 'background-mode) 'light)
+                 (aim/frame-colours-unspecified frame))
+            (progn
+              (set-frame-parameter frame 'background-color "#000000")
+              (set-frame-parameter frame 'foreground-color "#FFFFFF"))
+          (if (and (equal (frame-parameter frame 'background-mode) nil)
+                   (aim/frame-colours-unspecified frame))
+              (progn
+                (set-frame-parameter frame 'background-color "#FFFFFF")
+                (set-frame-parameter frame 'foreground-color "#000000"))))))
   (message "after FRAME %s" (frame-parameters frame)))
 
 (defun aim/maybe-frob-colours (frame)
@@ -864,8 +901,8 @@ save it in `ffap-file-at-point-line-number' variable."
 (defun kill-dired-buffers ()
   (interactive)
   (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
-			   (kill-buffer buffer)))
-	(buffer-list)))
+                           (kill-buffer buffer)))
+        (buffer-list)))
 
 ;; This package is easiest way to open particular link on
 ;; github/gitlab/bitbucket/stash/git.savannah.gnu.org from Emacs
@@ -898,7 +935,7 @@ save it in `ffap-file-at-point-line-number' variable."
   (setq nix-indent-function #'nix-indent-line)
   :bind
   (:map nix-mode-map
-	("C-c C-j" . aj-toggle-fold)))
+        ("C-c C-j" . aj-toggle-fold)))
 
 (use-package deadgrep)
 (global-set-key (kbd "<f5>") #'deadgrep)
@@ -966,12 +1003,12 @@ save it in `ffap-file-at-point-line-number' variable."
   :ensure company
   :config
   (setq company-idle-delay 0
-	company-tooltip-limit 20
-	company-minimum-prefix-length 3
-	company-echo-delay 0
-	company-require-match nil
-	company-tooltip-align-annotations t ; Align annotation to the right side.
-	company-auto-complete nil)
+        company-tooltip-limit 20
+        company-minimum-prefix-length 3
+        company-echo-delay 0
+        company-require-match nil
+        company-tooltip-align-annotations t ; Align annotation to the right side.
+        company-auto-complete nil)
   :hook (prog-mode . company-mode)
   ;;(global-company-mode 1)
   )
@@ -1000,8 +1037,8 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (setq company-frontends
       '(company-pseudo-tooltip-unless-just-one-frontend
-	company-preview-frontend
-	company-echo-metadata-frontend))
+        company-preview-frontend
+        company-echo-metadata-frontend))
 
 ;;(setq company-auto-complete 'never)
 ;;(company-tng-configure-default)
@@ -1053,20 +1090,20 @@ inserted between the braces between the braces."
   "Display godoc for given package (with completion)."
   (interactive)
   (godoc (or (helm :sources (helm-build-sync-source "Go packages"
-			    :candidates (go-packages))
-		   :buffer "*godoc packages*")
-	     (signal 'quit nil))))
+                            :candidates (go-packages))
+                   :buffer "*godoc packages*")
+             (signal 'quit nil))))
 
 (use-package go-mode
   :init
   (setq go-fontify-function-calls nil)
   :bind
   (:map go-mode-map
-	("C-c e g" . godoc)
-	("C-c P" . my-godoc-package)
-	("{" . my-go-electric-brace))
+        ("C-c e g" . godoc)
+        ("C-c P" . my-godoc-package)
+        ("{" . my-go-electric-brace))
   :hook ((go-mode . lsp)
-	 (go-mode . smartparens-mode)))
+         (go-mode . smartparens-mode)))
 
 (defun aim/setup-ac-complete nil
   (interactive)
@@ -1088,9 +1125,9 @@ inserted between the braces between the braces."
     :ensure company-go
     :config (add-to-list 'company-backends 'company-go))
   (add-hook 'go-mode-hook
-	    (lambda ()
-	      (set (make-local-variable 'company-backends) '(company-go))
-	      (company-mode))))
+            (lambda ()
+              (set (make-local-variable 'company-backends) '(company-go))
+              (company-mode))))
 
 (setq aim/prefer-ac-complete nil)
 
@@ -1165,12 +1202,12 @@ inserted between the braces between the braces."
 ;;   :config
 ;;   (global-set-key (kbd "C-s") 'swiper))
 
-(use-package yasnippet
-  :init
-  (yas-global-mode 1))
+;; (use-package yasnippet
+;;   :init
+;;   (yas-global-mode 1))
 
-(use-package yasnippet-snippets)
-;;(use-package yasnippet-classic-snippets)
+;; (use-package yasnippet-snippets)
+;; ;;(use-package yasnippet-classic-snippets)
 
 ;;(use-package projectile
 ;;  :ensure t
@@ -1247,7 +1284,8 @@ inserted between the braces between the braces."
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 
-(use-package ssh-config-mode)
+;; (use-package ssh-config-mode)
+
 (defun aim/tramp-borked ()
     (interactive)
     (tramp-cleanup-all-connections)
@@ -1262,7 +1300,7 @@ inserted between the braces between the braces."
   (add-hook 'eshell-mode-hook #'eshell-bookmark-setup))
 (org-babel-do-load-languages 'org-babel-load-languages
     '(
-	(shell . t)
+        (shell . t)
     )
 )
 
@@ -1278,12 +1316,12 @@ inserted between the braces between the braces."
   :init
   (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
   (setq heaven-and-hell-themes
-	'((light . modus-operandi)
-	  (dark . modus-vivendi))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
+        '((light . modus-operandi)
+          (dark . modus-vivendi))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
   (setq heaven-and-hell-load-theme-no-confirm t)
   :hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
-	 ("<f6>" . heaven-and-hell-toggle-theme)))
+         ("<f6>" . heaven-and-hell-toggle-theme)))
 
 ;; (setq lsp-gopls-staticcheck t)
 ;; (setq lsp-eldoc-render-all t)
@@ -1293,15 +1331,15 @@ inserted between the braces between the braces."
   :config
   ;;(lsp-prefer-flycheck t) ; Use flycheck instead of flymake
   :commands (lsp lsp-deferred)
-  :hook ((before-save . lsp-format-buffer)
-	 (before-save . lsp-organize-imports))
+  ;; :hook ((before-save . lsp-format-buffer)
+  ;;        (before-save . lsp-organize-imports))
   :bind (("C-c d" . lsp-describe-thing-at-point)
-	 ("C-c e n" . flymake-goto-next-error)
-	 ("C-c e p" . flymake-goto-prev-error)
-	 ("C-c e r" . lsp-find-references)
-	 ("C-c e R" . lsp-rename)
-	 ("C-c e i" . lsp-find-implementation)
-	 ("C-c e t" . lsp-find-type-definition))
+         ("C-c e n" . flymake-goto-next-error)
+         ("C-c e p" . flymake-goto-prev-error)
+         ("C-c e r" . lsp-find-references)
+         ("C-c e R" . lsp-rename)
+         ("C-c e i" . lsp-find-implementation)
+         ("C-c e t" . lsp-find-type-definition))
   :hook (go-mode . lsp-deferred))
 
 ;;Set up before-save hooks to format buffer and add/delete imports.
@@ -1321,10 +1359,10 @@ inserted between the braces between the braces."
   :commands company-lsp)
 
 ;;Optional - provides snippet support.
-(use-package yasnippet
-  :ensure t
-  :commands yas-minor-mode
-  :hook (go-mode . yas-minor-mode))
+;; (use-package yasnippet
+;;   :ensure t
+;;   :commands yas-minor-mode
+;;   :hook (go-mode . yas-minor-mode))
 
 (setq lsp-ui-doc-enable nil
       lsp-ui-peek-enable nil
@@ -1339,34 +1377,30 @@ inserted between the braces between the braces."
 
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
-	 ("M-g j" . dumb-jump-go)
-	 ("M-g b" . dumb-jump-back)
-	 ("M-g i" . dumb-jump-go-prompt)
-	 ("M-g x" . dumb-jump-go-prefer-external)
-	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
+         ("M-g j" . dumb-jump-go)
+         ("M-g b" . dumb-jump-back)
+         ("M-g i" . dumb-jump-go-prompt)
+         ("M-g x" . dumb-jump-go-prefer-external)
+         ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config (setq dumb-jump-selector 'helm
-		dumb-jump-debug nil
-		dumb-jump-prefer-searcher 'rg)
+                dumb-jump-debug nil
+                dumb-jump-prefer-searcher 'rg)
   :hook (prog-mode . dumb-jump-mode)
   :ensure t)
 
 (eval-after-load "dumb-jump"
   (add-hook 'go-mode 'my-dumb-jump-mode-hook))
 
-;; Fix trailing spaces but only in modified lines
-(use-package ws-butler
-  :hook (prog-mode . ws-butler-mode))
-
-(use-package server
-  :config (or (server-running-p) (server-mode)))
+;; (use-package server
+;;   :config (or (server-running-p) (server-mode)))
 
 (use-package langtool
   :bind (:map git-commit-mode-map
-	      ("C-x `" . langtool-correct-buffer))
+              ("C-x `" . langtool-correct-buffer))
   :config
   (setq langtool-http-server-host "localhost"
-	langtool-http-server-port 8081
-	langtool-default-language "en-GB"))
+        langtool-http-server-port 8081
+        langtool-default-language "en-GB"))
 
 (use-package ispell
   :config
@@ -1393,12 +1427,8 @@ inserted between the braces between the braces."
 (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
 
 (add-hook 'git-commit-mode-hook
-	  (lambda ()
-	    (add-hook 'after-save-hook 'langtool-check nil 'make-it-local)))
-
-;; Provides only the command “restart-emacs”.
-(use-package restart-emacs
-  :commands restart-emacs)
+          (lambda ()
+            (add-hook 'after-save-hook 'langtool-check nil 'make-it-local)))
 
 (use-package copy-as-format
   :ensure t
@@ -1406,29 +1436,35 @@ inserted between the braces between the braces."
   (copy-as-format-default "slack")
   :bind
   (:map mode-specific-map
-	:prefix-map copy-as-format-prefix-map
-	:prefix "f"
-	("f" . copy-as-format)
-	("a" . copy-as-format-asciidoc)
-	("b" . copy-as-format-bitbucket)
-	("d" . copy-as-format-disqus)
-	("g" . copy-as-format-github)
-	("l" . copy-as-format-gitlab)
-	("c" . copy-as-format-hipchat)
-	("h" . copy-as-format-html)
-	("j" . copy-as-format-jira)
-	("m" . copy-as-format-markdown)
-	("w" . copy-as-format-mediawiki)
-	("o" . copy-as-format-org-mode)
-	("p" . copy-as-format-pod)
-	("r" . copy-as-format-rst)
-	("s" . copy-as-format-slack)))
+        :prefix-map copy-as-format-prefix-map
+        :prefix "f"
+        ("f" . copy-as-format)
+        ("a" . copy-as-format-asciidoc)
+        ("b" . copy-as-format-bitbucket)
+        ("d" . copy-as-format-disqus)
+        ("g" . copy-as-format-github)
+        ("l" . copy-as-format-gitlab)
+        ("c" . copy-as-format-hipchat)
+        ("h" . copy-as-format-html)
+        ("j" . copy-as-format-jira)
+        ("m" . copy-as-format-markdown)
+        ("w" . copy-as-format-mediawiki)
+        ("o" . copy-as-format-org-mode)
+        ("p" . copy-as-format-pod)
+        ("r" . copy-as-format-rst)
+        ("s" . copy-as-format-slack)))
 
-;; Set default font
-(set-face-attribute 'default nil
-		    :family "Source Code"
-		    :height 180
-		    :weight 'semibold
-		    :width 'normal)
+;; Provides only the command “restart-emacs”.
+(use-package restart-emacs
+  :commands restart-emacs)
 
-(global-set-key (kbd "M-x") 'helm-M-x)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
+
+(use-package esup)
+
