@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t -*-
 
+(require 'cl-lib)
 (setq abbrev-file-name "/dev/null")
 (setq-default abbrev-mode nil)
 (setq ad-redefinition-action 'accept)
@@ -50,7 +51,7 @@
 ;;(setq straight-check-for-modifications '(watch-files find-when-checking))
 
 (setq straight-use-package-by-default t)
-(setq-default straight-vc-git-default-clone-depth 1)
+(setq-default straight-vc-git-default-clone-depth 'full)
 
 (straight-use-package 'use-package)
 
