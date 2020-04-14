@@ -115,12 +115,6 @@ other, future frames."
 
 ;; (hrs/reset-font-size)
 
-;; Mitigate Bug#28350 (security) in Emacs 25.2 and earlier.
-;; http://seclists.org/oss-sec/2017/q3/422
-(eval-after-load "enriched"
-  '(defun enriched-decode-display-prop (start end &optional param)
-     (list start end)))
-
 ;; (progn
 ;;   (add-to-list 'default-frame-alist '(undecorated . nil))
 ;;   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
