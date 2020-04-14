@@ -859,40 +859,11 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;   (use-package go-tag
 ;;     :config (setq go-tag-args (list "-transform" "camelcase"))))
 
-;; from https://lupan.pl/dotemacs/
-(defun my-go-electric-brace ()
-  "Insert an opening brace may be with the closing one.
-If there is a space before the brace also adds new line with
-properly indented closing brace and moves cursor to another line
-inserted between the braces between the braces."
-  (interactive)
-  (insert "{")
-  (when (looking-back " {")
-    (newline)
-    (indent-according-to-mode)
-    (save-excursion
-      (newline)
-      (insert "}")
-      (indent-according-to-mode))))
-
-(defun my-godoc-package ()
-  "Display godoc for given package (with completion)."
-  (interactive)
-  (godoc (or (helm :sources (helm-build-sync-source "Go packages"
-						    :candidates (go-packages))
-		   :buffer "*godoc packages*")
-	     (signal 'quit nil))))
-
 (use-package go-mode
-  :config
-  (setq gofmt-command "goimports")
   :init
   (setq go-fontify-function-calls nil)
-  :bind
-  (:map go-mode-map
-	("C-c e g" . godoc)
-	("C-c P" . my-godoc-package)
-	("{" . my-go-electric-brace))
+  :config
+  (setq gofmt-command "goimports")
   :hook ((go-mode . lsp)
 	 (go-mode . smartparens-mode)
 	 (go-mode . gofmt-before-save)))
