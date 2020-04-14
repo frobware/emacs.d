@@ -663,7 +663,7 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package pinentry
   :config
-  (setq epa-pinentry-mode 'loopback))
+  (setq epg-pinentry-mode 'loopback))
 
 (use-package adoc-mode)
 
