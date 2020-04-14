@@ -422,6 +422,8 @@ other, future frames."
 
 (put 'scroll-left 'disabled nil)
 
+(use-package alert)
+
 (use-package compile
   :init
   (defun compile-finish-hook (buf why)
