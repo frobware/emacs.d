@@ -1,6 +1,5 @@
 ;; -*- lexical-binding: t -*-
 
-(require 'cl-lib)
 (setq abbrev-file-name "/dev/null")
 (setq-default abbrev-mode nil)
 (setq ad-redefinition-action 'accept)
@@ -424,45 +423,6 @@ other, future frames."
 ;;       (format "\\(%s\\)\\|\\(%s\\)"
 ;; 	      vc-ignore-dir-regexp
 ;; 	      tramp-file-name-regexp))
-
-(defmacro with-x-environment (&rest body)
-  `(let ((process-environment
-	  (cons (concat "DISPLAY=" (getenv "DISPLAY" (selected-frame)))
-		process-environment)))
-     (if (getenv "XAUTHORITY" (selected-frame))
-	 (setq process-environment
-	       (cons (concat "XAUTHORITY=" (getenv "XAUTHORITY" (selected-frame)))
-		     process-environment)))
-     ,@body))
-
-(defun x-terminal-copy (text)
-  (with-temp-buffer
-    (insert text)
-    (with-x-environment
-     (call-process-region (point-min) (point-max) "xsel" nil nil nil "-bi"))))
-
-(defadvice x-select-text
-    (before x-select-text-in-tty activate)
-  "Use xsel to copy to the X clipboard when running in a terminal under X."
-  (when (and (eq (framep (selected-frame)) t)
-	     (getenv "DISPLAY" (selected-frame)))
-    (x-terminal-copy text)))
-
-(defun x-terminal-paste ()
-  (with-temp-buffer
-    (with-x-environment
-     (call-process "xsel" nil t nil "-bo"))))
-
-(defadvice x-cut-buffer-or-selection-value
-    (before x-cut-buffer-or-selection-value-in-tty activate)
-  "Use xsel to paste from the X clipboard when running in a terminal under X."
-  (when (and (eq (framep (selected-frame)) t)
-	     (getenv "DISPLAY" (selected-frame)))
-    (x-terminal-paste)))
-
-(setq x-select-enable-clipboard t
-      x-select-enable-primary t
-      save-interprogram-paste-before-kill t)
 
 (setq sentence-end-double-space nil)
 
