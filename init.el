@@ -578,11 +578,6 @@ other, future frames."
   :config
   (add-to-list 'auto-mode-alist '("\\.j2\\'" . jinja2-mode)))
 
-;; (use-package ini-mode
-;;   :ensure t)
-
-(message "Done")
-;;; Taken from:
 ;;; https://stackoverflow.com/questions/3139970/open-a-file-at-line-with-filenameline-syntax
 ;;;
 ;; Open files and goto lines like we see from g++ etc. i.e. file:line#
@@ -731,8 +726,9 @@ save it in `ffap-file-at-point-line-number' variable."
   (:map nix-mode-map
 	("C-c C-j" . aj-toggle-fold)))
 
-(use-package deadgrep)
-(global-set-key (kbd "<f5>") #'deadgrep)
+(use-package deadgrep
+  :config
+  (global-set-key (kbd "<f5>") #'deadgrep))
 
 (defun aim/light-mode ()
   (interactive)
@@ -772,11 +768,11 @@ save it in `ffap-file-at-point-line-number' variable."
 (defvar emacsql-sqlite-executable
   (expand-file-name (concat user-emacs-directory "/emacsql-sqlite")))
 
-(use-package multi-term)
-
-(global-set-key (kbd "C-c t") 'multi-term)
-(setq multi-term-program-switches "--login")
-(put 'magit-clean 'disabled nil)
+(use-package multi-term
+  :config
+  (global-set-key (kbd "C-c t") 'multi-term)
+  (setq multi-term-program-switches "--login")
+  (put 'magit-clean 'disabled nil))
 
 ;;Load auto-complete
 ;; (use-package go-autocomplete)
@@ -787,7 +783,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; suggest things when company has nothing to say
 (setq-default tab-always-indent 'complete)
 
-;; ;; turn off annoying tooltips
+;; turn off annoying tooltips
 (use-package company
   :config
   (setq company-frontends nil)
@@ -864,7 +860,8 @@ save it in `ffap-file-at-point-line-number' variable."
   (setq go-fontify-function-calls nil)
   :config
   (setq gofmt-command "goimports")
-  :hook ((go-mode . lsp)
+  :hook (
+         ;; (go-mode . lsp)
 	 (go-mode . smartparens-mode)
 	 (go-mode . gofmt-before-save)))
 
