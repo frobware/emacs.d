@@ -654,6 +654,8 @@ save it in `ffap-file-at-point-line-number' variable."
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
     (find-file filename)))
 
+(use-package itail)
+
 (defun itail-var-log-messages (hostname)
   (interactive "shost: ")
   (let ((filename (format "/ssh:%s|sudo:%s:/var/log/messages" hostname hostname)))
