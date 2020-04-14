@@ -75,3 +75,5 @@ anaconda-mode/
 /straight/build/
 /straight/repos/
 /straight/watcher/
+
+/epkgs
