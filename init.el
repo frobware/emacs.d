@@ -148,6 +148,9 @@ other, future frames."
   (let ((frame-name (get-frame-name (selected-frame))))
     (call-process-shell-command (concat "xprop -f _GTK_THEME_VARIANT 8u -set _GTK_THEME_VARIANT \"dark\" -name \"" frame-name "\""))))
 
+(and window-system
+     (set-selected-frame-dark-window-decoration))
+
 ;; (defun hrs/apply-theme ()
 ;;   (interactive)
 ;;   ;;(load-theme 'almost-mono-black t)
@@ -921,6 +924,8 @@ inserted between the braces between the braces."
 	     (signal 'quit nil))))
 
 (use-package go-mode
+  :config
+  (setq gofmt-command "goimports")
   :init
   (setq go-fontify-function-calls nil)
   :bind
@@ -929,7 +934,8 @@ inserted between the braces between the braces."
 	("C-c P" . my-godoc-package)
 	("{" . my-go-electric-brace))
   :hook ((go-mode . lsp)
-	 (go-mode . smartparens-mode)))
+	 (go-mode . smartparens-mode)
+	 (go-mode . gofmt-before-save)))
 
 (defun aim/setup-ac-complete nil
   (interactive)
@@ -1169,7 +1175,7 @@ inserted between the braces between the braces."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
-(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+;;(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 ;;Optional - provides fancier overlays.
 ;; (use-package lsp-ui)
@@ -1278,13 +1284,6 @@ inserted between the braces between the braces."
        (if (string-equal (downcase (face-foreground 'default)) "black")
 	   (aim/reverse-video))))
 
-(defun aim/require (FEATURE &optional FILENAME NOERROR)
-  (interactive)
-  (message "Loading %S" FEATURE)
-  (let ((res (require FEATURE FILENAME NOERROR)))
-    (and res (message "Success!"))
-    res))
-
 (defun aim/set-global-keybindings nil
   (interactive)
   (mapcar #'(lambda (x)
@@ -1309,5 +1308,3 @@ inserted between the braces between the braces."
 ;; 	  (lambda ()
 ;; 	    (load-theme 'modus-vivendi t)))
 ;; (electric-indent-mode 1)
-
-(message (emacs-init-time))
