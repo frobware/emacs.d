@@ -1268,3 +1268,5 @@ inserted between the braces between the braces."
 ;; 	  (lambda ()
 ;; 	    (load-theme 'modus-vivendi t)))
 ;; (electric-indent-mode 1)
+
+(auto-compression-mode)
