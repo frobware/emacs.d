@@ -26,7 +26,7 @@
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)
 	    (blink-cursor-mode -1)	;indicator that all is good
-	    (setq gc-cons-threshold 16777216
+	    (setq gc-cons-threshold 200000000 ;200MB
 		  gc-cons-percentage 0.1
 		  file-name-handler-alist default-file-name-handler-alist)))
 
@@ -241,30 +241,30 @@ other, future frames."
 ;;   :config
 ;;   (progn
 ;;     (setq ibuffer-saved-filter-groups
-;; 	  (quote (("default"
-;; 		   ("dired" (mode . dired-mode))
-;; 		   ("perl" (mode . cperl-mode))
-;; 		   ("Go" (mode . go-mode))
-;; 		   ("erc" (mode . erc-mode))
-;; 		   ("planner" (or
-;; 			       (name . "^\\*Calendar\\*$")
-;; 			       (name . "^diary$")
-;; 			       (mode . muse-mode)))
-;; 		   ("emacs" (or
-;; 			     (name . "^\\*scratch\\*$")
-;; 			     (name . "^\\*Messages\\*$")))
-;; 		   ("gnus" (or
-;; 			    (mode . message-mode)
-;; 			    (mode . bbdb-mode)
-;; 			    (mode . mail-mode)
-;; 			    (mode . gnus-group-mode)
-;; 			    (mode . gnus-summary-mode)
-;; 			    (mode . gnus-article-mode)
-;; 			    (name . "^\\.bbdb$")
-;; 			    (name . "^\\.newsrc-dribble")))))))
+;;	  (quote (("default"
+;;		   ("dired" (mode . dired-mode))
+;;		   ("perl" (mode . cperl-mode))
+;;		   ("Go" (mode . go-mode))
+;;		   ("erc" (mode . erc-mode))
+;;		   ("planner" (or
+;;			       (name . "^\\*Calendar\\*$")
+;;			       (name . "^diary$")
+;;			       (mode . muse-mode)))
+;;		   ("emacs" (or
+;;			     (name . "^\\*scratch\\*$")
+;;			     (name . "^\\*Messages\\*$")))
+;;		   ("gnus" (or
+;;			    (mode . message-mode)
+;;			    (mode . bbdb-mode)
+;;			    (mode . mail-mode)
+;;			    (mode . gnus-group-mode)
+;;			    (mode . gnus-summary-mode)
+;;			    (mode . gnus-article-mode)
+;;			    (name . "^\\.bbdb$")
+;;			    (name . "^\\.newsrc-dribble")))))))
 ;;     (add-hook 'ibuffer-mode-hook
-;; 	      (lambda ()
-;; 		(ibuffer-switch-to-saved-filter-groups "default")))
+;;	      (lambda ()
+;;		(ibuffer-switch-to-saved-filter-groups "default")))
 ;;     (bind-key "[::space::]" 'ibuffer-visit-buffer ibuffer-mode-map)))
 
 ;;(use-package dockerfile-mode)
@@ -415,8 +415,8 @@ other, future frames."
 
 ;; (setq vc-ignore-dir-regexp
 ;;       (format "\\(%s\\)\\|\\(%s\\)"
-;; 	      vc-ignore-dir-regexp
-;; 	      tramp-file-name-regexp))
+;;	      vc-ignore-dir-regexp
+;;	      tramp-file-name-regexp))
 
 (setq sentence-end-double-space nil)
 
@@ -440,10 +440,10 @@ other, future frames."
 
 ;; (setq desktop-buffers-not-to-save
 ;;       (concat "\\("
-;; 	      "\\.go\\"
-;; 	      "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
-;; 	      "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
-;; 	      "\\)$"))
+;;	      "\\.go\\"
+;;	      "^nn\\.a[0-9]+\\|\\.log\\|(ftp)\\|^tags\\|^TAGS"
+;;	      "\\|\\.emacs.*\\|\\.diary\\|\\.newsrc-dribble\\|\\.bbdb"
+;;	      "\\)$"))
 
 ;; (add-to-list 'desktop-modes-not-to-save 'dired-mode)
 ;; (add-to-list 'desktop-modes-not-to-save 'Info-mode)
@@ -457,7 +457,7 @@ other, future frames."
 ;;   ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
 ;;   (unless (desktop-save-mode-off)
 ;;     (if (eq (desktop-owner) (emacs-pid))
-;; 	(desktop-save desktop-dirname))))
+;;	(desktop-save desktop-dirname))))
 
 ;; (add-hook 'auto-save-hook 'aim/desktop-save)
 
@@ -668,7 +668,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (defun aim/frame-colours-unspecified (frame)
 ;;   (interactive)
 ;;   (let ((fg (face-attribute 'default :foreground frame))
-;; 	(bg (face-attribute 'default :background frame)))
+;;	(bg (face-attribute 'default :background frame)))
 ;;     (and (equal fg "unspecified-fg") (equal bg "unspecified-bg"))))
 
 ;; (defun aim/on-frame-open (frame)
@@ -678,16 +678,16 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;   (message "before FRAME foreground-mode %s" (frame-parameter frame 'foreground-mode))
 ;;   (if (not (display-graphic-p frame))
 ;;       (progn
-;; 	(if (and (equal (frame-parameter frame 'background-mode) 'light)
-;; 		 (aim/frame-colours-unspecified frame))
-;; 	    (progn
-;; 	      (set-frame-parameter frame 'background-color "#000000")
-;; 	      (set-frame-parameter frame 'foreground-color "#FFFFFF"))
-;; 	  (if (and (equal (frame-parameter frame 'background-mode) nil)
-;; 		   (aim/frame-colours-unspecified frame))
-;; 	      (progn
-;; 		(set-frame-parameter frame 'background-color "#FFFFFF")
-;; 		(set-frame-parameter frame 'foreground-color "#000000"))))))
+;;	(if (and (equal (frame-parameter frame 'background-mode) 'light)
+;;		 (aim/frame-colours-unspecified frame))
+;;	    (progn
+;;	      (set-frame-parameter frame 'background-color "#000000")
+;;	      (set-frame-parameter frame 'foreground-color "#FFFFFF"))
+;;	  (if (and (equal (frame-parameter frame 'background-mode) nil)
+;;		   (aim/frame-colours-unspecified frame))
+;;	      (progn
+;;		(set-frame-parameter frame 'background-color "#FFFFFF")
+;;		(set-frame-parameter frame 'foreground-color "#000000"))))))
 ;;   (message "after FRAME %s" (frame-parameters frame)))
 
 ;; (defun aim/maybe-frob-colours (frame)
@@ -698,8 +698,8 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (defun kill-dired-buffers ()
 ;;   (interactive)
 ;;   (mapc (lambda (buffer) (when (eq 'dired-mode (buffer-local-value 'major-mode buffer))
-;; 			   (kill-buffer buffer)))
-;; 	(buffer-list)))
+;;			   (kill-buffer buffer)))
+;;	(buffer-list)))
 
 ;; This package is easiest way to open particular link on
 ;; github/gitlab/bitbucket/stash/git.savannah.gnu.org from Emacs
@@ -789,7 +789,7 @@ save it in `ffap-file-at-point-line-number' variable."
   (setq company-frontends nil)
   (setq company-idle-delay 0
 	company-tooltip-limit 20
-	company-minimum-prefix-length 3
+	company-minimum-prefix-length 1
 	company-echo-delay 0
 	company-require-match nil
 	company-tooltip-align-annotations t ; Align annotation to the right side.
@@ -828,31 +828,33 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(setq company-auto-complete 'never)
 ;;(company-tng-configure-default)
 
-;; (use-package go-mode
-;;   :mode
-;;   "\\.go\\'"
-;;   :config
-;;   (setq gofmt-command "goimports")
-;;   (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-;;   :bind
-;;   (:map go-mode-map
-;; 	("C-M-x" . aim/run-go-buffer)
-;; 	("M-." . godef-jump)))
-
 (use-package go-mode
-  :mode "\\.go\\'"
-  :custom (gofmt-command "goimports")
-  :bind (:map go-mode-map
-	      ("C-c C-n" . go-run)
-	      ("C-c ."   . go-test-current-test)
-	      ("C-c f"   . go-test-current-file)
-	      ("C-c a"   . go-test-current-project))
+  :custom
+  (gofmt-command "goimports")
   :config
   (add-hook 'before-save-hook #'gofmt-before-save)
-  (setq gofmt-command "goimports")
-  (use-package gotest)
-  (use-package go-tag
-    :config (setq go-tag-args (list "-transform" "camelcase"))))
+  (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+  :bind
+  (:map go-mode-map
+	("M-RET" . compile)
+	("C-M-x" . aim/run-go-buffer)
+	;;("M-." . godef-jump))
+	))
+
+;; (use-package go-mode
+;;   :mode "\\.go\\'"
+;;   :custom (gofmt-command "goimports")
+;;   :bind (:map go-mode-map
+;;	      ("C-c C-n" . go-run)
+;;	      ("C-c ."   . go-test-current-test)
+;;	      ("C-c f"   . go-test-current-file)
+;;	      ("C-c a"   . go-test-current-project))
+;;   :config
+;;   (add-hook 'before-save-hook #'gofmt-before-save)
+;;   (setq gofmt-command "goimports")
+;;   (use-package gotest)
+;;   (use-package go-tag
+;;     :config (setq go-tag-args (list "-transform" "camelcase"))))
 
 (use-package flycheck)
 
@@ -1078,8 +1080,9 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
+  :init (setq lsp-keymap-prefix "C-c l")
   :hook ((before-save . lsp-format-buffer)
-         (before-save . lsp-organize-imports))
+	 (before-save . lsp-organize-imports))
   :bind (("C-c d" . lsp-describe-thing-at-point)
 	 ("C-c e n" . flymake-goto-next-error)
 	 ("C-c e p" . flymake-goto-prev-error)
@@ -1087,7 +1090,8 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
-  :hook ((lisp-mode . lsp-deferred)))
+  :hook ((go-mode . lsp-deferred)
+	 (lisp-mode . lsp-deferred)))
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
@@ -1096,6 +1100,12 @@ save it in `ffap-file-at-point-line-number' variable."
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+;; (add-hook 'before-save-hook 'gofmt-before-save)
+
+;; Prefer go-mode's gofmt over LSP sluggishness
+(remove-hook 'before-save-hook 'lsp-organize-imports)
+(remove-hook 'before-save-hook 'lsp-format-buffer)
 
 ;;Optional - provides fancier overlays.
 ;; (use-package lsp-ui)
@@ -1225,14 +1235,39 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (aim/set-global-keybindings)
 ;; (add-hook 'after-init-hook
-;; 	  (lambda ()
-;; 	    (load-theme 'modus-vivendi t)))
+;;	  (lambda ()
+;;	    (load-theme 'modus-vivendi t)))
 ;; (electric-indent-mode 1)
 
 (auto-compression-mode)
+
+;;; LSP speedups
+;;
+;; Increase the amount of data which Emacs reads from the process.
+;; Again the emacs default is too low 4k considering that the some of
+;; the language server responses are in 800k - 3M range.
+(setq read-process-output-max (* 5 (* 1024 1024))) ;; 1mb
+
+;; Optional: use company-capf . Although company-lsp also supports
+;; caching lsp-mode’s company-capf does that by default. To achieve
+;; that uninstall company-lsp or put these lines in your config:
+(setq lsp-prefer-capf t)
 
 ;; The buffer *Flymake log* tends to fill up with things like:
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
 ;; > because (error Can’t find a suitable init function)
 (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(modus-vivendi))
+ '(gofmt-command "goimports")
+ '(lsp-keymap-prefix ""))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
