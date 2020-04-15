@@ -461,15 +461,15 @@ other, future frames."
 
 ;; (add-hook 'auto-save-hook 'aim/desktop-save)
 
-;; (use-package recentf
-;;   :config
-;;   (progn
-;;     (setq recentf-auto-cleanup 'never
-;; 	  recentf-max-saved-items 100)
-;;     (recentf-mode 1)))
+(use-package recentf
+  :config
+  (progn
+    (setq recentf-auto-cleanup 'never
+	  recentf-max-saved-items 100)
+    (recentf-mode 1)))
 
-;; (add-to-list 'recentf-exclude
-;; 	     (expand-file-name "~/.emacs.d/elpa"))
+(add-to-list 'recentf-exclude
+	     (expand-file-name "~/.emacs.d/elpa"))
 
 (defun uniquify-all-lines-region (start end)
   "Find duplicate lines in region START to END keeping first occurrence."
@@ -829,41 +829,32 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(company-tng-configure-default)
 
 ;; (use-package go-mode
-;;   :ensure go-mode
-;;   :mode "\\.go\\'"
+;;   :mode
+;;   "\\.go\\'"
 ;;   :config
-;;   ;; (add-hook 'go-mode 'gofmt-before-save)
-;;   ;; (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-;;   ;; (setq gofmt-command "goimports")
-;;   (bind-key "C-M-x" 'aim/run-go-buffer go-mode-map)
-;;   (bind-key "C-M-i" 'helm-company go-mode-map)
-;;   ;;(bind-key "M-." 'godef-jump go-mode-map)
-;;   )
-
-;; (use-package go-mode
-;;   :mode "\\.go\\'"
-;;   :custom (gofmt-command "goimports")
-;;   :bind (:map go-mode-map
-;;	      ("C-c C-n" . go-run)
-;;	      ("C-c ."   . go-test-current-test)
-;;	      ("C-c f"   . go-test-current-file)
-;;	      ("C-c a"   . go-test-current-project))
-;;   :config
-;;   (add-hook 'before-save-hook #'gofmt-before-save)
 ;;   (setq gofmt-command "goimports")
-;;   (use-package gotest)
-;;   (use-package go-tag
-;;     :config (setq go-tag-args (list "-transform" "camelcase"))))
+;;   (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+;;   :bind
+;;   (:map go-mode-map
+;; 	("C-M-x" . aim/run-go-buffer)
+;; 	("M-." . godef-jump)))
 
 (use-package go-mode
-  :init
-  (setq go-fontify-function-calls nil)
+  :mode "\\.go\\'"
+  :custom (gofmt-command "goimports")
+  :bind (:map go-mode-map
+	      ("C-c C-n" . go-run)
+	      ("C-c ."   . go-test-current-test)
+	      ("C-c f"   . go-test-current-file)
+	      ("C-c a"   . go-test-current-project))
   :config
+  (add-hook 'before-save-hook #'gofmt-before-save)
   (setq gofmt-command "goimports")
-  :hook (
-         ;; (go-mode . lsp)
-	 (go-mode . smartparens-mode)
-	 (go-mode . gofmt-before-save)))
+  (use-package gotest)
+  (use-package go-tag
+    :config (setq go-tag-args (list "-transform" "camelcase"))))
+
+(use-package flycheck)
 
 (defun aim/setup-ac-complete nil
   (interactive)
@@ -902,6 +893,10 @@ save it in `ffap-file-at-point-line-number' variable."
   :diminish smartparens-mode)
 
 (use-package flx)
+
+;;(use-package flycheck
+;;  :init
+;;  (global-flycheck-mode))
 
 ;; (use-package counsel
 ;;   :config
@@ -1083,8 +1078,8 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  ;; :hook ((before-save . lsp-format-buffer)
-  ;;        (before-save . lsp-organize-imports))
+  :hook ((before-save . lsp-format-buffer)
+         (before-save . lsp-organize-imports))
   :bind (("C-c d" . lsp-describe-thing-at-point)
 	 ("C-c e n" . flymake-goto-next-error)
 	 ("C-c e p" . flymake-goto-prev-error)
@@ -1092,15 +1087,15 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
-  :hook ((lisp-mode . lsp-deferred)
-	 (go-mode . lsp-deferred)))
+  :hook ((lisp-mode . lsp-deferred)))
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
-;;(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 ;;Optional - provides fancier overlays.
 ;; (use-package lsp-ui)
@@ -1117,7 +1112,7 @@ save it in `ffap-file-at-point-line-number' variable."
       lsp-ui-peek-enable nil
       lsp-ui-sideline-enable nil
       lsp-ui-imenu-enable nil
-      lsp-ui-flycheck-enable t)
+      lsp-ui-flycheck-enable nil)
 
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
@@ -1235,3 +1230,9 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (electric-indent-mode 1)
 
 (auto-compression-mode)
+
+;; The buffer *Flymake log* tends to fill up with things like:
+;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
+;; > because (error Can’t find a suitable init function)
+(remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
