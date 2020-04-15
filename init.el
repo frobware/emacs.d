@@ -1082,8 +1082,6 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (setq lsp-gopls-complete-unimported t)
 
 (use-package lsp-mode
-  :config
-  ;;(lsp-prefer-flycheck t) ; Use flycheck instead of flymake
   :commands (lsp lsp-deferred)
   ;; :hook ((before-save . lsp-format-buffer)
   ;;        (before-save . lsp-organize-imports))
@@ -1094,15 +1092,14 @@ save it in `ffap-file-at-point-line-number' variable."
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
-  :hook (go-mode . lsp-deferred))
+  :hook ((lisp-mode . lsp-deferred)
+	 (go-mode . lsp-deferred)))
 
-;;Set up before-save hooks to format buffer and add/delete imports.
-;;Make sure you don't have other gofmt/goimports hooks enabled.
-
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
-
 ;;(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
 ;;Optional - provides fancier overlays.
