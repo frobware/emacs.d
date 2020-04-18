@@ -191,6 +191,22 @@ other, future frames."
 	ag-reuse-buffers t)
   (add-hook 'ag-mode-hook 'wgrep-ag-setup))
 
+(use-package ag
+  :custom
+  (ag-highligh-search t)
+  (ag-reuse-buffers t)
+  (ag-reuse-window t)
+  :bind
+  ("M-s a" . ag-project)
+  :config
+  (use-package wgrep-ag))
+
+(use-package wgrep
+  :custom
+  (wgrep-enable-key "e")
+  (wgrep-auto-save-buffer t)
+  (wgrep-change-readonly-file t))
+
 (use-package wgrep-ag
   :config
   (setq wgrep-auto-save-buffer t))
