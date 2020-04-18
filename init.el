@@ -1276,6 +1276,8 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package theme-changer
   :config
   (setq calendar-location-name "UK") 
-  (setq calendar-latitude 1.7797)
-  (setq calendar-longitude 51.5558)
+  (setq calendar-latitude 51.5558)
+  (setq calendar-longitude 1.7797)
   (change-theme 'modus-operandi 'modus-vivendi))
+
+;;(use-package vterm)
