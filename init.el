@@ -829,9 +829,8 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;(company-tng-configure-default)
 
 (use-package go-mode
-  :custom
-  (gofmt-command "goimports")
   :config
+  (setq gofmt-command "goimports")
   (add-hook 'before-save-hook #'gofmt-before-save)
   (remove-hook 'go-mode 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
   :bind
@@ -1257,24 +1256,10 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
 ;; > because (error Can’t find a suitable init function)
 (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(modus-vivendi))
- '(gofmt-command "goimports")
- '(lsp-keymap-prefix ""))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 (use-package theme-changer
   :config
-  (setq calendar-location-name "UK")
+  (setq calendar-location-name "UK") 
   (setq calendar-latitude 1.7797)
   (setq calendar-longitude 51.5558)
   (change-theme 'modus-operandi 'modus-vivendi))
