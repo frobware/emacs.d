@@ -218,7 +218,7 @@ other, future frames."
   (progn
     (global-magit-file-mode -1)
     (setq magit-refresh-status-buffer nil
-	  magit-auto-revert-mode nil
+	  magit-auto-revert-mode t
 	  magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat"))
 	  magit-pull-arguments nil)))
 
