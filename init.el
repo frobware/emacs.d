@@ -1284,6 +1284,16 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (defun my-minibuffer-setup ()
   (set (make-local-variable 'face-remapping-alist)
-       '((default :height 1.75))))
+       '((default :height 1.25))))
 
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
+
+;; Easily adjust the font size in all frames
+;;
+;; Enable the global minor mode `default-text-scale-mode' to bind
+;; C-M-= and C-M-- to `default-text-scale-increase' and
+;; `default-text-scale-decrease' respectively. Alternatively, bind
+;; those commands directly in another map.
+(use-package default-text-scale
+  :config
+  (default-text-scale-mode))
