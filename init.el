@@ -1297,3 +1297,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package default-text-scale
   :config
   (default-text-scale-mode))
+
+(use-package spell-fu
+  :hook
+  ((markdown-mode org-mode text-mode) . spell-fu-mode)
+  :init
+  (setq spell-fu-faces-exclude '(org-meta-line org-link org-code)))
