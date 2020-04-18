@@ -1271,3 +1271,10 @@ save it in `ffap-file-at-point-line-number' variable."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(use-package theme-changer
+  :config
+  (setq calendar-location-name "UK")
+  (setq calendar-latitude 1.7797)
+  (setq calendar-longitude 51.5558)
+  (change-theme 'modus-operandi 'modus-vivendi))
