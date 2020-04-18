@@ -1281,3 +1281,9 @@ save it in `ffap-file-at-point-line-number' variable."
   (change-theme 'modus-operandi 'modus-vivendi))
 
 ;;(use-package vterm)
+
+(defun my-minibuffer-setup ()
+  (set (make-local-variable 'face-remapping-alist)
+       '((default :height 1.75))))
+
+(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
