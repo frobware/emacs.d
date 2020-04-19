@@ -1303,3 +1303,6 @@ save it in `ffap-file-at-point-line-number' variable."
   ((markdown-mode org-mode text-mode) . spell-fu-mode)
   :init
   (setq spell-fu-faces-exclude '(org-meta-line org-link org-code)))
+
+(unless (fboundp 'json-serialize)
+  (error "you don't have a json-serialize builtin-in function"))
