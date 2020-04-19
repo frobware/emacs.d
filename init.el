@@ -1085,7 +1085,7 @@ save it in `ffap-file-at-point-line-number' variable."
 	'((light . modus-operandi)
 	  (dark . modus-vivendi))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
   (setq heaven-and-hell-load-theme-no-confirm t)
-  :hook (after-init . heaven-and-hell-init-hook)
+  ;;:hook (after-init . heaven-and-hell-init-hook)
   :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
 	 ("<f6>" . heaven-and-hell-toggle-theme)))
 
