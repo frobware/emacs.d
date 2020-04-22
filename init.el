@@ -542,6 +542,8 @@ other, future frames."
 (use-package helm)
 (use-package helm-company)
 
+(use-package helm-lsp)
+
 (use-package helm-ls-git
   :requires
   helm
@@ -871,7 +873,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;   (use-package go-tag
 ;;     :config (setq go-tag-args (list "-transform" "camelcase"))))
 
-(use-package flycheck)
+;;(use-package flycheck)
 
 (defun aim/setup-ac-complete nil
   (interactive)
@@ -1045,7 +1047,7 @@ save it in `ffap-file-at-point-line-number' variable."
   :diminish
   :config (which-key-mode)
   (which-key-setup-side-window-bottom)
-  (setq which-key-idle-delay 3.50))
+  (setq which-key-idle-delay 0.50))
 
 ;; Get org-headers to look pretty! E.g., * → ⊙, ** ↦ ◯, *** ↦ ★
 ;; https://github.com/emacsorphanage/org-bullets
@@ -1094,8 +1096,31 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (setq lsp-gopls-complete-unimported t)
 
 (use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :init (setq lsp-keymap-prefix "C-c l")
+  :commands
+  (lsp lsp-deferred)
+  :init
+  (setq lsp-auto-guess-root nil)
+  ;; Auto-kill LSP server after last workspace buffer is killed.
+  (setq lsp-keep-workspace-alive nil)
+  ;; Let `flycheck-check-syntax-automatically' determine this.
+  (setq lsp-flycheck-live-reporting nil)
+  ;; Disable LSP's superfluous, expensive and/or debatably unnecessary features.
+  ;; Some servers implement these poorly. Better to just rely on Emacs' native
+  ;; mechanisms and make these opt-in.
+  (setq lsp-enable-folding nil
+	;; HACK Fix #2911, until it is resolved upstream. Links come in
+	;;      asynchronously from the server, but lsp makes no effort to
+	;;      "select" the original buffer before laying them down, so they
+	;;      could be rendered in the wrong buffer (like the minibuffer).
+	lsp-enable-links nil
+	;; Potentially slow
+	lsp-enable-file-watchers nil
+	lsp-enable-text-document-color nil
+	lsp-enable-semantic-highlighting nil
+	;; Don't modify our code without our permission
+	lsp-enable-indentation nil
+	lsp-enable-on-type-formatting nil)
+
   :hook ((before-save . lsp-format-buffer)
 	 (before-save . lsp-organize-imports))
   :bind (("C-c d" . lsp-describe-thing-at-point)
@@ -1132,12 +1157,6 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; (use-package yasnippet
 ;;   :commands yas-minor-mode
 ;;   :hook (go-mode . yas-minor-mode))
-
-(setq lsp-ui-doc-enable nil
-      lsp-ui-peek-enable nil
-      lsp-ui-sideline-enable nil
-      lsp-ui-imenu-enable nil
-      lsp-ui-flycheck-enable nil)
 
 (use-package dumb-jump
   :bind (("M-g o" . dumb-jump-go-other-window)
@@ -1266,7 +1285,7 @@ save it in `ffap-file-at-point-line-number' variable."
 ;; Optional: use company-capf . Although company-lsp also supports
 ;; caching lsp-mode’s company-capf does that by default. To achieve
 ;; that uninstall company-lsp or put these lines in your config:
-(setq lsp-prefer-capf t)
+(setq lsp-prefer-capf nil)
 
 ;; The buffer *Flymake log* tends to fill up with things like:
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
@@ -1275,7 +1294,7 @@ save it in `ffap-file-at-point-line-number' variable."
 
 (use-package theme-changer
   :config
-  (setq calendar-location-name "UK") 
+  (setq calendar-location-name "UK")
   (setq calendar-latitude 51.5558)
   (setq calendar-longitude 1.7797)
   (change-theme 'modus-operandi 'modus-vivendi))
@@ -1305,4 +1324,58 @@ save it in `ffap-file-at-point-line-number' variable."
   (setq spell-fu-faces-exclude '(org-meta-line org-link org-code)))
 
 (unless (fboundp 'json-serialize)
-  (error "you don't have a json-serialize builtin-in function"))
+  (user-error "**** you don't have a json-serialize builtin-in function ****"))
+
+;; (use-package lsp-ui
+;;   :after lsp-mode
+;;   :diminish
+;;   :commands lsp-ui-mode
+;;   ;; :custom-face
+;;   ;; (lsp-ui-doc-background ((t (:background nil))))
+;;   ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
+;;   :bind (:map lsp-ui-mode-map
+;;               ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+;;               ([remap xref-find-references] . lsp-ui-peek-find-references)
+;;               ("C-c u" . lsp-ui-imenu))
+;;   :custom
+;;   (lsp-ui-doc-enable t)
+;;   (lsp-ui-doc-header t)
+;;   (lsp-ui-doc-include-signature t)
+;;   (lsp-ui-doc-position 'top)
+;;   (lsp-ui-doc-border (face-foreground 'default))
+;;   (lsp-ui-sideline-enable nil)
+;;   (lsp-ui-sideline-ignore-duplicate t)
+;;   (lsp-ui-sideline-show-code-actions nil)
+
+;;   :config
+;;   ;; Use lsp-ui-doc-webkit only in GUI
+;;   (setq lsp-ui-doc-use-webkit t)
+;;   ;; turn off all the lsp-ui noise
+;;   (setq
+;;    lsp-ui-sideline-enable nil
+;;    lsp-ui-doc-enable nil
+;;    lsp-eldoc-hook nil)
+;;   ;; WORKAROUND Hide mode-line of the lsp-ui-imenu buffer
+;;   ;; https://github.com/emacs-lsp/lsp-ui/issues/243
+;;   (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+;;     (setq mode-line-format nil)))
+
+(use-package lsp-ui
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-doc-max-height 8
+	lsp-ui-doc-max-width 35
+	lsp-ui-sideline-ignore-duplicate t
+	;; lsp-ui-doc is redundant with and more invasive than
+	;; `+lookup/documentation'
+	lsp-ui-doc-enable nil
+	;; Don't show symbol definitions in the sideline. They are pretty noisy,
+	;; and there is a bug preventing Flycheck errors from being shown (the
+	;; errors flash briefly and then disappear).
+	lsp-ui-sideline-show-hover nil)
+  (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
+    (setq mode-line-format nil)))
+
+(use-package lsp-treemacs)
+(use-package helm-lsp :commands helm-lsp-workspace-symbol)
+(global-hl-line-mode)
