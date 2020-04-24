@@ -376,7 +376,9 @@ other, future frames."
   ;; (global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
   ;; Jump to next/previous hunk
   (global-set-key (kbd "C-x p") 'git-gutter:previous-hunk)
-  (global-set-key (kbd "C-x n") 'git-gutter:next-hunk))
+  ;; clashes with narrow-to-region
+  ;; (global-set-key (kbd "C-x n") 'git-gutter:next-hunk))
+  )
 
 (use-package hippie-exp
   :straight nil
