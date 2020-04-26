@@ -1375,3 +1375,7 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package lsp-treemacs)
 (use-package helm-lsp :commands helm-lsp-workspace-symbol)
 (global-hl-line-mode)
+
+(use-package ws-butler
+  :config
+  (ws-butler-global-mode))
