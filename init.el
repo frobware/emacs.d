@@ -1389,6 +1389,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package x509-mode)
 
 (use-package hl-line)
+
+(use-package rust-mode)
+
 (use-package xterm-color)
 
 (setq compilation-environment '("TERM=xterm-256color"))
