@@ -1385,3 +1385,5 @@ save it in `ffap-file-at-point-line-number' variable."
   :bind (:map ibuffer-mode-map
 	      ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)
 	      ("/ <deletechar>" . ibuffer-clear-filter-groups)))
+
+(use-package x509-mode)
