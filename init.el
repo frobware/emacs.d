@@ -1379,3 +1379,9 @@ save it in `ffap-file-at-point-line-number' variable."
 (use-package ws-butler
   :config
   (ws-butler-global-mode))
+
+(use-package ibuffer-vc
+  :after (ibuffer vc)
+  :bind (:map ibuffer-mode-map
+	      ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)
+	      ("/ <deletechar>" . ibuffer-clear-filter-groups)))
