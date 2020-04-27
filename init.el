@@ -1387,3 +1387,5 @@ save it in `ffap-file-at-point-line-number' variable."
 	      ("/ <deletechar>" . ibuffer-clear-filter-groups)))
 
 (use-package x509-mode)
+
+(use-package hl-line)
