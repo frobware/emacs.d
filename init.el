@@ -1440,3 +1440,6 @@ save it in `ffap-file-at-point-line-number' variable."
 ;;   (funcall f proc (xterm-color-filter string)))
 
 ;; (advice-add 'compilation-filter :around #'my/advice-compilation-filter)
+
+(use-package kubernetes-tramp)
+(use-package docker-tramp)
