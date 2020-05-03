@@ -1,6 +1,3 @@
-[submodule "mirror-elpa"]
-	path = mirror-elpa
-	url = https://github.com/d12frosted/mirror-elpa
 [submodule "gcmh"]
 	path = gcmh
 	url = https://gitlab.com/koral/gcmh
