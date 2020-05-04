@@ -132,6 +132,11 @@
   :bind
   (("C-x C-j" . dired-jump)))
 
+(use-package dired-narrow
+  :ensure t
+  :bind (:map dired-mode-map
+              ("/" . dired-narrow)))
+
 (use-package hippie-exp
   :straight (:type built-in)
   :defer nil
