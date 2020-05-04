@@ -126,6 +126,12 @@
 (defalias 'ttl 'toggle-truncate-lines)
 (fset 'yes-or-no-p 'y-or-n-p)
 
+(use-package direnv
+  :custom
+  (direnv-always-show-summary nil)
+  :config
+  (direnv-mode))
+
 (use-package dired-x
   :straight (:type built-in)
   :defer nil
