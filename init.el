@@ -143,7 +143,7 @@
 (use-package dired-narrow
   :ensure t
   :bind (:map dired-mode-map
-              ("/" . dired-narrow)))
+	      ("/" . dired-narrow)))
 
 (use-package hippie-exp
   :straight (:type built-in)
@@ -600,6 +600,11 @@ other, future frames."
   "revert-(current-buffer) asking no questions"
   (interactive)
   (revert-buffer nil t))
+
+(defun aim/tramp-borked ()
+  (interactive)
+  (tramp-cleanup-all-connections)
+  (tramp-cleanup-all-buffers))
 
 (use-package simple
   :straight (:type built-in)
