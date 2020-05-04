@@ -274,6 +274,8 @@ other, future frames."
   (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
 
 (use-package magit
+  :config
+  (global-magit-file-mode -1)
   :custom
   (magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
   :bind
