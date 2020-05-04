@@ -273,9 +273,6 @@ other, future frames."
   ;; shell prompt additions for NixOS
   (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
 
-(use-package kubernetes-tramp)
-(use-package docker-tramp)
-
 (use-package magit
   :custom
   (magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
@@ -364,9 +361,12 @@ other, future frames."
 (use-package browse-at-remote)
 (use-package browse-url)
 (use-package cmake-mode)
+(use-package docker-tramp)
 (use-package epkg)
 (use-package esup)
 (use-package hl-line)
+(use-package json-mode)
+(use-package kubernetes-tramp)
 (use-package markdown-mode)
 (use-package modus-operandi-theme)
 (use-package modus-vivendi-theme)
