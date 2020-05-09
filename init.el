@@ -648,8 +648,8 @@ other, future frames."
   ;; (lsp-ui-doc-background ((t (:background nil))))
   ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
   :bind (:map lsp-ui-mode-map
-	      ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-	      ([remap xref-find-references] . lsp-ui-peek-find-references)
+	      ;; ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+	      ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
 	      ("C-c u" . lsp-ui-imenu))
   :custom
   (lsp-ui-doc-enable t)
