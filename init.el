@@ -462,9 +462,13 @@ other, future frames."
 ;; Increase the amount of data which Emacs reads from the process.
 ;; Again the emacs default is too low 4k considering that the some
 ;; of the language server responses are in 800k - 3M range.
-(setq read-process-output-max (* 5 (* 1024 1024)))
+(use-package process
+  :straight (:type built-in)
+  :custom
+  (read-process-output-max (* 1 (* 1024 1024))))
 
 (use-package company
+  :after lsp-mode
   :custom
   (company-idle-delay 0)
   (company-tooltip-limit 20)
