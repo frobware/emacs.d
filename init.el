@@ -524,6 +524,8 @@ other, future frames."
 	 ;; (before-save . lsp-format-buffer)
 	 ;; (before-save . lsp-organize-imports)
 	 )
+  :config
+  (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
   :bind (("C-c d" . lsp-describe-thing-at-point)
 	 ("C-c e n" . flymake-goto-next-error)
 	 ("C-c e p" . flymake-goto-prev-error)
