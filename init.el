@@ -129,6 +129,8 @@
 (use-package direnv
   :custom
   (direnv-always-show-summary nil)
+  :hook
+  (prog-mode-hook . #'direnv-update-environment)
   :config
   (direnv-mode))
 
