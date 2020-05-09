@@ -511,6 +511,8 @@ other, future frames."
   :config
   (add-to-list 'company-backends '(company-shell company-shell-env)))
 
+(use-package yasnippet)
+
 (use-package lsp-mode
   :preface
   (setq lsp-keymap-prefix "C-l")
