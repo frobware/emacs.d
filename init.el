@@ -346,6 +346,8 @@ other, future frames."
 (use-package docker-compose-mode)
 
 (use-package k8s-mode
+  :after yasnippet
+  :requires yasnippet
   :hook (k8s-mode . yas-minor-mode))
 
 (use-package kubernetes
