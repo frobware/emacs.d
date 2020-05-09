@@ -375,10 +375,28 @@ other, future frames."
 (use-package no-littering)
 (use-package pass)
 (use-package restart-emacs)
-(use-package rust-mode)
 (use-package terraform-mode)
 (use-package x509-mode)
 (use-package xterm-color)
+
+(use-package toml-mode)
+
+(use-package cargo)
+
+(use-package rust-mode
+  :hook
+  (rust-mode . yas-minor-mode))
+
+;; Add keybindings for interacting with Cargo
+(use-package cargo
+  :after rust-mode
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package flycheck)
+
+(use-package flycheck-rust
+  :after flycheck
+  :hook (flycheck-mode . #'flycheck-rust-setup))
 
 (use-package ws-butler
   :config
@@ -489,6 +507,7 @@ other, future frames."
   :preface
   (setq lsp-keymap-prefix "C-l")
   :custom
+  (lsp-rust-server 'rust-analyzer)
   (lsp-prefer-capf t)
   :hook ((prog-mode . lsp)
 	 (lsp-mode . lsp-enable-which-key-integration)
