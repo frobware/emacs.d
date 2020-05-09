@@ -396,12 +396,6 @@ other, future frames."
   :after rust-mode
   :hook (rust-mode . cargo-minor-mode))
 
-(use-package flycheck)
-
-(use-package flycheck-rust
-  :after flycheck
-  :hook (flycheck-mode . #'flycheck-rust-setup))
-
 (use-package ws-butler
   :config
   (ws-butler-global-mode))
