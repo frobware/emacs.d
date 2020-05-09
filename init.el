@@ -615,6 +615,7 @@ other, future frames."
   (column-number-mode 1)
   :bind
   (("C-x C-b" . ibuffer)
+   ("C-x C-b" . helm-buffers-list)
    ("C-x C-j" . dired-jump)
    ("C-x m" . gnus-msg-mail)
    ([f1] . gnus-slave)
