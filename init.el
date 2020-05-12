@@ -318,6 +318,8 @@ other, future frames."
 (use-package helm-company)
 (use-package helm-lsp)
 
+(use-package protobuf-mode)
+
 (use-package helm-ls-git
   :ensure t
   :defer nil
