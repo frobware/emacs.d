@@ -288,6 +288,17 @@ other, future frames."
 
 (use-package git-timemachine)
 
+(use-package git-gutter
+  :config
+  (setq git-gutter:modified-sign " "
+	git-gutter:added-sign " "
+	git-gutter:deleted-sign " "
+	git-gutter:lighter " GG")
+  (set-face-background 'git-gutter:modified "DarkGoldenrod4")
+  (set-face-foreground 'git-gutter:added "dark green")
+  (set-face-foreground 'git-gutter:deleted "dark red")
+  (global-git-gutter-mode 1))
+
 (use-package forge
   :after magit)
 
