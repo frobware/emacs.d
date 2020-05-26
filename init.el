@@ -127,10 +127,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package direnv
-  :custom
-  (direnv-always-show-summary nil)
-  :hook
-  (prog-mode-hook . #'direnv-update-environment)
+  :defer nil
+  :demand nil
   :config
   (direnv-mode))
 
@@ -284,7 +282,7 @@ other, future frames."
   ("C-c i" . magit-status))
 
 (use-package git-commit			;TODO (spell)
-  :hook (git-commit-setup-hook . git-commit-turn-on-flyspell))
+  :hook (git-commit-setup . git-commit-turn-on-flyspell))
 
 (use-package git-timemachine)
 
@@ -521,12 +519,13 @@ other, future frames."
 (use-package yasnippet)
 
 (use-package lsp-mode
-  :preface
-  (setq lsp-keymap-prefix "C-l")
+  :init
+  (setq lsp-keymap-prefix "M-SPC l")
   :custom
   (lsp-rust-server 'rust-analyzer)
   (lsp-prefer-capf t)
-  :hook ((prog-mode . lsp)
+  :hook ((prog-mode . direnv-update-environment)
+	 (prog-mode . lsp-deferred)
 	 (lsp-mode . lsp-enable-which-key-integration)
 	 ;; (before-save . lsp-format-buffer)
 	 ;; (before-save . lsp-organize-imports)
@@ -567,7 +566,7 @@ other, future frames."
 	      ("C-c f"   . go-test-current-file)
 	      ("C-c a"   . go-test-current-project))
   :hook
-  (before-save-hook . gofmt-before-save))
+  (before-save . gofmt-before-save))
 
 (eval-after-load "dumb-jump"
   (add-hook 'go-mode 'my-dumb-jump-mode-hook))
