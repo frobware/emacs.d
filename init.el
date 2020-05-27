@@ -120,7 +120,7 @@
   (use-dialog-box nil "Disable dialog boxes")
   (x-gtk-use-system-tooltips nil)
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
-  (debug-on-quit nil))
+  (debug-on-error nil))
 
 ;;; where can I put these? simple?
 (defalias 'ttl 'toggle-truncate-lines)
@@ -520,7 +520,7 @@ other, future frames."
 
 (use-package lsp-mode
   :init
-  (setq lsp-keymap-prefix "M-SPC l")
+  (setq lsp-keymap-prefix "C-; l")
   :custom
   (lsp-rust-server 'rust-analyzer)
   (lsp-prefer-capf t)
@@ -677,7 +677,15 @@ other, future frames."
   (lsp-ui-doc-enable nil)
   (lsp-eldoc-hook nil))
 
+;; Locate symbols using helm-lsp-workspace-symbol
+(use-package helm-lsp)
+
 ;; The buffer *Flymake log* tends to fill up with things like:
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
 ;; > because (error Can’t find a suitable init function)
 (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
+;; https://github.com/emacs-lsp/lsp-mode/issues/631#issuecomment-457866187
+(add-hook 'c++-mode-hook
+          (lambda ()
+            (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
