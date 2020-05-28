@@ -738,6 +738,15 @@ other, future frames."
     "Run `compile' in the project"
     (projectile-compile-project nil)))
 
+(setq projectile-completion-system 'helm)
+
+(setq projectile-switch-project-action
+      (lambda () (projectile-ibuffer nil)))
+
 (use-package helm-projectile
   :config
   (helm-projectile-on))
+
+(setq lsp-ui-peek-fontify 'always)
+(setq projectile-switch-project-action 'helm-projectile)
+(setq projectile-enable-caching t)
