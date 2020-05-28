@@ -127,8 +127,10 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (use-package direnv
-  :defer nil
-  :demand nil
+  :init
+  (add-hook 'prog-mode-hook #'direnv-update-environment)
+  :custom
+  (direnv-always-show-summary nil)
   :config
   (direnv-mode))
 
