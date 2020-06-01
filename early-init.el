@@ -36,3 +36,6 @@
 ;;                     :width 'normal)
 
 (setq initial-major-mode 'fundamental-mode)
+
+(setq comp-deferred-compilation t)
+
