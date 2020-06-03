@@ -19,4 +19,4 @@ safe_link() {
 mkdir -p "$HOME/.emacs.d/straight/versions"
 safe_link "$srcdir/early-init.el" "$HOME/.emacs.d/early-init.el"
 safe_link "$srcdir/init.el" "$HOME/.emacs.d/init.el"
-safe_link "$srcdir/versions.el" "$HOME/.emacs.d/straight/versions/frobware.el"
+safe_link "$srcdir/straight/versions/default.el" "$HOME/.emacs.d/straight/versions/default.el"
