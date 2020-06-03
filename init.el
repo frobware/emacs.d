@@ -519,14 +519,12 @@ other, future frames."
 (use-package flycheck)
 
 (use-package lsp-mode
-  :requires flycheck
   :init
-  (setq lsp-keymap-prefix "C-c l")
-  :custom
-  (lsp-rust-server 'rust-analyzer)
-  (lsp-prefer-capf t)
-  (lsp-enable-file-watchers nil)
-  (lsp-prefer-flymake nil)
+  (setq lsp-keymap-prefix "C-c l"
+	lsp-rust-server 'rust-analyzer
+	lsp-prefer-capf t
+	lsp-enable-file-watchers nil
+	lsp-prefer-flymake nil)
   :hook ((prog-mode . direnv-update-environment)
 	 (prog-mode . lsp-deferred)
 	 (lsp-mode . lsp-enable-which-key-integration)
