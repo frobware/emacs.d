@@ -1,7 +1,3 @@
-;; -*- lexical-binding: t -*-
-
-(setq debug-on-error nil) ;;convenience
-
 ;; A big contributor to startup times is garbage collection. We up the
 ;; gc threshold to temporarily prevent it from running, and then reset
 ;; it later using a hook.
@@ -28,14 +24,14 @@
 		  file-name-handler-alist default-file-name-handler-alist)))
 
 (setq straight-use-package-by-default t
-      straight-repository-branch "develop"
-      ;;straight-check-for-modifications '(watch-files find-when-checking))
-      straight-check-for-modifications nil)
+  straight-repository-branch "develop"
+  ;;straight-check-for-modifications '(watch-files find-when-checking))
+  straight-check-for-modifications nil)
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
 (defun aim/straight-bootstrap nil
-  "Bootstrap straight"
+  "Bootstrap straight."
   (defvar bootstrap-version)		;dynamically bound
   (let ((bootstrap-file
 	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -216,8 +212,7 @@ other, future frames."
   (hrs/set-font-size))
 
 (defun hrs/decrease-font-size ()
-  "Decrease current font size by a factor of
-`hrs/font-change-increment', down to a minimum size of 1."
+  "Decrease current font size by a factor `hrs/font-change-increment', down to a minimum size of 1."
   (interactive)
   (setq hrs/current-font-size
 	(max 1
@@ -252,7 +247,7 @@ other, future frames."
   (smex-initialize))
 
 (defun aj-toggle-fold ()
-  "Toggle fold all lines larger than indentation on current line"
+  "Toggle fold all lines larger than indentation on current line."
   (interactive)
   (let ((col 1))
     (save-excursion
@@ -327,15 +322,15 @@ other, future frames."
 
 (use-package helm)
 (use-package helm-company)
-(use-package helm-lsp)
-
-(use-package protobuf-mode)
+(use-package helm-lsp) ;; Locate symbols using helm-lsp-workspace-symbol
 
 (use-package helm-ls-git
   :ensure t
   :defer nil
   :bind
   (("C-c C-l" . helm-ls-git-ls)))
+
+(use-package protobuf-mode)
 
 (use-package nix-mode
   :custom
@@ -360,10 +355,12 @@ other, future frames."
 
 (use-package docker-compose-mode)
 
-(use-package k8s-mode
-  :after yasnippet
-  :requires yasnippet
-  :hook (k8s-mode . yas-minor-mode))
+;; (use-package k8s-mode
+;;   :after yasnippet
+;;   :requires yasnippet
+;;   :hook (k8s-mode . yas-minor-mode))
+
+;;(use-package yasnippet)
 
 (use-package kubernetes
   :commands (kubernetes-overview))
@@ -462,6 +459,7 @@ other, future frames."
   :hook (prog-mode . dumb-jump-mode))
 
 (defun my-dumb-jump-mode-hook ()
+  "Remove keybindings I use elsewhere after dumb-jump has loaded."
   (define-key dumb-jump-mode-map (kbd "C-M-g") nil)
   (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
   (define-key dumb-jump-mode-map (kbd "C-M-q") nil))
@@ -508,24 +506,27 @@ other, future frames."
      (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
      (define-key company-active-map (kbd "<backtab>") 'company-select-previous)))
 
-(use-package company-quickhelp
-  :custom
-  (company-quickhelp-delay 3)
-  (company-quickhelp-mode 1))
+;; (use-package company-quickhelp
+;;   :custom
+;;   (company-quickhelp-delay 3)
+;;   (company-quickhelp-mode 1))
 
 (use-package company-shell
   :after company
   :config
   (add-to-list 'company-backends '(company-shell company-shell-env)))
 
-(use-package yasnippet)
+(use-package flycheck)
 
 (use-package lsp-mode
+  :requires flycheck
   :init
-  (setq lsp-keymap-prefix "C-; l")
+  (setq lsp-keymap-prefix "C-c l")
   :custom
   (lsp-rust-server 'rust-analyzer)
   (lsp-prefer-capf t)
+  (lsp-enable-file-watchers nil)
+  (lsp-prefer-flymake nil)
   :hook ((prog-mode . direnv-update-environment)
 	 (prog-mode . lsp-deferred)
 	 (lsp-mode . lsp-enable-which-key-integration)
@@ -535,27 +536,14 @@ other, future frames."
   :config
   (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
   :bind (("C-c d" . lsp-describe-thing-at-point)
-	 ("C-c e n" . flymake-goto-next-error)
-	 ("C-c e p" . flymake-goto-prev-error)
+	 ("C-c e n" . flycheck-next-error)
+	 ("C-c e p" . flycheck-previous-error)
+	 ("C-c e l" . flycheck-list-errors)
 	 ("C-c e r" . lsp-find-references)
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
   :commands lsp lsp-deferred)
-
-(setq lsp-gopls-complete-unimported t)
-
-;; (use-package lsp-ui
-;;   :custom
-;;   (lsp-ui-doc-max-height 8)
-;;   (lsp-ui-doc-max-width 35)
-;;   (lsp-ui-sideline-ignore-duplicate t)
-;;   (lsp-ui-sideline-show-hover nil)
-;;   :config
-;;   (lsp-ui-doc-enable nil)
-;;   (defadvice lsp-ui-imenu (after hide-lsp-ui-imenu-mode-line activate)
-;;     (setq mode-line-format nil))
-;;   :hook (lsp-mode . lsp-ui-mode))
 
 (use-package lsp-treemacs)
 
@@ -568,7 +556,8 @@ other, future frames."
 	      ("C-c f"   . go-test-current-file)
 	      ("C-c a"   . go-test-current-project))
   :hook
-  (before-save . gofmt-before-save))
+  ((go-mode . lsp-deferred)
+   (before-save . gofmt-before-save)))
 
 (eval-after-load "dumb-jump"
   (add-hook 'go-mode 'my-dumb-jump-mode-hook))
@@ -576,6 +565,7 @@ other, future frames."
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
 (defun lsp-go-install-save-hooks ()
+  "Fix the slow LSP format buffer."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
@@ -600,20 +590,23 @@ other, future frames."
   (("C-x C-r" . recentf-open-files)))
 
 (defun aim/run-go-buffer ()
+  "Run current buffer using go run."
   (interactive)
   (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
 
 (defun aim/fullscreen ()
+  "Toggle fullscreen."
   (interactive)
   (set-frame-parameter nil 'fullscreen
 		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 
 (defun aim/revert-buffer-now ()
-  "revert-(current-buffer) asking no questions"
+  "Revert-(current-buffer) asking no questions."
   (interactive)
   (revert-buffer nil t))
 
 (defun aim/tramp-borked ()
+  "Delete all tramp buffers and their connections."
   (interactive)
   (tramp-cleanup-all-connections)
   (tramp-cleanup-all-buffers))
@@ -641,6 +634,7 @@ other, future frames."
    ([f11] . aim/fullscreen)))
 
 (defun my-minibuffer-setup ()
+  "Fix my eyes."
   (set (make-local-variable 'face-remapping-alist)
        '((default :height 1.25))))
 
@@ -678,9 +672,6 @@ other, future frames."
   (lsp-ui-sideline-enable nil)
   (lsp-ui-doc-enable nil)
   (lsp-eldoc-hook nil))
-
-;; Locate symbols using helm-lsp-workspace-symbol
-(use-package helm-lsp)
 
 ;; The buffer *Flymake log* tends to fill up with things like:
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
