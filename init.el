@@ -562,17 +562,15 @@ other, future frames."
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.
-(defun lsp-go-install-save-hooks ()
-  "Fix the slow LSP format buffer."
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-
-(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-(add-hook 'before-save-hook 'gofmt-before-save)
-
+;; (defun lsp-go-install-save-hooks ()
+;;   "Fix the slow LSP format buffer."
+;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
+;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
+;;(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+;; (add-hook 'before-save-hook 'gofmt-before-save)
 ;;Prefer go-mode's gofmt over LSP sluggishness
-(remove-hook 'before-save-hook 'lsp-organize-imports)
-(remove-hook 'before-save-hook 'lsp-format-buffer)
+;; (remove-hook 'before-save-hook 'lsp-organize-imports)
+;; (remove-hook 'before-save-hook 'lsp-format-buffer)
 
 (use-package hl-line
   :hook
