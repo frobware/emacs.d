@@ -323,15 +323,40 @@ other, future frames."
 	("r" . copy-as-format-rst)
 	("s" . copy-as-format-slack)))
 
-(use-package helm)
+(use-package xref)
+
+(use-package helm
+  :commands
+  (helm-semantic-or-imenu
+   helm-occur
+   helm-browse-project
+   helm-recentf-fuzzy-match
+   helm-projects-history)
+  :init
+  (setq helm-imenu-fuzzy-match t
+	helm-recentf-fuzzy-match t
+	helm-semantic-fuzzy-match t
+	helm-buffers-fuzzy-matching t)
+  :config
+  (helm-mode -1)			;this kills find-file for me
+  (define-key global-map (kbd "C-c h i") 'helm-semantic-or-imenu)
+  (define-key global-map (kbd "C-c h o") 'helm-occur)
+  (define-key global-map (kbd "C-c h d") 'helm-browse-project)
+  (define-key global-map (kbd "C-c h p") 'helm-projects-history))
+
 (use-package helm-company)
-(use-package helm-lsp) ;; Locate symbols using helm-lsp-workspace-symbol
+
+(use-package helm-lsp
+  :commands
+  lsp-deferred
+  :config
+  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
 (use-package helm-ls-git
-  :ensure t
-  :defer nil
   :bind
   (("C-c C-l" . helm-ls-git-ls)))
+
+(use-package helm-projectile)
 
 (use-package protobuf-mode)
 
@@ -363,7 +388,9 @@ other, future frames."
 ;;   :requires yasnippet
 ;;   :hook (k8s-mode . yas-minor-mode))
 
-;;(use-package yasnippet)
+(use-package yasnippet
+  :config
+  (yas-global-mode t))
 
 (use-package kubernetes
   :commands (kubernetes-overview))
@@ -410,8 +437,8 @@ other, future frames."
   :hook (rust-mode . cargo-minor-mode))
 
 (use-package ws-butler
-  :config
-  (ws-butler-global-mode))
+  :hook
+  (prog-mode . ws-butler-mode))
 
 (use-package ibuffer
   :bind
@@ -478,17 +505,14 @@ other, future frames."
   (read-process-output-max (* 1 (* 1024 1024))))
 
 (use-package company
-  :after lsp-mode
   :custom
   (company-idle-delay 0)
   (company-tooltip-limit 20)
-  (company-minimum-prefix-length 1)
+  (company-minimum-prefix-length 2)
   (company-echo-delay 0)
   (company-require-match nil)
   (company-tooltip-align-annotations t) ; Align annotation to the right side.
   (company-auto-complete nil)
-  :hook
-  (prog-mode . company-mode)
   :bind
   (:map company-active-map
 	("C-n" . company-select-next-or-abort)
@@ -503,11 +527,14 @@ other, future frames."
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
 
 (with-eval-after-load 'company
-  '(progn
-     (define-key company-active-map (kbd "TAB") 'company-select-previous)
-     (define-key company-active-map (kbd "<tab>") 'company-select-previous)
-     (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
-     (define-key company-active-map (kbd "<backtab>") 'company-select-previous)))
+  (define-key company-active-map (kbd "TAB") 'company-select-previous)
+  (define-key company-active-map (kbd "<tab>") 'company-select-previous)
+  (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
+
+(with-eval-after-load 'company
+  (define-key company-mode-map (kbd "C-:") 'helm-company)
+  (define-key company-active-map (kbd "C-:") 'helm-company))
 
 ;; (use-package company-quickhelp
 ;;   :custom
@@ -544,7 +571,8 @@ other, future frames."
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
-  :commands lsp lsp-deferred)
+  :commands
+  (lsp lsp-deferred))
 
 (use-package lsp-treemacs)
 
@@ -571,9 +599,9 @@ other, future frames."
 ;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 ;;(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 ;; (add-hook 'before-save-hook 'gofmt-before-save)
-;;Prefer go-mode's gofmt over LSP sluggishness
-;; (remove-hook 'before-save-hook 'lsp-organize-imports)
-;; (remove-hook 'before-save-hook 'lsp-format-buffer)
+;; ;;Prefer go-mode's gofmt over LSP sluggishness
+;; (add-hook 'before-save-hook 'lsp-organize-imports)
+;; (add-hook 'before-save-hook 'lsp-format-buffer)
 
 (use-package hl-line
   :hook
@@ -634,6 +662,7 @@ other, future frames."
 	      ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
 	      ("C-c u" . lsp-ui-imenu))
   :custom
+  (lsp-ui-peek-fontify 'always)
   (lsp-ui-doc-enable t)
   (lsp-ui-doc-header t)
   (lsp-ui-doc-include-signature t)
@@ -654,8 +683,8 @@ other, future frames."
 
 ;; https://github.com/emacs-lsp/lsp-mode/issues/631#issuecomment-457866187
 (add-hook 'c++-mode-hook
-          (lambda ()
-            (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
+	  (lambda ()
+	    (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
 
 ;; direct copy from vdemeester
 (use-package projectile
@@ -687,18 +716,22 @@ other, future frames."
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (setq-default projectile-completion-system 'helm
-                ;; Do not track known projects automatically, instead call projectile-add-known-project
-                projectile-track-known-projects-automatically nil)
+		;; Do not track known projects automatically, instead call projectile-add-known-project
+		projectile-track-known-projects-automatically nil)
   (projectile-mode)
   (helm-projectile-on)
   ;; Remove dead projects when Emacs is idle
   (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
+  (setq projectile-switch-project-action
+	(lambda () (projectile-ibuffer nil)))
   (setq
    ;; Custom compilation buffer name function
    compilation-buffer-name-function (lambda (mode) (concat "*" (downcase mode) ": " (projectile-project-name) "*"))
    projectile-find-dir-includes-top-level t
    ;; projectile-switch-project-action #'projectile-commander
    projectile-create-missing-test-files t
+   projectile-switch-project-action 'helm-projectile
+   projectile-enable-caching t
    projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
   (def-projectile-commander-method ?s
     "Open a *shell* buffer for the project"
@@ -706,19 +739,6 @@ other, future frames."
   (def-projectile-commander-method ?c
     "Run `compile' in the project"
     (projectile-compile-project nil)))
-
-(setq projectile-switch-project-action
-      (lambda () (projectile-ibuffer nil)))
-
-(use-package helm-projectile
-  :config
-  (helm-projectile-on))
-
-(setq lsp-ui-peek-fontify 'always)
-(setq projectile-switch-project-action 'helm-projectile)
-(setq projectile-enable-caching t)
-
-(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
 
 (use-package simple
   :straight (:type built-in)
@@ -729,13 +749,8 @@ other, future frames."
   :config
   (column-number-mode 1))
 
-(setq helm-imenu-fuzzy-match t
-      helm-recentf-fuzzy-match t
-      helm-semantic-fuzzy-match t
-      helm-buffers-fuzzy-matching t)
-
 (mapcar #'(lambda (x)
-	    (global-set-key (kbd (car x)) (cdr x)))
+	    (define-key global-map (kbd (car x)) (cdr x)))
 	'(("C-x C-b" . ibuffer)
 	  ("C-x C-b" . helm-buffers-list)
 	  ("C-x b" . helm-mini)
@@ -745,15 +760,7 @@ other, future frames."
 	  ("<f1>" . gnus-slave)
 	  ("<f2>" . aim/revert-buffer-now)
 	  ("<f3>" . whitespace-cleanup)
-	  ("C-x b" . helm-mini)
 	  ("C-x C" . compile)
 	  ("C-x g" . goto-line)
 	  ("C-x C-g" . goto-line)
 	  ("<f11>" . aim/fullscreen)))
-
-(global-set-key (kbd "C-c h i") 'helm-semantic-or-imenu)
-(global-set-key (kbd "C-c h o") 'helm-occur)
-
-;; (global-set-key (kbd "C-x b") 'helm-mini)
-;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-
