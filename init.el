@@ -1,3 +1,6 @@
+(unless (fboundp 'json-serialize)
+  (error "**** you don't have a json-serialize built-in function ****"))
+
 ;; A big contributor to startup times is garbage collection. We up the
 ;; gc threshold to temporarily prevent it from running, and then reset
 ;; it later using a hook.
