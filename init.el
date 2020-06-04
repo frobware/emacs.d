@@ -610,30 +610,8 @@ other, future frames."
   (tramp-cleanup-all-connections)
   (tramp-cleanup-all-buffers))
 
-(use-package simple
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (kill-ring-max 30000)
-  (truncate-lines t)
-  :config
-  (column-number-mode 1)
-  :bind
-  (("C-x C-b" . ibuffer)
-   ("C-x C-b" . helm-buffers-list)
-   ("C-x C-j" . dired-jump)
-   ("C-x m" . gnus-msg-mail)
-   ([f1] . gnus-slave)
-   ([f2] . aim/revert-buffer-now)
-   ([f3] . whitespace-cleanup)
-   ([f4] . heaven-and-hell-toggle-theme)
-   ("C-x C" . compile)
-   ("C-x g" . goto-line)
-   ("C-x C-g" . goto-line)
-   ([f11] . aim/fullscreen)))
-
 (defun my-minibuffer-setup ()
-  "Fix my eyes."
+  "Stop squinting."
   (set (make-local-variable 'face-remapping-alist)
        '((default :height 1.25))))
 
@@ -644,9 +622,6 @@ other, future frames."
  '((shell . t)))
 
 (setq org-confirm-babel-evaluate nil)
-
-(unless (fboundp 'json-serialize)
-  (error "**** you don't have a json-serialize built-in function ****"))
 
 (use-package lsp-ui
   :after lsp-mode
@@ -707,20 +682,22 @@ other, future frames."
    projectile-run-shell-command-in-root
    projectile-switch-project
    projectile-switch-to-buffer
-   projectile-vc)
+   projectile-vc
+   helm-projectile-on)
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
-  (setq-default projectile-completion-system 'default
+  (setq-default projectile-completion-system 'helm
                 ;; Do not track known projects automatically, instead call projectile-add-known-project
                 projectile-track-known-projects-automatically nil)
   (projectile-mode)
+  (helm-projectile-on)
   ;; Remove dead projects when Emacs is idle
   (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
   (setq
    ;; Custom compilation buffer name function
    compilation-buffer-name-function (lambda (mode) (concat "*" (downcase mode) ": " (projectile-project-name) "*"))
    projectile-find-dir-includes-top-level t
-   projectile-switch-project-action #'projectile-commander
+   ;; projectile-switch-project-action #'projectile-commander
    projectile-create-missing-test-files t
    projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
   (def-projectile-commander-method ?s
@@ -729,8 +706,6 @@ other, future frames."
   (def-projectile-commander-method ?c
     "Run `compile' in the project"
     (projectile-compile-project nil)))
-
-(setq projectile-completion-system 'helm)
 
 (setq projectile-switch-project-action
       (lambda () (projectile-ibuffer nil)))
@@ -742,3 +717,43 @@ other, future frames."
 (setq lsp-ui-peek-fontify 'always)
 (setq projectile-switch-project-action 'helm-projectile)
 (setq projectile-enable-caching t)
+
+(setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
+
+(use-package simple
+  :straight (:type built-in)
+  :defer nil
+  :custom
+  (kill-ring-max 30000)
+  (truncate-lines t)
+  :config
+  (column-number-mode 1))
+
+(setq helm-imenu-fuzzy-match t
+      helm-recentf-fuzzy-match t
+      helm-semantic-fuzzy-match t
+      helm-buffers-fuzzy-matching t)
+
+(mapcar #'(lambda (x)
+	    (global-set-key (kbd (car x)) (cdr x)))
+	'(("C-x C-b" . ibuffer)
+	  ("C-x C-b" . helm-buffers-list)
+	  ("C-x b" . helm-mini)
+	  ("C-x m" . gnus-msg-mail)
+	  ("M-x" . smex)
+	  ("M-y" . helm-show-kill-ring)
+	  ("<f1>" . gnus-slave)
+	  ("<f2>" . aim/revert-buffer-now)
+	  ("<f3>" . whitespace-cleanup)
+	  ("C-x b" . helm-mini)
+	  ("C-x C" . compile)
+	  ("C-x g" . goto-line)
+	  ("C-x C-g" . goto-line)
+	  ("<f11>" . aim/fullscreen)))
+
+(global-set-key (kbd "C-c h i") 'helm-semantic-or-imenu)
+(global-set-key (kbd "C-c h o") 'helm-occur)
+
+;; (global-set-key (kbd "C-x b") 'helm-mini)
+;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
