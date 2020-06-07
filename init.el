@@ -756,6 +756,20 @@ other, future frames."
   :config
   (atomic-chrome-start-server))
 
+(straight-use-package
+ '(tree-sitter :host github
+               :repo "ubolonton/emacs-tree-sitter"
+               :files ("lisp/*.el" "src" "Cargo.toml" "Cargo.lock")))
+
+(straight-use-package
+ '(tree-sitter-langs :host github
+                     :repo "ubolonton/emacs-tree-sitter"
+                     :files ("langs/*.el" "langs/queries")))
+
+(use-package tree-sitter-langs
+  :config
+  (global-tree-sitter-mode))
+
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
 	'(("C-x C-b" . ibuffer)
