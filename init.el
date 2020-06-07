@@ -1,5 +1,8 @@
-(unless (fboundp 'json-serialize)
+(unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
+
+(unless (functionp 'module-load)
+  (error "**** you don't have modules enabled ****"))
 
 ;; A big contributor to startup times is garbage collection. We up the
 ;; gc threshold to temporarily prevent it from running, and then reset
