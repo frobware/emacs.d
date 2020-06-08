@@ -749,6 +749,10 @@ other, future frames."
   :config
   (column-number-mode 1))
 
+(use-package atomic-chrome
+  :config
+  (atomic-chrome-start-server))
+
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
 	'(("C-x C-b" . ibuffer)
