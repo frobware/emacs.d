@@ -761,6 +761,7 @@ other, future frames."
 (use-package atomic-chrome
   :config
   (atomic-chrome-start-server))
+
 (use-package hydra)
 (use-package major-mode-hydra
   :after hydra)
@@ -843,7 +844,7 @@ other, future frames."
 
 ;; Enable tree-based syntax highlighting for supported languages:
 (require 'tree-sitter-hl)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
