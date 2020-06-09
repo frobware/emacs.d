@@ -470,6 +470,10 @@ other, future frames."
 (use-package unfill
   :bind ([remap fill-paragraph] . unfill-toggle))
 
+(use-package shfmt
+  :config
+  (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
+
 (use-package langtool
   :config
   (setq langtool-http-server-host "localhost"
