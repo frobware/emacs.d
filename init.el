@@ -758,6 +758,72 @@ other, future frames."
   :config
   (atomic-chrome-start-server))
 
+(use-package hydra)
+(use-package major-mode-hydra
+  :after hydra)
+
+;; from https://github.com/thatwist/.emacs.d/blob/master/init.el
+(pretty-hydra-define hydra-lsp
+  (:hint nil :color teal :quit-key "q" :exit t :title "LSP")
+  ("Find"
+   (("D" lsp-find-declaration "declaration") ;find declarationS
+    ("d" lsp-find-definition "definition")
+    ("R" lsp-find-references "references")
+    ("i" lsp-find-implementation "implementation")
+    ("gt" lsp-find-type-definition "type")
+    ("f" helm-lsp-workspace-symbol "symbol")
+    ("F" helm-lsp-global-workspace-symbol "global symbol")
+    ("uf" lsp-ui-find-workspace-symbol "ui symbol")
+    ("pd" lsp-ui-peek-find-definitions "peek def")
+    ("pr" lsp-ui-peek-find-references "peek refs")
+    ("pf" lsp-ui-peek-find-workspace-symbol "peek symb")
+    ("pi" lsp-ui-peek-find-implementation "peek impl"))
+   "Toggle"
+   (("Td" lsp-ui-doc-mode "doc" :toggle t)
+    ("TS" lsp-ui-sideline-mode "sideline" :toggle t)
+    ("Ts" lsp-ui-sideline-toggle-symbols-info "side symb" :toggle t)
+    ("Tl" lsp-lens-mode "lens" :toggle t)
+    ("Ti" lsp-toggle-trace-io "trace-io" :toggle t)
+    ("Th" lsp-toggle-symbol-highlight "symb highlight")
+    ("Tf" lsp-toggle-on-type-formatting "format" :toggle t)
+    ("TF" lsp-ui-flycheck-list "flycheck")
+    ("TT" lsp-treemacs-sync-mode "treemacs sync" :toggle t)
+    ("TD" lsp-diagnostics-modeline-mode "diag line" :toggle t)
+    ("Tnf" lsp-signature-toggle-full-docs "sign docs full")
+    ("Tna" lsp-signature-activate "sign activate help")
+    ("Tns" lsp-toggle-signature-auto-activate "sign auto activate"))
+   "Help"
+   (("hd" lsp-ui-doc-glance "doc glance")
+    ("hh" lsp-describe-thing-at-point "describe"))
+   "Code"
+   (("=f" lsp-format-buffer "format")
+    ("=r" lsp-format-region "region")
+    ("r" lsp-rename "rename")
+    ("o" lsp-organize-imports "org imports")
+    ("m" lsp-ui-imenu "imenu")
+    ("x" lsp-execute-code-action "action"))
+   "Other"
+   (("l" lsp-avy-lens "avy lens")
+    ("ge" lsp-treemacs-errors-list "errors")
+    ("gh" lsp-treemacs-call-hierarchy "hierarchy")
+    ("gf" lsp-ui-flycheck-list "flycheck")
+    ("ga" xref-find-apropos "xref-apropos"))
+   "Metals"
+   (("Mb" lsp-metals-build-import "build import")
+    ("Ms" lsp-metals-sources-scan "sources rescan")
+    ("Mr" lsp-metals-build-connect "bloop reconnect"))
+   "Session"
+   (("s?" lsp-describe-session "describe")
+    ("ss" lsp "start")
+    ("sd" lsp-disconnect "disconnect")
+    ("sr" lsp-workspace-restart "restart")
+    ("sq" lsp-workspace-shutdown "shutdown")
+    ("sl" lsp-workspace-show-log "log")
+    ("sfa" lsp-workspace-folders-add "folders +")
+    ("sfo" lsp-workspace-folders-open "folder")
+    ("sfr" lsp-workspace-folders-remove "folders -")
+    ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
+
 (straight-use-package
  '(tree-sitter :host github
                :repo "ubolonton/emacs-tree-sitter"
