@@ -587,7 +587,8 @@ other, future frames."
 	      ("C-c C-n" . go-run)
 	      ("C-c ."   . go-test-current-test)
 	      ("C-c f"   . go-test-current-file)
-	      ("C-c a"   . go-test-current-project))
+	      ("C-c a"   . go-test-current-project)
+	      ("C-c h ." . hydra-lsp/body))
   :hook
   ((go-mode . lsp-deferred)
    (before-save . gofmt-before-save)))
