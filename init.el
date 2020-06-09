@@ -282,7 +282,8 @@ other, future frames."
   :custom
   (magit-diff-arguments (quote ("--function-context" "--no-ext-diff" "--stat")))
   :bind
-  ("C-c i" . magit-status))
+  (("C-c i" . magit-status)
+   ("C-c I" . magit-dispatch)))
 
 (use-package git-commit			;TODO (spell)
   :hook (git-commit-setup . git-commit-turn-on-flyspell))
