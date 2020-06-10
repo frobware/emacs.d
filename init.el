@@ -518,7 +518,7 @@ other, future frames."
   :custom
   (company-idle-delay 0)
   (company-tooltip-limit 20)
-  (company-minimum-prefix-length 2)
+  (company-minimum-prefix-length 3)
   (company-echo-delay 0)
   (company-require-match nil)
   (company-tooltip-align-annotations t) ; Align annotation to the right side.
