@@ -474,6 +474,8 @@ other, future frames."
   :config
   (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
 
+(use-package notmuch)
+
 (use-package langtool
   :config
   (setq langtool-http-server-host "localhost"
