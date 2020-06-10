@@ -588,6 +588,8 @@ other, future frames."
 
 (use-package go-mode
   :custom
+  (go-fontify-function-calls nil)
+  (go-fontify-variables nil)
   (gofmt-command "goimports")
   :bind (:map go-mode-map
 	      ("C-c C-n" . go-run)
