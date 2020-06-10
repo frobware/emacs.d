@@ -387,14 +387,15 @@ other, future frames."
 
 (use-package docker-compose-mode)
 
-;; (use-package k8s-mode
-;;   :after yasnippet
-;;   :requires yasnippet
-;;   :hook (k8s-mode . yas-minor-mode))
-
 (use-package yasnippet
+  :commands (yas-minor-mode)
   :config
-  (yas-global-mode t))
+  (use-package yasnippet-snippets
+    :ensure t)
+  (yas-reload-all))
+
+(use-package k8s-mode
+  :hook (k8s-mode . yas-minor-mode))
 
 (use-package kubernetes
   :commands (kubernetes-overview))
@@ -597,9 +598,14 @@ other, future frames."
 	      ("C-c f"   . go-test-current-file)
 	      ("C-c a"   . go-test-current-project)
 	      ("C-c h ." . hydra-lsp/body))
-  :hook
-  ((go-mode . lsp-deferred)
-   (before-save . gofmt-before-save)))
+  :hook ((go-mode . lsp-deferred)
+	 (go-mode . yas-minor-mode)
+	 (before-save . gofmt-before-save)))
+
+;; (add-hook 'go-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'company-backends)
+;;                  '((company-dabbrev-code company-yasnippet)))))
 
 (eval-after-load "dumb-jump"
   (add-hook 'go-mode 'my-dumb-jump-mode-hook))
