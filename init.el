@@ -620,8 +620,8 @@ other, future frames."
 
 (use-package recentf
   :custom
-  (recentf-max-menu-items 25)
-  (recentf-max-saved-items 25)
+  (recentf-max-menu-items 325)
+  (recentf-max-saved-items 325)
   :config
   (recentf-mode 1)
   :bind
