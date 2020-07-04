@@ -602,6 +602,8 @@ other, future frames."
 	 (go-mode . yas-minor-mode)
 	 (before-save . gofmt-before-save)))
 
+(use-package go-add-tags)
+
 ;; (add-hook 'go-mode-hook
 ;;           (lambda ()
 ;;             (set (make-local-variable 'company-backends)
