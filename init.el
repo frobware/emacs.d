@@ -475,7 +475,16 @@ other, future frames."
   :config
   (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
 
-(use-package notmuch)
+(use-package notmuch
+  :config
+  (setq notmuch-search-oldest-first nil
+        mail-user-agent 'message-user-agent
+        notmuch-tree-show-out t)
+  (setq notmuch-saved-searches
+        '((:key "i" :name "inbox" :query "tag:inbox")
+          (:key "u" :name "unread" :query "tag:unread")
+          (:key "F" :name "flagged" :query "tag:flagged")
+          (:key "S" :name "sent" :query "tag:Sent Mail"))))
 
 (use-package langtool
   :config
