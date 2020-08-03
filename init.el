@@ -479,10 +479,17 @@ other, future frames."
   :config
   (setq notmuch-search-oldest-first nil
         mail-user-agent 'message-user-agent
+	notmuch-wash-wrap-lines-length 80
         notmuch-tree-show-out t)
   (setq notmuch-saved-searches
         '((:key "i" :name "inbox" :query "tag:inbox")
           (:key "u" :name "unread" :query "tag:unread")
+          (:key "m" :name "to-me" :query "tag:to-me is:unread not tag:gh")
+          (:key "g" :name "github" :query "(tag:to-me and tag:gh) is:unread")
+          (:key "b" :name "bugs" :query "(tag:to-me and tag:bz) is:unread")
+	  (:key "T" :name "today" :query "date:today" :sort-order oldest-first)
+	  (:key "U" :name "unread today" :query "date:today to:me is:unread")
+          (:key "O" :name "OCP" :query "tag:lists/aos-devel is:unread")
           (:key "F" :name "flagged" :query "tag:flagged")
           (:key "S" :name "sent" :query "tag:Sent Mail"))))
 
