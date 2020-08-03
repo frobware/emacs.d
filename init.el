@@ -851,15 +851,14 @@ other, future frames."
 
 (straight-use-package
  '(tree-sitter :host github
-	       :repo "ubolonton/emacs-tree-sitter"
-	       :files ("lisp/*.el" "src" "Cargo.toml" "Cargo.lock")))
+               :repo "ubolonton/emacs-tree-sitter"
+               :files ("lisp/*.el")))
 
 (straight-use-package
  '(tree-sitter-langs :host github
-		     :repo "ubolonton/emacs-tree-sitter"
-		     :files ("langs/*.el" "langs/queries")))
+                     :repo "ubolonton/emacs-tree-sitter"
+                     :files ("langs/*.el" "langs/queries")))
 
-(require 'tree-sitter)
 (require 'tree-sitter-langs)
 (global-tree-sitter-mode)
 
