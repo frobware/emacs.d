@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
@@ -408,6 +410,8 @@ other, future frames."
   (setq which-key-idle-delay most-positive-fixnum)
   (setq which-key-idle-secondary-delay 1e-100)
   (which-key-mode +1))
+
+(defvar browse-url-mosaic-program nil)
 
 (use-package browse-at-remote)
 (use-package browse-url)
