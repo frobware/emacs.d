@@ -12,6 +12,10 @@
 (setq gc-cons-threshold most-positive-fixnum
       gc-cons-percentage 0.6)
 
+(setq mac-command-modifier 'meta
+      mac-right-option-modifier 'none
+      mac-option-modifier 'meta)
+
 ;; Keep a ref to the actual file-name-handler
 (defvar default-file-name-handler-alist file-name-handler-alist)
 
