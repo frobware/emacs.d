@@ -199,7 +199,9 @@
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
 
-(setq hrs/default-font "DejaVu Sans Mono")
+(if (eq system-type 'darwin)
+    (setq hrs/default-font "Menlo")
+  (setq hrs/default-font "DejaVu Sans Mono"))
 (setq hrs/default-font-size 14)
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.2)
