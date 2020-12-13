@@ -904,3 +904,4 @@ other, future frames."
 	  ("C-x g" . goto-line)
 	  ("C-x C-g" . goto-line)
 	  ("<f11>" . aim/fullscreen)))
+(use-package vterm)
