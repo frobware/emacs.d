@@ -1,5 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
+;; defaults write -g NSUserKeyEquivalents -dict-add ‘Emoji & Symbols’ ‘\0’
+
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
