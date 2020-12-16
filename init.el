@@ -906,4 +906,7 @@ other, future frames."
 	  ("C-x g" . goto-line)
 	  ("C-x C-g" . goto-line)
 	  ("<f11>" . aim/fullscreen)))
+
+(and (eq system-type 'darwin)
+     (global-set-key "\M-`" 'other-frame))
 (use-package vterm)
