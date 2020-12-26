@@ -1,6 +1,10 @@
 ;; -*- lexical-binding: t; -*-
 
-;; defaults write -g NSUserKeyEquivalents -dict-add ‘Emoji & Symbols’ ‘\0’
+(defun on-macos nil
+  "Returns t if running on macOS"
+  (eq system-type 'darwin))
+
+;; defaults write -g NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
 
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
@@ -16,7 +20,7 @@
 
 (setq mac-command-modifier 'meta
       mac-right-option-modifier 'none
-      mac-option-modifier 'meta)
+      mac-option-modifier 'super)
 
 ;; Keep a ref to the actual file-name-handler
 (defvar default-file-name-handler-alist file-name-handler-alist)
@@ -73,6 +77,13 @@
   :ensure t
   :config
   (gcmh-mode 1))
+
+(use-package cc-mode
+  :mode (("\\.h\\'"    . c-mode)
+	 ("\\.c\\'"    . c-mode)
+	 ("\\.cpp\\'"  . c++-mode)
+	 ("\\.mm\\'"   . objc-mode)
+	 ("\\.java\\'" . java-mode)))
 
 (use-package exec-path-from-shell
   :defer nil
@@ -201,12 +212,13 @@
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
 
-(if (eq system-type 'darwin)
-    (setq hrs/default-font "Menlo")
-  (setq hrs/default-font "DejaVu Sans Mono"))
-(setq hrs/default-font-size 14)
+(setq hrs/default-font "DejaVu Sans Mono")
+(setq hrs/default-font-size 18)
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.2)
+
+(when (on-macos)
+  (setq hrs/default-font "SF Mono"))
 
 (defun hrs/font-code ()
   "Return a string representing the current font (like \"Inconsolata-14\")."
@@ -496,20 +508,20 @@ other, future frames."
 (use-package notmuch
   :config
   (setq notmuch-search-oldest-first nil
-        mail-user-agent 'message-user-agent
+	mail-user-agent 'message-user-agent
 	notmuch-wash-wrap-lines-length 80
-        notmuch-tree-show-out t)
+	notmuch-tree-show-out t)
   (setq notmuch-saved-searches
-        '((:key "i" :name "inbox" :query "tag:inbox")
-          (:key "u" :name "unread" :query "tag:unread")
-          (:key "m" :name "to-me" :query "tag:to-me is:unread not tag:gh")
-          (:key "g" :name "github" :query "(tag:to-me and tag:gh) is:unread")
-          (:key "b" :name "bugs" :query "(tag:to-me and tag:bz) is:unread")
+	'((:key "i" :name "inbox" :query "tag:inbox")
+	  (:key "u" :name "unread" :query "tag:unread")
+	  (:key "m" :name "to-me" :query "tag:to-me is:unread not tag:gh")
+	  (:key "g" :name "github" :query "(tag:to-me and tag:gh) is:unread")
+	  (:key "b" :name "bugs" :query "(tag:to-me and tag:bz) is:unread")
 	  (:key "T" :name "today" :query "date:today" :sort-order oldest-first)
 	  (:key "U" :name "unread today" :query "date:today to:me is:unread")
-          (:key "O" :name "OCP" :query "tag:lists/aos-devel is:unread")
-          (:key "F" :name "flagged" :query "tag:flagged")
-          (:key "S" :name "sent" :query "tag:Sent Mail"))))
+	  (:key "O" :name "OCP" :query "tag:lists/aos-devel is:unread")
+	  (:key "F" :name "flagged" :query "tag:flagged")
+	  (:key "S" :name "sent" :query "tag:Sent Mail"))))
 
 (use-package langtool
   :config
@@ -873,23 +885,22 @@ other, future frames."
     ("sfo" lsp-workspace-folders-open "folder")
     ("sfr" lsp-workspace-folders-remove "folders -")
     ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
+;; (straight-use-package
+;;  '(tree-sitter :host github
+;;                :repo "ubolonton/emacs-tree-sitter"
+;;                :files ("lisp/*.el")))
 
-(straight-use-package
- '(tree-sitter :host github
-               :repo "ubolonton/emacs-tree-sitter"
-               :files ("lisp/*.el")))
+;; (straight-use-package
+;;  '(tree-sitter-langs :host github
+;;                      :repo "ubolonton/emacs-tree-sitter"
+;;                      :files ("langs/*.el" "langs/queries")))
 
-(straight-use-package
- '(tree-sitter-langs :host github
-                     :repo "ubolonton/emacs-tree-sitter"
-                     :files ("langs/*.el" "langs/queries")))
+;; (require 'tree-sitter-langs)
+;; (global-tree-sitter-mode)
 
-(require 'tree-sitter-langs)
-(global-tree-sitter-mode)
-
-;; Enable tree-based syntax highlighting for supported languages:
-(require 'tree-sitter-hl)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+;; ;; Enable tree-based syntax highlighting for supported languages:
+;; (require 'tree-sitter-hl)
+;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
@@ -909,4 +920,75 @@ other, future frames."
 
 (and (eq system-type 'darwin)
      (global-set-key "\M-`" 'other-frame))
+
 (use-package vterm)
+
+(and (eq system-type 'darwin)
+     (defun copy-from-osx ()
+       (shell-command-to-string "pbpaste"))
+     (defun paste-to-osx (text &optional push)
+       (let ((process-connection-type nil))
+	 (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+	   (process-send-string proc text)
+	   (process-send-eof proc))))
+     (setq interprogram-cut-function 'paste-to-osx)
+     (setq interprogram-paste-function 'copy-from-osx))
+
+;; (add-to-list 'load-path (expand-file-name "~/term-keys")) ;
+;; (require 'term-keys)
+;; (require 'term-keys-terminal-app)
+;; (with-temp-buffer
+;;   (insert (term-keys/terminal-app-keymap-xml))
+;;   (append-to-file (point-min) (point-max) "~/term-keys.xml"))
+;;
+
+(use-package xterm
+  :straight (:type built-in))
+
+(unless (display-graphic-p)
+  (add-hook 'after-make-frame-functions
+	    '(lambda
+	       ;; Take advantage of iterm2's CSI u support (https://gitlab.com/gnachman/iterm2/-/issues/8382).
+	       (xterm--init-modify-other-keys)
+	       ;; Courtesy https://emacs.stackexchange.com/a/13957, modified per
+	       ;; https://gitlab.com/gnachman/iterm2/-/issues/8382#note_365264207
+	       (defun character-apply-modifiers (c &rest modifiers)
+		 "Apply modifiers to the character C.
+MODIFIERS must be a list of symbols amongst (meta control shift).
+Return an event vector."
+		 (if (memq 'control modifiers) (setq c (if (and (<= ?a c) (<= c ?z))
+							   (logand c ?\x1f)
+							 (logior (lsh 1 26) c))))
+		 (if (memq 'meta modifiers) (setq c (logior (lsh 1 27) c)))
+		 (if (memq 'shift modifiers) (setq c (logior (lsh 1 25) c)))
+		 (vector c))
+	       (when (and (boundp 'xterm-extra-capabilities) (boundp 'xterm-function-map))
+		 (let ((c 32))
+		   (while (<= c 126)
+		     (mapc (lambda (x)
+			     (define-key xterm-function-map (format (car x) c)
+			       (apply 'character-apply-modifiers c (cdr x))))
+			   '(;; with ?.VT100.formatOtherKeys: 0
+			     ("\e\[27;3;%d~" meta)
+			     ("\e\[27;5;%d~" control)
+			     ("\e\[27;6;%d~" control shift)
+			     ("\e\[27;7;%d~" control meta)
+			     ("\e\[27;8;%d~" control meta shift)
+			     ;; with ?.VT100.formatOtherKeys: 1
+			     ("\e\[%d;3u" meta)
+			     ("\e\[%d;5u" control)
+			     ("\e\[%d;6u" control shift)
+			     ("\e\[%d;7u" control meta)
+			     ("\e\[%d;8u" control meta shift)))
+		     (setq c (1+ c)))))
+	       )))
+
+(when (on-macos)
+  (set-face-attribute
+   'default nil
+   :font "JetBrains Mono"
+   :height 160
+   :weight 'extra-light
+   :width 'normal))
+
+(desktop-save-mode 1)
