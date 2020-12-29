@@ -31,12 +31,21 @@
 ;; Reset file-name-handler-alist after initialization.
 (add-hook 'emacs-startup-hook
 	  (lambda ()
-	    (hrs/reset-font-size)
+	    (and (display-graphic-p)
+		 (if (on-macos)
+		     (set-face-attribute
+		      'default nil
+		      :font "JetBrains Mono"
+		      :height 160
+		      :weight 'light
+		      :width 'normal)
+		   (hrs/reset-font-size)))
 	    (message "Happiness delivered in %s with %d garbage collections."
 		     (format "%.2f seconds"
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)
+	    (desktop-save-mode 1)
 	    (setq gc-cons-threshold 100000000 ;100MB
 		  gc-cons-percentage 0.1
 		  file-name-handler-alist default-file-name-handler-alist)))
@@ -213,7 +222,7 @@
 ;; thanks man!
 
 (setq hrs/default-font "DejaVu Sans Mono")
-(setq hrs/default-font-size 18)
+(setq hrs/default-font-size 26)
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.2)
 
@@ -918,12 +927,12 @@ other, future frames."
 	  ("C-x C-g" . goto-line)
 	  ("<f11>" . aim/fullscreen)))
 
-(and (eq system-type 'darwin)
-     (global-set-key "\M-`" 'other-frame))
+(when (on-macos)
+  (global-set-key "\M-`" 'other-frame))
 
 (use-package vterm)
 
-(and (eq system-type 'darwin)
+(when (on-macos)
      (defun copy-from-osx ()
        (shell-command-to-string "pbpaste"))
      (defun paste-to-osx (text &optional push)
@@ -982,13 +991,5 @@ Return an event vector."
 			     ("\e\[%d;8u" control meta shift)))
 		     (setq c (1+ c)))))
 	       )))
-
-(when (on-macos)
-  (set-face-attribute
-   'default nil
-   :font "JetBrains Mono"
-   :height 160
-   :weight 'extra-light
-   :width 'normal))
 
 (desktop-save-mode 1)
