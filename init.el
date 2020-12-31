@@ -174,7 +174,9 @@
   :straight (:type built-in)
   :defer nil
   :bind
-  (("C-x C-j" . dired-jump)))
+  (("C-x C-j" . dired-jump))
+  :config
+  (add-hook 'dired-mode-hook #'dired-omit-mode))
 
 (use-package dired-narrow
   :ensure t
