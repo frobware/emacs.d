@@ -340,6 +340,11 @@ other, future frames."
   (("C-c i" . magit-status)
    ("C-c I" . magit-dispatch)))
 
+(use-package libgit)
+
+(use-package magit-libgit
+  :after (magit libgit))
+
 (use-package git-commit			;TODO (spell)
   :hook (git-commit-setup . git-commit-turn-on-flyspell))
 
