@@ -663,7 +663,7 @@ other, future frames."
   :commands
   (lsp lsp-deferred))
 
-(use-package lsp-treemacs)
+(use-package lsp-treemacs)		;
 
 (use-package go-mode
   :custom
