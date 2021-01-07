@@ -745,6 +745,7 @@ other, future frames."
 	      ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
 	      ("C-c u" . lsp-ui-imenu))
   :custom
+  (lsp-enable-symbol-highlighting nil)
   (lsp-ui-peek-fontify 'always)
   (lsp-ui-doc-enable t)
   (lsp-ui-doc-header t)
