@@ -902,22 +902,15 @@ other, future frames."
     ("sfo" lsp-workspace-folders-open "folder")
     ("sfr" lsp-workspace-folders-remove "folders -")
     ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
-;; (straight-use-package
-;;  '(tree-sitter :host github
-;;                :repo "ubolonton/emacs-tree-sitter"
-;;                :files ("lisp/*.el")))
 
-;; (straight-use-package
-;;  '(tree-sitter-langs :host github
-;;                      :repo "ubolonton/emacs-tree-sitter"
-;;                      :files ("langs/*.el" "langs/queries")))
+(use-package tree-sitter
+  :init (global-tree-sitter-mode)
+  :hook ((ruby-mode . tree-sitter-hl-mode)
+         (js-mode . tree-sitter-hl-mode)
+         (typescript-mode . tree-sitter-hl-mode)
+         (go-mode . tree-sitter-hl-mode)))
 
-;; (require 'tree-sitter-langs)
-;; (global-tree-sitter-mode)
-
-;; ;; Enable tree-based syntax highlighting for supported languages:
-;; (require 'tree-sitter-hl)
-;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+(use-package tree-sitter-langs)
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
