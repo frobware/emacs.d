@@ -99,6 +99,10 @@
   :config
   (exec-path-from-shell-initialize))
 
+(use-package keychain-environment
+  :config
+  (keychain-refresh-environment))
+
 
 (use-package select
   :straight (:type built-in)
