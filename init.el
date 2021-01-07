@@ -103,6 +103,17 @@
   :config
   (keychain-refresh-environment))
 
+;; avy gives us fluent jump-to-line commands mapped to the home row.
+(use-package avy
+  :bind ("C-c l" . avy-goto-line))
+
+(use-package ivy-avy)
+
+(use-package which-key
+  :config
+  (which-key-mode)
+  (which-key-setup-side-window-bottom)
+  :custom (which-key-idle-delay 1.2))
 
 (use-package select
   :straight (:type built-in)
