@@ -637,21 +637,24 @@ other, future frames."
 
 (use-package flycheck)
 
+(defun efs/lsp-mode-setup ()
+  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  (lsp-headerline-breadcrumb-mode))
+
 (use-package lsp-mode
   :init
   (setq lsp-keymap-prefix "C-c l"
-	lsp-rust-server 'rust-analyzer
-	lsp-prefer-capf t
 	lsp-enable-file-watchers nil
+	lsp-enable-on-type-formatting nil
+	lsp-enable-snippet nil
+	lsp-prefer-capf t
 	lsp-prefer-flymake nil)
-  :hook ((prog-mode . direnv-update-environment)
-	 (prog-mode . lsp-deferred)
-	 (lsp-mode . lsp-enable-which-key-integration)
-	 ;; (before-save . lsp-format-buffer)
-	 ;; (before-save . lsp-organize-imports)
-	 )
+  :hook ((go-mode . direnv-update-environment)
+	 (go-mode . lsp-deferred)
+	 (go-mode . efs/lsp-mode-setup))
   :config
   (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
+  (lsp-enable-which-key-integration t)
   :bind (("C-c d" . lsp-describe-thing-at-point)
 	 ("C-c e n" . flycheck-next-error)
 	 ("C-c e p" . flycheck-previous-error)
