@@ -35,8 +35,8 @@
 		 (if (on-macos)
 		     (set-face-attribute
 		      'default nil
-		      :font "JetBrains Mono"
-		      :height 160
+		      ;;:font "JetBrains Mono"
+		      ;;:height 160
 		      :weight 'light
 		      :width 'normal)
 		   (hrs/reset-font-size)))
@@ -936,17 +936,6 @@ other, future frames."
 	   (process-send-eof proc))))
      (setq interprogram-cut-function 'paste-to-osx)
      (setq interprogram-paste-function 'copy-from-osx))
-
-;; (add-to-list 'load-path (expand-file-name "~/term-keys")) ;
-;; (require 'term-keys)
-;; (require 'term-keys-terminal-app)
-;; (with-temp-buffer
-;;   (insert (term-keys/terminal-app-keymap-xml))
-;;   (append-to-file (point-min) (point-max) "~/term-keys.xml"))
-;;
-
-(use-package xterm
-  :straight (:type built-in))
 
 (unless (display-graphic-p)
   (add-hook 'after-make-frame-functions
