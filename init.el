@@ -190,6 +190,8 @@
   :defer nil
   :bind
   (("C-x C-j" . dired-jump))
+  :custom
+  (dired-use-ls-dired nil)
   :config
   (add-hook 'dired-mode-hook #'dired-omit-mode))
 
@@ -649,9 +651,6 @@ other, future frames."
 	lsp-enable-snippet nil
 	lsp-prefer-capf t
 	lsp-prefer-flymake nil)
-  :hook ((go-mode . direnv-update-environment)
-	 (go-mode . lsp-deferred)
-	 (go-mode . efs/lsp-mode-setup))
   :config
   (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
   (lsp-enable-which-key-integration t)
@@ -668,11 +667,16 @@ other, future frames."
 
 (use-package lsp-treemacs)		;
 
+(defun aim/lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
+(use-package go-test)
+
 (use-package go-mode
   :custom
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
-  (gofmt-command "goimports")
   :bind (:map go-mode-map
 	      ("C-c C-n" . go-run)
 	      ("C-c ."   . go-test-current-test)
@@ -680,30 +684,9 @@ other, future frames."
 	      ("C-c a"   . go-test-current-project)
 	      ("C-c h ." . hydra-lsp/body))
   :hook ((go-mode . lsp-deferred)
-	 (go-mode . yas-minor-mode)
-	 (before-save . gofmt-before-save)))
+	 (before-save . aim/lsp-go-install-save-hooks)))
 
 (use-package go-add-tags)
-
-;; (add-hook 'go-mode-hook
-;;           (lambda ()
-;;             (set (make-local-variable 'company-backends)
-;;                  '((company-dabbrev-code company-yasnippet)))))
-
-(eval-after-load "dumb-jump"
-  (add-hook 'go-mode 'my-dumb-jump-mode-hook))
-
-;; Set up before-save hooks to format buffer and add/delete imports.
-;; Make sure you don't have other gofmt/goimports hooks enabled.
-;; (defun lsp-go-install-save-hooks ()
-;;   "Fix the slow LSP format buffer."
-;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
-;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
-;;(remove-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-;; (add-hook 'before-save-hook 'gofmt-before-save)
-;; ;;Prefer go-mode's gofmt over LSP sluggishness
-;; (add-hook 'before-save-hook 'lsp-organize-imports)
-;; (add-hook 'before-save-hook 'lsp-format-buffer)
 
 (use-package hl-line
   :hook
@@ -921,15 +904,6 @@ other, future frames."
     ("sfo" lsp-workspace-folders-open "folder")
     ("sfr" lsp-workspace-folders-remove "folders -")
     ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
-
-(use-package tree-sitter
-  :init (global-tree-sitter-mode)
-  :hook ((ruby-mode . tree-sitter-hl-mode)
-         (js-mode . tree-sitter-hl-mode)
-         (typescript-mode . tree-sitter-hl-mode)
-         (go-mode . tree-sitter-hl-mode)))
-
-(use-package tree-sitter-langs)
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
