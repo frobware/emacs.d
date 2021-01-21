@@ -847,6 +847,8 @@ other, future frames."
 (use-package major-mode-hydra
   :after hydra)
 
+(use-package vterm)
+
 ;; from https://github.com/thatwist/.emacs.d/blob/master/init.el
 (pretty-hydra-define hydra-lsp
   (:hint nil :color teal :quit-key "q" :exit t :title "LSP")
@@ -927,8 +929,6 @@ other, future frames."
 
 (when (on-macos)
   (global-set-key "\M-`" 'other-frame))
-
-(use-package vterm)
 
 (when (on-macos)
      (defun copy-from-osx ()
