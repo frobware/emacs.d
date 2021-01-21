@@ -574,13 +574,17 @@ other, future frames."
 	 ("M-g x" . dumb-jump-go-prefer-external)
 	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
   :config
-  (setq ;;dumb-jump-selector 'helm
-   dumb-jump-debug nil
-   dumb-jump-prefer-searcher 'rg)
-  :hook (prog-mode . dumb-jump-mode))
+  (setq dumb-jump-selector 'helm
+	dumb-jump-debug nil
+	dumb-jump-prefer-searcher 'rg))
 
-(defun my-dumb-jump-mode-hook ()
-  "Remove keybindings I use elsewhere after dumb-jump has loaded."
+(eval-after-load "dump-jump"
+  '(progn
+     (aim/dumb-jump-mode-hook)
+     (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)))
+
+(defun aim/dumb-jump-mode-hook ()
+  "Remove unexpected keybindings."
   (define-key dumb-jump-mode-map (kbd "C-M-g") nil)
   (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
   (define-key dumb-jump-mode-map (kbd "C-M-q") nil))
@@ -976,3 +980,13 @@ Return an event vector."
 	       )))
 
 (desktop-save-mode 1)
+
+(defhydra dumb-jump-hydra (:columns 3)
+    "Dumb Jump"
+    ("j" dumb-jump-go "Go")
+    ("o" dumb-jump-go-other-window "Other window")
+    ("e" dumb-jump-go-prefer-external "Go external")
+    ("x" dumb-jump-go-prefer-external-other-window "Go external other window")
+    ("i" dumb-jump-go-prompt "Prompt")
+    ("l" dumb-jump-quick-look "Quick look")
+    ("b" dumb-jump-back "Back"))
