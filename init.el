@@ -567,27 +567,17 @@ other, future frames."
 	("C-x `" . langtool-correct-buffer)))
 
 (use-package dumb-jump
-  :bind (("M-g o" . dumb-jump-go-other-window)
-	 ("M-g j" . dumb-jump-go)
+  :bind (("C-M-g" . nil)
+	 ("C-M-p" . nil)
+	 ("C-M-q" . nil)
+	 ("M-g o" . dumb-jump-go-other-window)
 	 ("M-g b" . dumb-jump-back)
-	 ("M-g i" . dumb-jump-go-prompt)
-	 ("M-g x" . dumb-jump-go-prefer-external)
-	 ("M-g z" . dumb-jump-go-prefer-external-other-window))
-  :config
+	 ("M-g i" . dumb-jump-go-prompt))
+  :init
   (setq dumb-jump-selector 'helm
-	dumb-jump-debug nil
-	dumb-jump-prefer-searcher 'rg))
-
-(eval-after-load "dump-jump"
-  '(progn
-     (aim/dumb-jump-mode-hook)
-     (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)))
-
-(defun aim/dumb-jump-mode-hook ()
-  "Remove unexpected keybindings."
-  (define-key dumb-jump-mode-map (kbd "C-M-g") nil)
-  (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
-  (define-key dumb-jump-mode-map (kbd "C-M-q") nil))
+	dumb-jump-prefer-searcher 'rg)
+  :config
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
 
 ;; This is to speedup LSP.
 ;;
