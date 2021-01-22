@@ -45,7 +45,6 @@
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)
-	    (desktop-save-mode 1)
 	    (setq gc-cons-threshold 100000000 ;100MB
 		  gc-cons-percentage 0.1
 		  file-name-handler-alist default-file-name-handler-alist)))
@@ -686,14 +685,14 @@ other, future frames."
   :hook
   (prog-mode . hl-line-mode))
 
-(use-package recentf
-  :custom
-  (recentf-max-menu-items 325)
-  (recentf-max-saved-items 325)
-  :config
-  (recentf-mode 1)
-  :bind
-  (("C-x C-r" . recentf-open-files)))
+;; (use-package recentf
+;;   :custom
+;;   (recentf-max-menu-items 325)
+;;   (recentf-max-saved-items 325)
+;;   :config
+;;   (recentf-mode 1)
+;;   :bind
+;;   (("C-x C-r" . recentf-open-files)))
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
@@ -930,5 +929,3 @@ other, future frames."
 	   (process-send-eof proc))))
      (setq interprogram-cut-function 'paste-to-osx)
      (setq interprogram-paste-function 'copy-from-osx))
-
-(desktop-save-mode 1)
