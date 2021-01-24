@@ -566,17 +566,26 @@ other, future frames."
 	("C-x `" . langtool-correct-buffer)))
 
 (use-package dumb-jump
-  :bind (("C-M-g" . nil)
-	 ("C-M-p" . nil)
-	 ("C-M-q" . nil)
-	 ("M-g o" . dumb-jump-go-other-window)
+  :bind (("M-g o" . dumb-jump-go-other-window)
 	 ("M-g b" . dumb-jump-back)
 	 ("M-g i" . dumb-jump-go-prompt))
   :init
   (setq dumb-jump-selector 'helm
 	dumb-jump-prefer-searcher 'rg)
   :config
-  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+  (aim/dumb-jump-mode-hook))
+
+(eval-after-load "dump-jump"
+  '(progn
+     (aim/dumb-jump-mode-hook)
+     (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)))
+
+(defun aim/dumb-jump-mode-hook ()
+  "Remove unexpected keybindings."
+  (define-key dumb-jump-mode-map (kbd "C-M-g") nil)
+  (define-key dumb-jump-mode-map (kbd "C-M-p") nil)
+  (define-key dumb-jump-mode-map (kbd "C-M-q") nil))
 
 ;; This is to speedup LSP.
 ;;
