@@ -94,8 +94,9 @@
 	 ("\\.java\\'" . java-mode)))
 
 (use-package exec-path-from-shell
-  :defer nil
-  :config
+  :defer t)
+
+(when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
 (use-package keychain-environment
