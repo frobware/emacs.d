@@ -240,13 +240,15 @@
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
 
-(setq hrs/default-font "DejaVu Sans Mono")
-(setq hrs/default-font-size 26)
+(cond ((or (equal (system-name) "rbook") (on-macos))
+       (setq hrs/default-font-size 20
+	     hrs/default-font "SF Mono"))
+      (t
+       (setq hrs/default-font-size 14
+	     hrs/default-font "DejaVu Sans Mono")))
+
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.2)
-
-(when (on-macos)
-  (setq hrs/default-font "SF Mono"))
 
 (defun hrs/font-code ()
   "Return a string representing the current font (like \"Inconsolata-14\")."
