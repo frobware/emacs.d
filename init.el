@@ -941,3 +941,5 @@ other, future frames."
 	   (process-send-eof proc))))
      (setq interprogram-cut-function 'paste-to-osx)
      (setq interprogram-paste-function 'copy-from-osx))
+
+(load-file (expand-file-name "~/.config/gnus/gnus.el"))
