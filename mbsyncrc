@@ -1,7 +1,7 @@
 IMAPAccount amcdermo@redhat.com
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 Host imap.gmail.com
-PassCmd "/nix/store/p4kqc9v777mvmmwj3g17slmpf4v6irpv-password-store-1.7.3/bin/pass rhat/app-password/gnus"
+PassCmd "pass rhat/app-password/gnus"
 PipelineDepth 1
 SSLType IMAPS
 Timeout 120
