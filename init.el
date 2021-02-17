@@ -325,15 +325,15 @@ other, future frames."
   :bind
   ("C-c C-j" . aj-toggle-fold))
 
-(use-package tramp
-  :config
-  (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
-  :custom
-  (tramp-backup-directory-alist backup-directory-alist)
-  (tramp-default-method "ssh")
-  (tramp-default-proxies-alist nil)
-  ;; shell prompt additions for NixOS
-  (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
+;; (use-package tramp
+;;   :config
+;;   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
+;;   :custom
+;;   (tramp-backup-directory-alist backup-directory-alist)
+;;   (tramp-default-method "ssh")
+;;   (tramp-default-proxies-alist nil)
+;;   ;; shell prompt additions for NixOS
+;;   (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
 
 (use-package magit
   ;; :config
