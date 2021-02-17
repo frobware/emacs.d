@@ -11,6 +11,8 @@
 
 defaults write -g NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
 
+defaults write -app Emacs NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
+
 # defaults write -app Terminal NSUserKeyEquivalents '{
 # 	 "Copy"="^$C";
 # 	 "Paste"="^$V";
