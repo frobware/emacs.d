@@ -192,8 +192,9 @@
   (("C-x C-j" . dired-jump))
   :custom
   (dired-use-ls-dired nil)
-  :config
-  (add-hook 'dired-mode-hook #'dired-omit-mode))
+  ;; :config
+  ;; (add-hook 'dired-mode-hook #'dired-omit-mode)
+  )
 
 (use-package dired-narrow
   :ensure t
