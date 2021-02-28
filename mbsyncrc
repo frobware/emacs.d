@@ -11,16 +11,16 @@ IMAPStore amcdermo@redhat.com-remote
 Account amcdermo@redhat.com
 
 MaildirStore amcdermo@redhat.com-local
-Inbox /Users/amcdermo/Maildir/amcdermo@redhat.com/Inbox
-Path /Users/amcdermo/Maildir/amcdermo@redhat.com/
+Inbox /Users/aim/Maildir/amcdermo@redhat.com/Inbox
+Path /Users/aim/Maildir/amcdermo@redhat.com/
 SubFolders Verbatim
 
 Channel amcdermo@redhat.com
 Create Both
 Expunge Both
-Master :amcdermo@redhat.com-remote:
+Far :amcdermo@redhat.com-remote:
 Patterns * ![Gmail]* "![Gmail]/Sent Mail" ![Gmail]/Starred "![Gmail]/All Mail"
 Remove None
-Slave :amcdermo@redhat.com-local:
+Near :amcdermo@redhat.com-local:
 Sync All
 SyncState *

@@ -11,7 +11,7 @@
 # configured here named ".notmuch".
 #
 [database]
-path=/Users/amcdermo/Maildir/amcdermo@redhat.com
+path=/Users/aim/.mail
 
 # User configuration
 #
