@@ -242,7 +242,7 @@
 ;; thanks man!
 
 (cond ((or (equal (system-name) "rbook") (on-macos))
-       (setq hrs/default-font-size 20
+       (setq hrs/default-font-size 16
 	     hrs/default-font "SF Mono"))
       (t
        (setq hrs/default-font-size 14
