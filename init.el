@@ -139,6 +139,7 @@
   (uniquify-ignore-buffers-re "^\\*"))
 
 (use-package ffap
+  :defer nil
   :custom
   ;; Don't ping things that look like domain names.
   (ffap-machine-p-known 'reject)
