@@ -107,8 +107,6 @@
 (use-package avy
   :bind ("C-c l" . avy-goto-line))
 
-(use-package ivy-avy)
-
 (use-package which-key
   :config
   (which-key-mode)
