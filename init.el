@@ -178,13 +178,14 @@
 (defalias 'ttl 'toggle-truncate-lines)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(use-package direnv
-  :init
-  (add-hook 'prog-mode-hook #'direnv-update-environment)
-  :custom
-  (direnv-always-show-summary nil)
-  :config
-  (direnv-mode))
+(and (executable-find "direnv")
+     (use-package direnv
+       :init
+       (add-hook 'prog-mode-hook #'direnv-update-environment)
+       :custom
+       (direnv-always-show-summary nil)
+       :config
+       (direnv-mode)))
 
 (use-package dired-x
   :straight (:type built-in)
