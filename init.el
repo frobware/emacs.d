@@ -677,8 +677,6 @@ other, future frames."
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
-(use-package go-test)
-
 (use-package go-mode
   :custom
   (go-fontify-function-calls nil)
