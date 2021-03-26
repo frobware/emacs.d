@@ -36,10 +36,11 @@
 		     (set-face-attribute
 		      'default nil
 		      ;;:font "JetBrains Mono"
-		      ;;:height 160
+		      :height 120
 		      :weight 'light
 		      :width 'normal)
-		   (hrs/reset-font-size)))
+		   ;;(hrs/reset-font-size)
+		   ))
 	    (message "Happiness delivered in %s with %d garbage collections."
 		     (format "%.2f seconds"
 			     (float-time
@@ -51,8 +52,8 @@
 
 (setq straight-use-package-by-default t
   straight-repository-branch "develop"
-  ;;straight-check-for-modifications '(watch-files find-when-checking))
-  straight-check-for-modifications nil)
+  straight-check-for-modifications '(watch-files find-when-checking))
+;;straight-check-for-modifications nil)
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
@@ -162,10 +163,10 @@
   (initial-scratch-message nil)
   (ring-bell-function #'ignore)
   (mouse-yank-at-point t)
-  (default-frame-alist '((menu-bar-lines 0)
-			 (tool-bar-lines 0)
-			 (vertical-scroll-bars)))
-  (initial-frame-alist '((vertical-scroll-bars)))
+  ;; (default-frame-alist '((menu-bar-lines 0)
+  ;; 			 (tool-bar-lines 0)
+  ;; 			 (vertical-scroll-bars)))
+  ;; (initial-frame-alist '((vertical-scroll-bars)))
   (inhibit-startup-screen t "Don't show splash screen")
   (use-dialog-box nil "Disable dialog boxes")
   (x-gtk-use-system-tooltips nil)
@@ -241,15 +242,17 @@
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
 
-(cond ((or (equal (system-name) "rbook") (on-macos))
-       (setq hrs/default-font-size 16
-	     hrs/default-font "SF Mono"))
-      (t
-       (setq hrs/default-font-size 14
-	     hrs/default-font "DejaVu Sans Mono")))
+;; (cond ((or (equal (system-name) "rbook") (on-macos))
+;;        (setq hrs/default-font-size 16
+;; 	     hrs/default-font "SF Mono"))
+;;       (t
+;;        (setq hrs/default-font-size 10
+;; 	     hrs/default-font "Ubuntu Mono")))
 
+(setq hrs/default-font-size 14)
+(setq hrs/default-font "Ubuntu Mono")
 (setq hrs/current-font-size hrs/default-font-size)
-(setq hrs/font-change-increment 1.2)
+(setq hrs/font-change-increment 1.1)
 
 (defun hrs/font-code ()
   "Return a string representing the current font (like \"Inconsolata-14\")."
@@ -696,14 +699,14 @@ other, future frames."
   :hook
   (prog-mode . hl-line-mode))
 
-;; (use-package recentf
-;;   :custom
-;;   (recentf-max-menu-items 325)
-;;   (recentf-max-saved-items 325)
-;;   :config
-;;   (recentf-mode 1)
-;;   :bind
-;;   (("C-x C-r" . recentf-open-files)))
+(use-package recentf
+  :custom
+  (recentf-max-menu-items 325)
+  (recentf-max-saved-items 325)
+  :config
+  (recentf-mode 1)
+  :bind
+  (("C-x C-r" . recentf-open-files)))
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
@@ -930,4 +933,4 @@ other, future frames."
 (when (on-macos)
   (global-set-key "\M-`" 'other-frame))
 
-(load-file (expand-file-name "~/.config/gnus/gnus.el"))
+;; (load-file (expand-file-name "~/.config/gnus/gnus.el"))

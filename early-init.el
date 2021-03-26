@@ -19,10 +19,25 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
+(setq default-frame-alist
+       '((height . 70)
+         (width . 174)
+         (left . 613)
+         (top . 391)
+         (vertical-scroll-bars . nil)
+         (horizontal-scroll-bars . nil)
+         (menu-bar-lines . 0)
+         (tool-bar-lines . 0)))
+
 (progn
-  (add-to-list 'default-frame-alist '(undecorated . nil))
+  ;; (add-to-list default-frame-alist '((menu-bar-lines . 0)
+  ;; 				     (tool-bar-lines . 0)
+  ;; 				     (vertical-scroll-bars . nil)))
+  (add-to-list 'default-frame-alist '(undecorated . t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)))
+  (add-to-list 'default-frame-alist '(ns-appearance . dark))
+  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
+  (add-to-list 'default-frame-alist '(internal-border-width . 5)))
 
 ;; Resizing the Emacs frame can be a terribly expensive part of
 ;; changing the font. By inhibiting this, we easily halve startup
@@ -36,13 +51,22 @@
 
 ;; https://www.reddit.com/r/emacs/comments/f3ed3r/how_is_doom_emacs_so_damn_fast/
 
-;; Set default font
+;; (when (member "Ubuntu One" (font-family-list))
+;;   (set-face-attribute 'default nil
+;; 		      :family "Ubuntu Mono"
+;; 		      :height 140
+;; 		      :weight 'regular))
+
+;; ;; Set default font
 ;; (set-face-attribute 'default nil
-;;                     :family "Source Code Pro"
+;;                     :family "Ubuntu Mono"
 ;;                     :height 140
 ;;                     :width 'normal)
 
-(setq initial-major-mode 'fundamental-mode)
+;; (setq initial-major-mode 'fundamental-mode)
 
-(setq comp-deferred-compilation t)
+;; (setq comp-deferred-compilation t)
 
+(setq inhibit-startup-screen t
+      inhibit-splash-screen t
+      inhibit-startup-message t)
