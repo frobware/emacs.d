@@ -20,7 +20,7 @@
 (push '(vertical-scroll-bars) default-frame-alist)
 
 (progn
-  (add-to-list 'default-frame-alist '(undecorated . t))
+  ;;(add-to-list 'default-frame-alist '(undecorated . t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(drag-internal-border . 1))
