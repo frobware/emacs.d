@@ -19,24 +19,13 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
-(setq default-frame-alist
-       '((height . 70)
-         (width . 174)
-         (left . 613)
-         (top . 391)
-         (vertical-scroll-bars . nil)
-         (horizontal-scroll-bars . nil)
-         (menu-bar-lines . 0)
-         (tool-bar-lines . 0)))
-
 (progn
-  ;; (add-to-list default-frame-alist '((menu-bar-lines . 0)
-  ;; 				     (tool-bar-lines . 0)
-  ;; 				     (vertical-scroll-bars . nil)))
   (add-to-list 'default-frame-alist '(undecorated . t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
+  (add-to-list 'default-frame-alist '(internal-border-width . 5)))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; Resizing the Emacs frame can be a terribly expensive part of
 ;; changing the font. By inhibiting this, we easily halve startup
@@ -49,8 +38,6 @@
 (advice-add #'x-apply-session-resources :override #'ignore)
 
 (setq initial-major-mode 'fundamental-mode)
-
-;; (setq comp-deferred-compilation t)
 
 (defun aim/apply-theme (appearance)
   "Load theme, taking current system APPEARANCE into consideration."
