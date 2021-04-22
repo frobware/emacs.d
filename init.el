@@ -933,4 +933,6 @@ other, future frames."
 (when (on-macos)
   (global-set-key "\M-`" 'other-frame))
 
-;; (load-file (expand-file-name "~/.config/gnus/gnus.el"))
+(let ((gnus-init-file (expand-file-name "~/.config/gnus/gnus.el")))
+  (and (file-exists-p gnus-init-file)
+    (load-file gnus-init-file)))
