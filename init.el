@@ -12,48 +12,23 @@
 (unless (functionp 'module-load)
   (error "**** you don't have modules enabled ****"))
 
-;; A big contributor to startup times is garbage collection. We up the
-;; gc threshold to temporarily prevent it from running, and then reset
-;; it later using a hook.
-(setq gc-cons-threshold most-positive-fixnum
-      gc-cons-percentage 0.6)
-
 (setq mac-command-modifier 'meta
       mac-right-option-modifier 'none
       mac-option-modifier 'super)
 
-;; Keep a ref to the actual file-name-handler
-(defvar default-file-name-handler-alist file-name-handler-alist)
-
-;; Set to nil (because regexing is cpu intensive).
-(setq file-name-handler-alist nil)
-
 ;; Reset file-name-handler-alist after initialization.
 (add-hook 'emacs-startup-hook
 	  (lambda ()
-	    (and (display-graphic-p)
-		 (if (on-macos)
-		     (set-face-attribute
-		      'default nil
-		      ;;:font "JetBrains Mono"
-		      :height 120
-		      :weight 'light
-		      :width 'normal)
-		   ;;(hrs/reset-font-size)
-		   ))
 	    (message "Happiness delivered in %s with %d garbage collections."
 		     (format "%.2f seconds"
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)
-	    (setq gc-cons-threshold 100000000 ;100MB
-		  gc-cons-percentage 0.1
-		  file-name-handler-alist default-file-name-handler-alist)))
+		     gcs-done)))
 
 (setq straight-use-package-by-default t
   straight-repository-branch "develop"
-  straight-check-for-modifications '(watch-files find-when-checking))
-;;straight-check-for-modifications nil)
+  ;; straight-check-for-modifications '(check-on-save))
+  straight-check-for-modifications nil)
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
@@ -933,6 +908,12 @@ other, future frames."
 (when (on-macos)
   (global-set-key "\M-`" 'other-frame))
 
-(let ((gnus-init-file (expand-file-name "~/.config/gnus/gnus.el")))
-  (and (file-exists-p gnus-init-file)
-    (load-file gnus-init-file)))
+;; (load-file (expand-file-name "~/.config/gnus/gnus.el"))
+
+(use-package good-scroll
+  :init
+  (good-scroll-mode 1))
+
+(setq shell-command-switch "-lc")
+
+(add-hook 'after-init-hook 'exec-path-from-shell-initialize)
