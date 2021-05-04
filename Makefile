@@ -1,17 +1,16 @@
-all: \
+LINKS := \
 	$(HOME)/.config/gnus/gnus.el \
 	$(HOME)/.mbsyncrc \
 	$(HOME)/.config/gnus/dovecotrc-work-mbsync \
 	$(HOME)/.notmuch-config
 
-$(HOME)/.config/gnus/gnus.el: gnus.el
-	install -D -m 0600 $< $@
+install: | $(HOME)/.config/gnus
+	mkdir -p $@
+	rm $(LINKS)
+	ln -s $(realpath gnus.el)  ~/.config/gnus
+	ln -s $(realpath dovecotrc-work-mbsync)  ~/.config/gnus
+	ln -s $(realpath .notmuch-config)  ~/.notmuch-config
+	ln -s $(realpath .mbsyncrc)  ~/.mbsyncrc
 
-$(HOME)/.config/gnus/dovecotrc-work-mbsync: dovecotrc-work-mbsync
-	install -D -m 0600 $< $@
-
-$(HOME)/.mbsyncrc: mbsyncrc
-	install -D -m 0600 $< $@
-
-$(HOME)/.notmuch-config: notmuch-config
-	install -D -m 0600 $< $@
+$(HOME)/.config/gnus:
+	mkdir -p $@

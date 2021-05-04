@@ -1,7 +1,7 @@
 (use-package simple
   :custom (read-mail-command #'gnus))
 
-;; /usr/local/Cellar/dovecot/2.3.13/libexec/dovecot/imap
+;; /usr/local/Cellar/dovecot/2.3.14/libexec/dovecot/imap
 
 (use-package auth-source
   :config
@@ -33,7 +33,7 @@
   (setq gnus-secondary-select-methods
 	'((nnimap ""
 		  (nnimap-stream shell)
-		  (nnimap-shell-program "/usr/local/Cellar/dovecot/2.3.13/libexec/dovecot/imap -c ~/.config/gnus/dovecotrc-work-mbsync"))))
+		  (nnimap-shell-program "/usr/local/Cellar/dovecot/2.3.14/libexec/dovecot/imap -c ~/.config/gnus/dovecotrc-work-mbsync"))))
   (setq gnus-startup-file "~/.config/gnus/newsrc")
   (setq gnus-use-dribble-file t)
   (setq mail-source-directory "~/.config/gnus/mail")
