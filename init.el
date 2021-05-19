@@ -127,7 +127,7 @@
   (put 'downcase-region 'disabled nil)
   (put 'set-goal-column 'disabled nil)
   :custom
-  (auto-compression-mode)
+  (auto-compression-mode t)
   (sentence-end-double-space nil)
   (blink-cursor-mode nil)
   (vc-follow-symlinks t)
