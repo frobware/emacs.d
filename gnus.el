@@ -20,6 +20,8 @@
   :straight (:type built-in)
   :config
   (setq gnus-agent nil)
+  (setq message-sendmail-f-is-evil 't)
+  (setq message-sendmail-extra-arguments '("--read-envelope-from"))
   (setq gnus-always-read-dribble-file t)
   (setq gnus-article-save-directory "~/.config/gnus/news")
   (setq gnus-cache-directory "~/.config/gnus/news/cache")
@@ -155,3 +157,17 @@
   '(progn
      (add-to-list 'mm-discouraged-alternatives "text/html")
      (add-to-list 'mm-discouraged-alternatives "text/richtext")))
+
+;; with Emacs 23.1, you have to set this explicitly (in MS Windows)
+;; otherwise it tries to send through OS associated mail client
+(setq message-send-mail-function 'message-send-mail-with-sendmail)
+
+;; we substitute sendmail with msmtp
+(setq sendmail-program "/run/current-system/sw/bin/msmtp")
+
+;;need to tell msmtp which account we're using
+(setq message-sendmail-extra-arguments '("-a" "gmail"))
+
+;; you might want to set the following too
+(setq user-full-name "Andrew McDermott")
+(setq user-mail-address "amcdermo@redhat.com")
