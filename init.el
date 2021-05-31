@@ -224,7 +224,7 @@
 ;;        (setq hrs/default-font-size 10
 ;; 	     hrs/default-font "Ubuntu Mono")))
 
-(setq hrs/default-font-size 16)
+(setq hrs/default-font-size 18)
 (setq hrs/default-font "Menlo")
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.1)
@@ -521,6 +521,11 @@ other, future frames."
   (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
 
 (use-package notmuch
+  :init
+  (setq notmuch-search-oldest-first nil
+	mail-user-agent 'message-user-agent
+	notmuch-wash-wrap-lines-length 80
+	notmuch-tree-show-out t)
   :config
   (setq notmuch-search-oldest-first nil
 	mail-user-agent 'message-user-agent
