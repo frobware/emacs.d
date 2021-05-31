@@ -12,6 +12,7 @@
 defaults write -g NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
 
 defaults write -app Emacs NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
+defaults write -app Emacs NSUserKeyEquivalents -dict-add 'Quit Emacs' '\0'
 
 defaults write -app XQuartz NSUserKeyEquivalents -dict-add 'Copy' '\0'
 defaults write -app XQuartz NSUserKeyEquivalents -dict-add 'Close' '\0'
