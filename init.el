@@ -846,7 +846,9 @@ other, future frames."
 (use-package major-mode-hydra
   :after hydra)
 
-(use-package vterm)
+(use-package vterm
+  :init
+  (setq vterm-ignore-blink-cursor t))
 
 ;; from https://github.com/thatwist/.emacs.d/blob/master/init.el
 (pretty-hydra-define hydra-lsp
