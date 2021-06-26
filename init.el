@@ -84,6 +84,8 @@
 	 ("\\.java\\'" . java-mode)))
 
 (use-package exec-path-from-shell
+  :config
+  (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH"))
   :defer t)
 
 (when (memq window-system '(mac ns))
