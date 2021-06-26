@@ -57,9 +57,9 @@
 ;;(straight-use-package '(org :type built-in))
 
 (use-package term
-  :config
+  :init
   ;; prevent cursor blinking in remote terminal sessions.
-  (visible-cursor nil))
+  (setq visible-cursor nil))
 
 (use-package gcmh
   :defer nil
