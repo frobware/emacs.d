@@ -69,6 +69,11 @@
 
 (use-package clipetty
   :ensure t
+  ;; You can invoke Clipetty explicitly from a key binding to copy a
+  ;; region to the clipboard rather than using either the local or
+  ;; global minor modes. To that end, Clipetty has a function called
+  ;; clipetty-kill-ring-save which I like to bind to M-w like so:
+  ;; :bind ("M-w" . clipetty-kill-ring-save))
   :hook (after-init . global-clipetty-mode))
 
 (use-package cc-mode
