@@ -670,9 +670,9 @@ other, future frames."
 
 (use-package lsp-treemacs)		;
 
-(defun aim/lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+;; (defun aim/lsp-go-install-save-hooks ()
+;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
+;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (use-package go-mode
   :custom
