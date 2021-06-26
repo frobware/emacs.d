@@ -67,6 +67,10 @@
   :config
   (gcmh-mode 1))
 
+(use-package clipetty
+  :ensure t
+  :hook (after-init . global-clipetty-mode))
+
 (use-package cc-mode
   :mode (("\\.h\\'"    . c-mode)
 	 ("\\.c\\'"    . c-mode)
