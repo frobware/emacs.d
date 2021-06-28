@@ -61,6 +61,12 @@
   ;; prevent cursor blinking in remote terminal sessions.
   (setq visible-cursor nil))
 
+(use-package pinentry
+  :ensure t
+  :config
+  (setq epa-pinentry-mode 'loopback) ; prevent GUI input
+  (pinentry-start))
+
 (use-package gcmh
   :defer nil
   :ensure t
