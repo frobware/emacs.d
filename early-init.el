@@ -17,13 +17,18 @@
 (push '(vertical-scroll-bars) default-frame-alist)
 
 (progn
-  ;;(add-to-list 'default-frame-alist '(undecorated . t))
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(drag-internal-border . 1))
-  (add-to-list 'default-frame-alist '(internal-border-width . 5)))
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (add-to-list 'default-frame-alist '(internal-border-width . 5))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized)))
 
+(and (string-equal system-name "x1c")
+     (progn
+       (add-to-list 'default-frame-alist '(font . "JetBrains Mono-14"))
+       (add-to-list 'default-frame-alist '(undecorated . t))
+       (add-to-list 'default-frame-alist '(fullscreen . maximized))))
+ 
 ;; Resizing the Emacs frame can be a terribly expensive part of
 ;; changing the font. By inhibiting this, we easily halve startup
 ;; times with fonts that are larger than the system default.

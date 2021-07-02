@@ -246,8 +246,8 @@
 ;;        (setq hrs/default-font-size 10
 ;; 	     hrs/default-font "Ubuntu Mono")))
 
-(setq hrs/default-font-size 18)
-(setq hrs/default-font "Menlo")
+(setq hrs/default-font-size 14)
+(setq hrs/default-font "JetBrains Mono")
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.1)
 
