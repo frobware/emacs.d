@@ -935,8 +935,6 @@ other, future frames."
 (when (on-macos)
   (global-set-key "\M-`" 'other-frame))
 
-(load-file (expand-file-name "~/.config/gnus/gnus.el"))
-
 (use-package good-scroll
   :init
   (good-scroll-mode 1))
