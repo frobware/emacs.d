@@ -73,6 +73,8 @@
   :config
   (gcmh-mode 1))
 
+(use-package lua-mode)
+
 (use-package clipetty
   :ensure t
   ;; You can invoke Clipetty explicitly from a key binding to copy a
