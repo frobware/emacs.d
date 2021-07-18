@@ -935,12 +935,7 @@ other, future frames."
 	  ("<f11>" . aim/fullscreen)))
 
 (when (on-macos)
-  (global-set-key "\M-`" 'other-frame))
-
-(use-package good-scroll
-  :init
-  (good-scroll-mode 1))
-
-(setq shell-command-switch "-lc")
-
-(add-hook 'after-init-hook 'exec-path-from-shell-initialize)
+  (progn
+    (setq shell-command-switch "-lc")
+    (global-set-key "\M-`" 'other-frame)
+    (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
