@@ -23,7 +23,7 @@
   (add-to-list 'default-frame-alist '(internal-border-width . 5))
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
 
-(and (string-equal system-name "x1c")
+(and (string-equal system-name "spicy")
      (progn
        (add-to-list 'default-frame-alist '(font . "JetBrains Mono-14"))
        (add-to-list 'default-frame-alist '(undecorated . t))
