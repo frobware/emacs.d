@@ -60,9 +60,6 @@
   :ensure t
   :init
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
-        modus-themes-region '(bg-only no-extend))
-  (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs nil
 	modus-themes-no-mixed-fonts nil
 	modus-themes-subtle-line-numbers nil
