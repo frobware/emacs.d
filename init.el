@@ -528,10 +528,6 @@ other, future frames."
   (:map nix-mode-map
 	("C-c C-j" . aj-toggle-fold)))
 
-(use-package deadgrep)
-  ;;:bind
-  ;;(("<f5>" . deadgrep)))
-
 (use-package docker
   :ensure t
   :bind
