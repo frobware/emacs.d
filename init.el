@@ -26,9 +26,9 @@
 		     gcs-done)))
 
 (setq straight-use-package-by-default t
-  straight-repository-branch "develop"
-  ;; straight-check-for-modifications '(check-on-save))
-  straight-check-for-modifications nil)
+      straight-repository-branch "develop"
+      ;; straight-check-for-modifications '(check-on-save))
+      straight-check-for-modifications nil)
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
@@ -268,8 +268,8 @@
 
 (and (executable-find "direnv")
      (use-package direnv
-       :init
-       (add-hook 'prog-mode-hook #'direnv-update-environment)
+       ;; :init
+       ;; (add-hook 'prog-mode-hook #'direnv-update-environment)
        :custom
        (direnv-always-show-summary nil)
        :config
@@ -338,7 +338,7 @@
 ;;        (setq hrs/default-font-size 10
 ;; 	     hrs/default-font "Ubuntu Mono")))
 
-(setq hrs/default-font-size 14)
+(setq hrs/default-font-size 18)
 (setq hrs/default-font "JetBrains Mono")
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.1)
