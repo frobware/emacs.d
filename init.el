@@ -615,6 +615,8 @@ other, future frames."
   :config
   (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
 
+(require 'notmuch)
+
 (use-package notmuch
   :init
   (setq notmuch-search-oldest-first nil
