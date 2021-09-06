@@ -608,18 +608,6 @@ other, future frames."
 	      ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)
 	      ("/ <deletechar>" . ibuffer-clear-filter-groups)))
 
-(use-package heaven-and-hell
-  :ensure t
-  :init
-  (setq heaven-and-hell-theme-type 'dark) ;; Omit to use light by default
-  (setq heaven-and-hell-themes
-	'((light . modus-operandi)
-	  (dark . modus-vivendi))) ;; Themes can be the list: (dark . (tsdh-dark wombat))
-  (setq heaven-and-hell-load-theme-no-confirm t)
-  :hook (after-init . heaven-and-hell-init-hook)
-  :bind (("C-c <f6>" . heaven-and-hell-load-default-theme)
-	 ("<f6>" . heaven-and-hell-toggle-theme)))
-
 (use-package unfill
   :bind ([remap fill-paragraph] . unfill-toggle))
 
