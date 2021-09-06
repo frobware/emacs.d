@@ -58,6 +58,7 @@
 
 (use-package modus-themes
   :ensure t
+  :defer nil
   :init
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs nil
@@ -142,6 +143,7 @@
 	modus-themes-scale-title 1.33)
   ;; Load the theme files before enabling a theme
   (modus-themes-load-themes)
+  :hook (emacs-startup-hook . (modus-themes-load-vivendi))
   :config
   (modus-themes-load-vivendi)
   :bind ("<f5>" . modus-themes-toggle))
