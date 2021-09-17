@@ -53,8 +53,11 @@
 (straight-use-package 'use-package)
 
 (setq use-package-always-defer t)
-
 ;;(straight-use-package '(org :type built-in))
+
+;; https://github.com/cpitclaudel/easy-escape
+;; avoid toothpicks.
+(use-package easy-escape)
 
 (use-package modus-themes
   :ensure t
