@@ -149,7 +149,7 @@
   :hook (emacs-startup-hook . (modus-themes-load-vivendi))
   :config
   (modus-themes-load-vivendi)
-  :bind ("<f5>" . modus-themes-toggle))
+  :bind ("<f6>" . modus-themes-toggle))
 
 (use-package term
   :init
