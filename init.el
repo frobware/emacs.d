@@ -1,5 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+
 (defun on-macos nil
   "Returns t if running on macOS"
   (eq system-type 'darwin))
@@ -58,8 +60,6 @@
 ;; https://github.com/cpitclaudel/easy-escape
 ;; avoid toothpicks.
 (use-package easy-escape)
-
-(use-package modus-theme-vivendi)
 
 (if (version< emacs-version "28")
     (progn
@@ -625,8 +625,6 @@ other, future frames."
 (use-package shfmt
   :config
   (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
-
-(require 'notmuch)
 
 (use-package notmuch
   :init
