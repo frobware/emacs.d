@@ -126,14 +126,14 @@
 
 	modus-themes-org-agenda ; this is an alist: read the manual or its doc string
 	'((header-block . (variable-pitch scale-title))
-          (header-date . (grayscale workaholic bold-today))
-          (scheduled . uniform)
-          (habit . traffic-light-deuteranopia))
+	  (header-date . (grayscale workaholic bold-today))
+	  (scheduled . uniform)
+	  (habit . traffic-light-deuteranopia))
 
 	modus-themes-headings ; this is an alist: read the manual or its doc string
 	'((1 . (overline background))
-          (2 . (rainbow overline))
-          (t . (no-bold)))
+	  (2 . (rainbow overline))
+	  (t . (no-bold)))
 
 	modus-themes-variable-pitch-ui nil
 	modus-themes-variable-pitch-headings t
@@ -261,8 +261,8 @@
   (ring-bell-function #'ignore)
   (mouse-yank-at-point t)
   ;; (default-frame-alist '((menu-bar-lines 0)
-  ;; 			 (tool-bar-lines 0)
-  ;; 			 (vertical-scroll-bars)))
+  ;;			 (tool-bar-lines 0)
+  ;;			 (vertical-scroll-bars)))
   ;; (initial-frame-alist '((vertical-scroll-bars)))
   (inhibit-startup-screen t "Don't show splash screen")
   (use-dialog-box nil "Disable dialog boxes")
@@ -341,10 +341,10 @@
 
 ;; (cond ((or (equal (system-name) "rbook") (on-macos))
 ;;        (setq hrs/default-font-size 16
-;; 	     hrs/default-font "SF Mono"))
+;;	     hrs/default-font "SF Mono"))
 ;;       (t
 ;;        (setq hrs/default-font-size 10
-;; 	     hrs/default-font "Ubuntu Mono")))
+;;	     hrs/default-font "Ubuntu Mono")))
 
 (setq hrs/default-font-size 16)
 (setq hrs/default-font "JetBrains Mono")
