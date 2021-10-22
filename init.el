@@ -1021,3 +1021,5 @@ other, future frames."
     (setq shell-command-switch "-lc")
     (global-set-key "\M-`" 'other-frame)
     (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
+
+(add-hook 'before-save-hook 'whitespace-cleanup)
