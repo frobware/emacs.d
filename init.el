@@ -1023,3 +1023,4 @@ other, future frames."
     (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
+;;(setq notmuch-command "remote-notmuch.sh")
