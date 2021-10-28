@@ -639,7 +639,7 @@ other, future frames."
 	  (:key "u" :name "unread" :query "tag:unread")
 	  (:key "g" :name "github/mentions" :query "tag:github/mentions is:unread")
 	  (:key "b" :name "bugs" :query "tag:bugs is:unread")
-	  (:key "T" :name "today" :query "date:today" :sort-order oldest-first)
+	  (:key "T" :name "today" :query "date:today and not tag:trash")
 	  (:key "U" :name "unread today" :query "date:today is:unread")
 	  (:key "F" :name "flagged" :query "tag:flagged")
 	  (:key "S" :name "sent" :query "tag:Sent Mail"))))
@@ -1024,3 +1024,61 @@ other, future frames."
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 ;;(setq notmuch-command "remote-notmuch.sh")
+(set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:"))))
+
+(eval-after-load "tramp"
+  '(progn
+     (defvar sudo-tramp-prefix
+       "/sudo:"
+       (concat "Prefix to be used by sudo commands when building tramp path "))
+     (defun sudo-file-name (filename)
+       (set 'splitname (split-string filename ":"))
+       (if (> (length splitname) 1)
+	   (progn (set 'final-split (cdr splitname))
+		  (set 'sudo-tramp-prefix "/sudo:")
+		  )
+	 (progn (set 'final-split splitname)
+		(set 'sudo-tramp-prefix (concat sudo-tramp-prefix "root@localhost:")))
+	 )
+       (set 'final-fn (concat sudo-tramp-prefix (mapconcat (lambda (e) e) final-split ":")))
+       (message "splitname is %s" splitname)
+       (message "sudo-tramp-prefix is %s" sudo-tramp-prefix)
+       (message "final-split is %s" final-split)
+       (message "final-fn is %s" final-fn)
+       (message "%s" final-fn)
+       )
+
+     (defun sudo-find-file (filename &optional wildcards)
+       "Calls find-file with filename with sudo-tramp-prefix prepended"
+       (interactive "fFind file with sudo ")
+       (let ((sudo-name (sudo-file-name filename)))
+	 (apply 'find-file
+		(cons sudo-name (if (boundp 'wildcards) '(wildcards))))))
+
+     (defun sudo-reopen-file ()
+       "Reopen file as root by prefixing its name with sudo-tramp-prefix and by clearing buffer-read-only"
+       (interactive)
+       (let*
+	   ((file-name (expand-file-name buffer-file-name))
+	    (sudo-name (sudo-file-name file-name)))
+	 (progn
+	   (setq buffer-file-name sudo-name)
+	   (rename-buffer sudo-name)
+	   (setq buffer-read-only nil)
+	   (message (concat "File name set to " sudo-name)))))
+     (global-set-key (kbd "C-c o") 'sudo-find-file)
+     ;;(global-set-key (kbd "C-c o s") 'sudo-reopen-file)
+     ))
+
+;; (require 'tramp)
+;; (add-to-list 'tramp-default-proxies-alist
+;; 	     '("\\.frobware\\.com\\'" "\\`root\\'" "/ssh:%h:"))
+
+;; Load the theme files before enabling a theme (else you get an
+;; error).
+;; (modus-themes-load-themes)
+;; (modus-themes-load-vivendi)             ; Dark theme
+
+(use-package dumb-jump)
+(require 'dumb-jump)
+
