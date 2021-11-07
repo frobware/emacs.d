@@ -1022,5 +1022,5 @@ other, future frames."
     (global-set-key "\M-`" 'other-frame)
     (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
 
-;;(add-hook 'before-save-hook 'whitespace-cleanup)
+(add-hook 'before-save-hook 'whitespace-cleanup)
 ;;(setq notmuch-command "remote-notmuch.sh")
