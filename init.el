@@ -649,7 +649,7 @@ other, future frames."
 	'((:key "i" :name "inbox" :query "tag:inbox")
 	  (:key "u" :name "unread" :query "tag:unread")
 	  (:key "g" :name "github/mentions" :query "tag:github/mentions is:unread")
-	  (:key "b" :name "bugs" :query "tag:bugs is:unread")
+	  (:key "b" :name "bugs" :query "tag:bugs date:today")
 	  (:key "T" :name "today" :query "date:today and not tag:trash")
 	  (:key "U" :name "unread today" :query "date:today is:unread")
 	  (:key "F" :name "flagged" :query "tag:flagged")
