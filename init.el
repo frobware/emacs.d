@@ -196,7 +196,12 @@
 	 ("\\.c\\'"    . c-mode)
 	 ("\\.cpp\\'"  . c++-mode)
 	 ("\\.mm\\'"   . objc-mode)
-	 ("\\.java\\'" . java-mode)))
+	 ("\\.java\\'" . java-mode))
+  :config
+  (setq c-default-style '((java-mode . "java")
+			  (awk-mode . "awk")
+			  (other . "linux")))
+  :hook ((c-mode . lsp-deferred)))
 
 (use-package exec-path-from-shell
   :config
