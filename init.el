@@ -772,12 +772,15 @@ other, future frames."
 ;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
 ;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
+(use-package go-test)
+
 (use-package go-mode
   :custom
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
   :bind (:map go-mode-map
 	      ("C-c C-n" . go-run)
+	      ("C-c C-c" . go-coverage)
 	      ("C-c ."   . go-test-current-test)
 	      ("C-c f"   . go-test-current-file)
 	      ("C-c a"   . go-test-current-project)
