@@ -67,99 +67,6 @@
 (setq use-package-always-defer t)
 ;;(straight-use-package '(org :type built-in))
 
-(use-package modus-themes
-  :ensure t
-  :defer nil
-  :straight (:type built-in)
-  :init
-  (setq modus-themes-italic-constructs t
-	modus-themes-bold-constructs nil
-	modus-themes-no-mixed-fonts nil
-	modus-themes-subtle-line-numbers nil
-	modus-themes-success-deuteranopia t
-	modus-themes-tabs-accented t
-	modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
-
-	modus-themes-fringes 'intense	; {nil,'subtle,'intense}
-
-	;; Options for `modus-themes-lang-checkers' are either nil (the
-	;; default), or a list of properties that may include any of those
-	;; symbols: `straight-underline', `text-also', `background',
-	;; `intense'
-	modus-themes-lang-checkers nil
-
-	;; Options for `modus-themes-mode-line' are either nil, or a list
-	;; that can combine any of `3d' OR `moody', `borderless',
-	;; `accented', `padded'.
-	modus-themes-mode-line '(accented borderless)
-
-	;; Options for `modus-themes-syntax' are either nil (the default),
-	;; or a list of properties that may include any of those symbols:
-	;; `faint', `yellow-comments', `green-strings', `alt-syntax'
-	modus-themes-syntax nil
-
-	;; Options for `modus-themes-hl-line' are either nil (the default),
-	;; or a list of properties that may include any of those symbols:
-	;; `accented', `underline', `intense'
-	modus-themes-hl-line '(intense accented)
-
-	;; Options for `modus-themes-paren-match' are either nil (the
-	;; default), or a list of properties that may include any of those
-	;; symbols: `bold', `intense', `underline'
-	modus-themes-paren-match '(bold intense)
-
-	;; Options for `modus-themes-links' are either nil (the default),
-	;; or a list of properties that may include any of those symbols:
-	;; `neutral-underline' OR `no-underline', `faint' OR `no-color',
-	;; `bold', `italic', `background'
-	modus-themes-links '(neutral-underline background)
-
-	;; Options for `modus-themes-prompts' are either nil (the
-	;; default), or a list of properties that may include any of those
-	;; symbols: `background', `bold', `gray', `intense', `italic'
-	modus-themes-prompts '(intense bold)
-
-	modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
-
-	modus-themes-mail-citations nil	; {nil,'faint,'monochrome}
-
-	;; Options for `modus-themes-region' are either nil (the default),
-	;; or a list of properties that may include any of those symbols:
-	;; `no-extend', `bg-only', `accented'
-	modus-themes-region '(bg-only no-extend)
-
-	;; Options for `modus-themes-diffs': nil, 'desaturated,
-	;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
-	modus-themes-diffs 'fg-only-deuteranopia
-
-	modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
-
-	modus-themes-org-agenda ; this is an alist: read the manual or its doc string
-	'((header-block . (variable-pitch scale-title))
-	  (header-date . (grayscale workaholic bold-today))
-	  (scheduled . uniform)
-	  (habit . traffic-light-deuteranopia))
-
-	modus-themes-headings ; this is an alist: read the manual or its doc string
-	'((1 . (overline background))
-	  (2 . (rainbow overline))
-	  (t . (no-bold)))
-
-	modus-themes-variable-pitch-ui nil
-	modus-themes-variable-pitch-headings t
-	modus-themes-scale-headings t
-	modus-themes-scale-1 1.1
-	modus-themes-scale-2 1.15
-	modus-themes-scale-3 1.21
-	modus-themes-scale-4 1.27
-	modus-themes-scale-title 1.33)
-  ;; Load the theme files before enabling a theme
-  (modus-themes-load-themes)
-  :hook (emacs-startup-hook . (modus-themes-load-vivendi))
-  :config
-  (modus-themes-load-vivendi)
-  :bind ("<f6>" . modus-themes-toggle))
-
 ;; https://github.com/cpitclaudel/easy-escape
 ;; avoid toothpicks.
 (use-package easy-escape)
@@ -1029,3 +936,20 @@ other, future frames."
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 ;;(setq notmuch-command "remote-notmuch.sh")
+
+(load-theme 'modus-vivendi t t)
+(load-theme 'modus-operandi t t)
+
+(require 'modus-themes)
+
+;; Add all your customizations prior to loading the themes
+(setq modus-themes-italic-constructs t
+      modus-themes-bold-constructs nil
+      modus-themes-region '(bg-only no-extend))
+
+;; Load the theme files before enabling a theme
+(modus-themes-load-themes)
+
+;; Load the theme of your choice:
+(modus-themes-load-vivendi)
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
