@@ -474,12 +474,6 @@ other, future frames."
     :ensure t)
   (yas-reload-all))
 
-(use-package k8s-mode
-  :hook (k8s-mode . yas-minor-mode))
-
-(use-package kubernetes
-  :commands (kubernetes-overview))
-
 ;; Making it easier to discover Emacs key presses.
 (use-package which-key
   :demand t
