@@ -587,16 +587,10 @@ other, future frames."
 (use-package browse-at-remote)
 (use-package browse-url)
 (use-package cmake-mode)
-(use-package docker-tramp)
-(use-package epkg)
-(use-package esup)
 (use-package hl-line)
 (use-package json-mode)
-(use-package kubernetes-tramp)
 (use-package markdown-mode)
 (use-package pass)
-(use-package restart-emacs)
-(use-package terraform-mode)
 (use-package x509-mode)
 (use-package xterm-color)
 
@@ -630,10 +624,6 @@ other, future frames."
 
 (use-package unfill
   :bind ([remap fill-paragraph] . unfill-toggle))
-
-(use-package shfmt
-  :config
-  (add-hook 'sh-mode-hook 'shfmt-on-save-mode))
 
 (use-package notmuch
   :init
