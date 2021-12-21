@@ -1,6 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
-(setq package-native-compile nil)
+;; From https://github.com/raxod502/straight.el/issues/757
+(setq straight-disable-native-compile t)
+(setq native-comp-deferred-compilation-deny-list nil)
 
 (defun on-macos nil
   "Returns t if running on macOS"
@@ -13,9 +15,8 @@
 	  mac-option-modifier 'super)
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")))
 
+;; this is for spicy and my custom notmuch build.
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
-
-;; defaults write -g NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
 
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
