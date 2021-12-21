@@ -1,10 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+(setq package-native-compile nil)
 
-(defun on-macos nil
-  "Returns t if running on macOS"
-  (eq system-type 'darwin))
+(when (on-macos)
+  (progn
+    (setq mac-command-modifier 'meta
+	  mac-right-option-modifier 'none
+	  mac-option-modifier 'super)
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")))
+
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
 
 ;; defaults write -g NSUserKeyEquivalents -dict-add 'Emoji & Symbols' '\0'
 
@@ -60,7 +65,7 @@
 (use-package modus-themes
   :ensure t
   :defer nil
-  :straight (modus-themes :type git :host gitlab :repo "protesilaos/modus-themes")
+  :straight (:type built-in)
   :init
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs nil
@@ -465,9 +470,6 @@ other, future frames."
   (set-face-foreground 'git-gutter:added "dark green")
   (set-face-foreground 'git-gutter:deleted "dark red")
   (global-git-gutter-mode 1))
-
-(use-package forge
-  :after magit)
 
 (use-package copy-as-format
   :config
