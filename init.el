@@ -2,6 +2,10 @@
 
 (setq package-native-compile nil)
 
+(defun on-macos nil
+  "Returns t if running on macOS"
+  (eq system-type 'darwin))
+
 (when (on-macos)
   (progn
     (setq mac-command-modifier 'meta
