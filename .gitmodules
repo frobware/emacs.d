@@ -1,3 +1,6 @@
 [submodule "gcmh"]
 	path = gcmh
 	url = https://gitlab.com/koral/gcmh
+[submodule "modus-themes"]
+	path = modus-themes
+	url = https://github.com/protesilaos/modus-themes
