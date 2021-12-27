@@ -931,10 +931,13 @@ other, future frames."
 (add-hook 'before-save-hook 'whitespace-cleanup)
 ;;(setq notmuch-command "remote-notmuch.sh")
 
-(load-theme 'modus-vivendi t t)
-(load-theme 'modus-operandi t t)
+(add-to-list 'load-path
+	     (expand-file-name "~/src/github.com/frobware/emacs.d/modus-themes"))
 
 (require 'modus-themes)
+
+(load-theme 'modus-vivendi t t)		;dark
+(load-theme 'modus-operandi t t)	;lightness
 
 ;; Add all your customizations prior to loading the themes
 (setq modus-themes-italic-constructs t
