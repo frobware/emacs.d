@@ -1,8 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 
 ;; From https://github.com/raxod502/straight.el/issues/757
-(setq straight-disable-native-compile t)
-(setq native-comp-deferred-compilation-deny-list nil)
+(setq straight-disable-native-compile nil)
+(setq native-comp-async-report-warnings-errors nil)
+;; (setq native-comp-deferred-compilation-deny-list nil)
 
 (defun on-macos nil
   "Returns t if running on macOS"
