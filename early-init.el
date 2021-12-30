@@ -26,10 +26,10 @@
 (and (or (string-equal system-name "spicy")
 	 (string-equal system-name "x1c"))
      (progn
-       (add-to-list 'default-frame-alist '(font . "JetBrains Mono-14"))
+       (add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
        (add-to-list 'default-frame-alist '(undecorated . t))
        (add-to-list 'default-frame-alist '(fullscreen . maximized))))
- 
+
 ;; Resizing the Emacs frame can be a terribly expensive part of
 ;; changing the font. By inhibiting this, we easily halve startup
 ;; times with fonts that are larger than the system default.

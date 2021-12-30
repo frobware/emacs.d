@@ -262,14 +262,7 @@
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
 
-;; (cond ((or (equal (system-name) "rbook") (on-macos))
-;;        (setq hrs/default-font-size 16
-;;	     hrs/default-font "SF Mono"))
-;;       (t
-;;        (setq hrs/default-font-size 10
-;;	     hrs/default-font "Ubuntu Mono")))
-
-(setq hrs/default-font-size 16)
+(setq hrs/default-font-size 10)
 (setq hrs/default-font "JetBrains Mono")
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.1)
