@@ -656,6 +656,7 @@ other, future frames."
 ;;(use-package go-test)
 
 (use-package go-mode
+  :mode (("\\.go\\'" . go-mode))
   :custom
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
