@@ -55,15 +55,13 @@
 
 (if (package-installed-p 'use-package)
     (progn
-      (setq use-package-always-defer t
+      (setq use-package-always-defer nil
 	    use-package-always-ensure t
 	    use-package-ignore-unknown-keywords t)
       (eval-when-compile
-	(add-to-list 'load-path
-		     (expand-file-name "~/src/github.com/frobware/emacs.d/use-package"))
 	(require 'use-package)))
   (progn
-    (setq use-package-always-defer t
+    (setq use-package-always-defer nil
 	  use-package-always-ensure t)
     (aim/straight-bootstrap)))
 
@@ -361,6 +359,7 @@ other, future frames."
   (helm-semantic-or-imenu
    helm-occur
    helm-browse-project
+   helm-buffers-list
    helm-recentf-fuzzy-match
    helm-projects-history)
   :init
