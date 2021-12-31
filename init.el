@@ -1,20 +1,21 @@
 ;; -*- lexical-binding: t; -*-
 
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "Happiness delivered in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
+
 ;; From https://github.com/raxod502/straight.el/issues/757
 (setq straight-disable-native-compile nil)
 (setq native-comp-async-report-warnings-errors nil)
-;; (setq native-comp-deferred-compilation-deny-list nil)
 
-(defun on-macos nil
-  "Returns t if running on macOS"
-  (eq system-type 'darwin))
-
-(when (on-macos)
-  (progn
-    (setq mac-command-modifier 'meta
-	  mac-right-option-modifier 'none
-	  mac-option-modifier 'super)
-    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")))
+(when (eq system-type 'darwin)
+  (setq mac-command-modifier 'meta
+	mac-right-option-modifier 'none
+	mac-option-modifier 'super))
 
 ;; this is for spicy and my custom notmuch build.
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
@@ -29,19 +30,13 @@
       mac-right-option-modifier 'none
       mac-option-modifier 'super)
 
-;; Reset file-name-handler-alist after initialization.
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Happiness delivered in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
-
-(setq straight-use-package-by-default t
+(setq straight-use-package-by-default nil
       straight-repository-branch "develop"
       ;; straight-check-for-modifications '(check-on-save))
       straight-check-for-modifications nil)
+
+(setq use-package-always-ensure t
+      use-package-ignore-unknown-keywords t)
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
@@ -58,41 +53,37 @@
 	   'silent 'inhibit-cookies)
 	(goto-char (point-max))
 	(eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage)))
+    (load bootstrap-file nil 'nomessage)
+    (straight-use-package 'use-package)))
 
-(aim/straight-bootstrap)
+(require 'package)
 
-;; Bootstrap use-package
-(straight-use-package 'use-package)
+(if (package-installed-p 'use-package)
+    (progn
+      (setq use-package-always-defer nil
+	    use-package-always-ensure t
+	    use-package-ignore-unknown-keywords t)
+      (require 'use-package))
+  (progn
+    (aim/straight-bootstrap)))
 
-(setq use-package-always-defer t)
-;;(straight-use-package '(org :type built-in))
-
-;; https://github.com/cpitclaudel/easy-escape
-;; avoid toothpicks.
-(use-package easy-escape)
-
-(use-package term
-  :init
-  ;; prevent cursor blinking in remote terminal sessions.
-  (setq visible-cursor nil))
+(require 'term)
+;; prevent cursor blinking in remote terminal sessions.
+(setq visible-cursor nil)
 
 (use-package pinentry
-  :ensure t
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
   (pinentry-start))
 
-(use-package gcmh
-  :defer nil
-  :ensure t
-  :config
-  (gcmh-mode 1))
+;; (use-package gcmh
+;;   :defer nil
+;;   :config
+;;   (gcmh-mode 1))
 
 (use-package lua-mode)
 
 (use-package clipetty
-  :ensure t
   ;; You can invoke Clipetty explicitly from a key binding to copy a
   ;; region to the clipboard rather than using either the local or
   ;; global minor modes. To that end, Clipetty has a function called
@@ -100,25 +91,17 @@
   ;; :bind ("M-w" . clipetty-kill-ring-save))
   :hook (after-init . global-clipetty-mode))
 
-(use-package cc-mode
-  :mode (("\\.h\\'"    . c-mode)
-	 ("\\.c\\'"    . c-mode)
-	 ("\\.cpp\\'"  . c++-mode)
-	 ("\\.mm\\'"   . objc-mode)
-	 ("\\.java\\'" . java-mode))
-  :config
-  (setq c-default-style '((java-mode . "java")
-			  (awk-mode . "awk")
-			  (other . "linux")))
-  :hook ((c-mode . lsp-deferred)))
+(require 'cc-mode)
+(setq c-default-style '((java-mode . "java")
+			(awk-mode . "awk")
+			(other . "linux")))
 
 (use-package exec-path-from-shell
   :config
-  (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH"))
-  :defer nil)
+  (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH")))
 
-;; (when (memq window-system '(mac ns))
-;;   (exec-path-from-shell-initialize))
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
 
 (use-package keychain-environment
   :config
@@ -134,36 +117,23 @@
   (which-key-setup-side-window-bottom)
   :custom (which-key-idle-delay 1.2))
 
-(use-package select
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (x-select-enable-clipboard t)
-  (x-select-enable-primary t)
-  (save-interprogram-paste-before-kill t))
+(require 'select)
+(setq x-select-enable-clipboard t
+      x-select-enable-primary t
+      save-interprogram-paste-before-kill t)
 
-(use-package cus-edit
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (custom-file null-device "Don't store customizations"))
+(require 'cus-edit)
+(setq custom-file null-device)
 
-(use-package uniquify
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (uniquify-buffer-name-style 'reverse)
-  (uniquify-separator "|")
-  (uniquify-after-kill-buffer-p t)
-  (uniquify-ignore-buffers-re "^\\*"))
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse
+      uniquify-separator "|"
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re "^\\*")
 
-(use-package ffap
-  :defer nil
-  :custom
-  ;; Don't ping things that look like domain names.
-  (ffap-machine-p-known 'reject)
-  :config
-  (ffap-bindings))
+(require 'ffap)
+(setq ffap-machine-p-known 'reject)
+(ffap-bindings)
 
 (use-package emacs
   :init
@@ -206,58 +176,45 @@
        :config
        (direnv-mode)))
 
-(use-package dired-x
-  :straight (:type built-in)
-  :defer nil
-  :bind
-  (("C-x C-j" . dired-jump))
-  :custom
-  (dired-use-ls-dired nil)
-  ;; :config
-  ;; (add-hook 'dired-mode-hook #'dired-omit-mode)
-  )
-
 (use-package dired-narrow
-  :ensure t
   :bind (:map dired-mode-map
 	      ("/" . dired-narrow)))
 
-(use-package hippie-exp
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (hippie-expand-try-functions-list
-   '(try-expand-dabbrev
-     try-expand-dabbrev-from-kill
-     try-expand-dabbrev-all-buffers
-     try-complete-file-name-partially
-     try-complete-file-name
-     try-expand-all-abbrevs
-     try-expand-list
-     try-expand-line
-     try-complete-lisp-symbol-partially
-     try-complete-lisp-symbol))
-  :bind
-  (("M-/" . hippie-expand)))
+;; (use-package hippie-exp
+;;   :straight (:type built-in)
+;;   :defer nil
+;;   :custom
+;;   (hippie-expand-try-functions-list
+;;    '(try-expand-dabbrev
+;;      try-expand-dabbrev-from-kill
+;;      try-expand-dabbrev-all-buffers
+;;      try-complete-file-name-partially
+;;      try-complete-file-name
+;;      try-expand-all-abbrevs
+;;      try-expand-list
+;;      try-expand-line
+;;      try-complete-lisp-symbol-partially
+;;      try-complete-lisp-symbol))
+;;   :bind
+;;   (("M-/" . hippie-expand)))
 
-(use-package files
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (require-final-newline t)
-  (backup-by-copying t)
-  (backup-directory-alist
-   `((".*" . ,(locate-user-emacs-file "backups"))))
-  (auto-save-file-name-transforms
-   `((".*" ,temporary-file-directory t)))
-  (delete-old-versions t)
-  (kept-new-versions 20)
-  (kept-old-versions 10)
-  (version-control t))
+;; (use-package files
+;;   :straight (:type built-in)
+;;   :defer nil
+;;   :custom
+;;   (require-final-newline t)
+;;   (backup-by-copying t)
+;;   (backup-directory-alist
+;;    `((".*" . ,(locate-user-emacs-file "backups"))))
+;;   (auto-save-file-name-transforms
+;;    `((".*" ,temporary-file-directory t)))
+;;   (delete-old-versions t)
+;;   (kept-new-versions 20)
+;;   (kept-old-versions 10)
+;;   (version-control t))
 
-(use-package executable
-  :hook
-  (after-save . executable-make-buffer-file-executable-if-script-p))
+(require 'executable)
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
@@ -400,7 +357,7 @@ other, future frames."
 	("r" . copy-as-format-rst)
 	("s" . copy-as-format-slack)))
 
-(use-package xref)
+;;(use-package xref)
 
 (use-package helm
   :commands
@@ -415,7 +372,6 @@ other, future frames."
 	helm-semantic-fuzzy-match t
 	helm-buffers-fuzzy-matching t)
   :config
-  (helm-mode -1)			;this kills find-file for me
   (define-key global-map (kbd "C-c h i") 'helm-semantic-or-imenu)
   (define-key global-map (kbd "C-c h o") 'helm-occur)
   (define-key global-map (kbd "C-c h d") 'helm-browse-project)
@@ -444,24 +400,11 @@ other, future frames."
   (:map nix-mode-map
 	("C-c C-j" . aj-toggle-fold)))
 
-(use-package docker
-  :ensure t
-  :bind
-  (:map mode-specific-map
-	("d" . docker)))
-
 ;; not sure if these two should be here
 (use-package dockerfile-mode
   :mode "Dockerfile\\'")
 
 (use-package docker-compose-mode)
-
-(use-package yasnippet
-  :commands (yas-minor-mode)
-  :config
-  (use-package yasnippet-snippets
-    :ensure t)
-  (yas-reload-all))
 
 ;; Making it easier to discover Emacs key presses.
 (use-package which-key
@@ -475,9 +418,8 @@ other, future frames."
 (defvar browse-url-mosaic-program nil)
 
 (use-package browse-at-remote)
-(use-package browse-url)
+(require 'browse-url)
 (use-package cmake-mode)
-(use-package hl-line)
 (use-package json-mode)
 (use-package markdown-mode)
 (use-package pass)
@@ -501,10 +443,12 @@ other, future frames."
   :hook
   (prog-mode . ws-butler-mode))
 
-(use-package ibuffer
-  :bind
-  (:map ibuffer-mode-map
-	("SPC" . ibuffer-visit-buffer)))
+(require 'ibuffer)
+
+;; (use-package ibuffer
+;;   :bind
+;;   (:map ibuffer-mode-map
+;;	("SPC" . ibuffer-visit-buffer)))
 
 (use-package ibuffer-vc
   :after (ibuffer vc)
@@ -572,10 +516,10 @@ other, future frames."
 ;; Increase the amount of data which Emacs reads from the process.
 ;; Again the emacs default is too low 4k considering that the some
 ;; of the language server responses are in 800k - 3M range.
-(use-package process
-  :straight (:type built-in)
-  :custom
-  (read-process-output-max (* 1 (* 1024 1024))))
+;; (use-package process
+;;   :straight (:type built-in)
+;;   :custom
+;;   (read-process-output-max (* 1 (* 1024 1024))))
 
 (use-package company
   :custom
@@ -647,11 +591,11 @@ other, future frames."
   :commands
   (lsp lsp-deferred))
 
-(use-package lsp-treemacs)		;
+;;(use-package lsp-treemacs)		;
 
-;; (defun aim/lsp-go-install-save-hooks ()
-;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
-;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(defun aim/lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 ;;(use-package go-test)
 
@@ -672,18 +616,13 @@ other, future frames."
 
 (use-package go-add-tags)
 
-(use-package hl-line
-  :hook
-  (prog-mode . hl-line-mode))
+(require 'hl-line)
+(add-hook 'prog-mode 'hl-line-mode)
 
-(use-package recentf
-  :custom
-  (recentf-max-menu-items 325)
-  (recentf-max-saved-items 325)
-  :config
-  (recentf-mode 1)
-  :bind
-  (("C-x C-r" . recentf-open-files)))
+(require 'recentf)
+(setq recentf-max-menu-items 325
+      recentf-max-saved-items 325)
+(recentf-mode 1)
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
@@ -813,14 +752,10 @@ other, future frames."
     "Run `compile' in the project"
     (projectile-compile-project nil)))
 
-(use-package simple
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  (kill-ring-max 30000)
-  (truncate-lines t)
-  :config
-  (column-number-mode 1))
+(require 'simple)
+(setq kill-ring-max 30000
+      truncate-lines t)
+(column-number-mode 1)
 
 (use-package atomic-chrome
   :config
@@ -835,71 +770,72 @@ other, future frames."
   (setq vterm-ignore-blink-cursor t))
 
 ;; from https://github.com/thatwist/.emacs.d/blob/master/init.el
-(pretty-hydra-define hydra-lsp
-  (:hint nil :color teal :quit-key "q" :exit t :title "LSP")
-  ("Find"
-   (("D" lsp-find-declaration "declaration") ;find declarationS
-    ("d" lsp-find-definition "definition")
-    ("R" lsp-find-references "references")
-    ("i" lsp-find-implementation "implementation")
-    ("gt" lsp-find-type-definition "type")
-    ("f" helm-lsp-workspace-symbol "symbol")
-    ("F" helm-lsp-global-workspace-symbol "global symbol")
-    ("uf" lsp-ui-find-workspace-symbol "ui symbol")
-    ("pd" lsp-ui-peek-find-definitions "peek def")
-    ("pr" lsp-ui-peek-find-references "peek refs")
-    ("pf" lsp-ui-peek-find-workspace-symbol "peek symb")
-    ("pi" lsp-ui-peek-find-implementation "peek impl"))
-   "Toggle"
-   (("Td" lsp-ui-doc-mode "doc" :toggle t)
-    ("TS" lsp-ui-sideline-mode "sideline" :toggle t)
-    ("Ts" lsp-ui-sideline-toggle-symbols-info "side symb" :toggle t)
-    ("Tl" lsp-lens-mode "lens" :toggle t)
-    ("Ti" lsp-toggle-trace-io "trace-io" :toggle t)
-    ("Th" lsp-toggle-symbol-highlight "symb highlight")
-    ("Tf" lsp-toggle-on-type-formatting "format" :toggle t)
-    ("TF" lsp-ui-flycheck-list "flycheck")
-    ("TT" lsp-treemacs-sync-mode "treemacs sync" :toggle t)
-    ("TD" lsp-diagnostics-modeline-mode "diag line" :toggle t)
-    ("Tnf" lsp-signature-toggle-full-docs "sign docs full")
-    ("Tna" lsp-signature-activate "sign activate help")
-    ("Tns" lsp-toggle-signature-auto-activate "sign auto activate"))
-   "Help"
-   (("hd" lsp-ui-doc-glance "doc glance")
-    ("hh" lsp-describe-thing-at-point "describe"))
-   "Code"
-   (("=f" lsp-format-buffer "format")
-    ("=r" lsp-format-region "region")
-    ("r" lsp-rename "rename")
-    ("o" lsp-organize-imports "org imports")
-    ("m" lsp-ui-imenu "imenu")
-    ("x" lsp-execute-code-action "action"))
-   "Other"
-   (("l" lsp-avy-lens "avy lens")
-    ("ge" lsp-treemacs-errors-list "errors")
-    ("gh" lsp-treemacs-call-hierarchy "hierarchy")
-    ("gf" lsp-ui-flycheck-list "flycheck")
-    ("ga" xref-find-apropos "xref-apropos"))
-   "Metals"
-   (("Mb" lsp-metals-build-import "build import")
-    ("Ms" lsp-metals-sources-scan "sources rescan")
-    ("Mr" lsp-metals-build-connect "bloop reconnect"))
-   "Session"
-   (("s?" lsp-describe-session "describe")
-    ("ss" lsp "start")
-    ("sd" lsp-disconnect "disconnect")
-    ("sr" lsp-workspace-restart "restart")
-    ("sq" lsp-workspace-shutdown "shutdown")
-    ("sl" lsp-workspace-show-log "log")
-    ("sfa" lsp-workspace-folders-add "folders +")
-    ("sfo" lsp-workspace-folders-open "folder")
-    ("sfr" lsp-workspace-folders-remove "folders -")
-    ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
+;; (pretty-hydra-define hydra-lsp
+;;   (:hint nil :color teal :quit-key "q" :exit t :title "LSP")
+;;   ("Find"
+;;    (("D" lsp-find-declaration "declaration") ;find declarationS
+;;     ("d" lsp-find-definition "definition")
+;;     ("R" lsp-find-references "references")
+;;     ("i" lsp-find-implementation "implementation")
+;;     ("gt" lsp-find-type-definition "type")
+;;     ("f" helm-lsp-workspace-symbol "symbol")
+;;     ("F" helm-lsp-global-workspace-symbol "global symbol")
+;;     ("uf" lsp-ui-find-workspace-symbol "ui symbol")
+;;     ("pd" lsp-ui-peek-find-definitions "peek def")
+;;     ("pr" lsp-ui-peek-find-references "peek refs")
+;;     ("pf" lsp-ui-peek-find-workspace-symbol "peek symb")
+;;     ("pi" lsp-ui-peek-find-implementation "peek impl"))
+;;    "Toggle"
+;;    (("Td" lsp-ui-doc-mode "doc" :toggle t)
+;;     ("TS" lsp-ui-sideline-mode "sideline" :toggle t)
+;;     ("Ts" lsp-ui-sideline-toggle-symbols-info "side symb" :toggle t)
+;;     ("Tl" lsp-lens-mode "lens" :toggle t)
+;;     ("Ti" lsp-toggle-trace-io "trace-io" :toggle t)
+;;     ("Th" lsp-toggle-symbol-highlight "symb highlight")
+;;     ("Tf" lsp-toggle-on-type-formatting "format" :toggle t)
+;;     ("TF" lsp-ui-flycheck-list "flycheck")
+;;     ("TT" lsp-treemacs-sync-mode "treemacs sync" :toggle t)
+;;     ("TD" lsp-diagnostics-modeline-mode "diag line" :toggle t)
+;;     ("Tnf" lsp-signature-toggle-full-docs "sign docs full")
+;;     ("Tna" lsp-signature-activate "sign activate help")
+;;     ("Tns" lsp-toggle-signature-auto-activate "sign auto activate"))
+;;    "Help"
+;;    (("hd" lsp-ui-doc-glance "doc glance")
+;;     ("hh" lsp-describe-thing-at-point "describe"))
+;;    "Code"
+;;    (("=f" lsp-format-buffer "format")
+;;     ("=r" lsp-format-region "region")
+;;     ("r" lsp-rename "rename")
+;;     ("o" lsp-organize-imports "org imports")
+;;     ("m" lsp-ui-imenu "imenu")
+;;     ("x" lsp-execute-code-action "action"))
+;;    "Other"
+;;    (("l" lsp-avy-lens "avy lens")
+;;     ("ge" lsp-treemacs-errors-list "errors")
+;;     ("gh" lsp-treemacs-call-hierarchy "hierarchy")
+;;     ("gf" lsp-ui-flycheck-list "flycheck")
+;;     ("ga" xref-find-apropos "xref-apropos"))
+;;    "Metals"
+;;    (("Mb" lsp-metals-build-import "build import")
+;;     ("Ms" lsp-metals-sources-scan "sources rescan")
+;;     ("Mr" lsp-metals-build-connect "bloop reconnect"))
+;;    "Session"
+;;    (("s?" lsp-describe-session "describe")
+;;     ("ss" lsp "start")
+;;     ("sd" lsp-disconnect "disconnect")
+;;     ("sr" lsp-workspace-restart "restart")
+;;     ("sq" lsp-workspace-shutdown "shutdown")
+;;     ("sl" lsp-workspace-show-log "log")
+;;     ("sfa" lsp-workspace-folders-add "folders +")
+;;     ("sfo" lsp-workspace-folders-open "folder")
+;;     ("sfr" lsp-workspace-folders-remove "folders -")
+;;     ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
 	'(("C-x C-b" . ibuffer)
 	  ("C-x C-b" . helm-buffers-list)
+	  ("C-x C-j" . dired-jump)
 	  ("C-x b" . helm-mini)
 	  ("C-x m" . gnus-msg-mail)
 	  ("M-x" . smex)
@@ -910,6 +846,8 @@ other, future frames."
 	  ("C-x C" . compile)
 	  ("C-x g" . goto-line)
 	  ("C-x C-g" . goto-line)
+	  ("C-x C-r" . recentf-open-files)
+	  ("M-/" . hippie-expand)
 	  ("<f11>" . aim/fullscreen)))
 
 (when (eq system-type 'darwin)
@@ -940,3 +878,16 @@ other, future frames."
 ;; Load the theme of your choice:
 (modus-themes-load-vivendi)
 (define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(xterm-color x509-mode ws-butler which-key wgrep-ag vterm use-package unfill toml-mode smex rust-mode protobuf-mode pinentry pass notmuch nix-mode major-mode-hydra magit lua-mode lsp-ui langtool keychain-environment json-mode ibuffer-vc helm-projectile helm-lsp helm-ls-git helm-company go-mode go-add-tags git-timemachine git-gutter flycheck exec-path-from-shell dumb-jump dockerfile-mode docker-compose-mode direnv dired-narrow copy-as-format company-shell cmake-mode clipetty cargo browse-at-remote avy atomic-chrome ag)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
