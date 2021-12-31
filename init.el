@@ -74,11 +74,6 @@
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
   (pinentry-start))
 
-;; (use-package gcmh
-;;   :defer nil
-;;   :config
-;;   (gcmh-mode 1))
-
 (use-package lua-mode)
 
 (use-package clipetty
