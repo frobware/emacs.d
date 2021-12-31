@@ -1,5 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
+(setq custom-file null-device)
+
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (message "Happiness delivered in %s with %d garbage collections."
@@ -11,11 +13,6 @@
 ;; From https://github.com/raxod502/straight.el/issues/757
 (setq straight-disable-native-compile nil)
 (setq native-comp-async-report-warnings-errors nil)
-
-(when (eq system-type 'darwin)
-  (setq mac-command-modifier 'meta
-	mac-right-option-modifier 'none
-	mac-option-modifier 'super))
 
 ;; this is for spicy and my custom notmuch build.
 (add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
@@ -30,13 +27,10 @@
       mac-right-option-modifier 'none
       mac-option-modifier 'super)
 
-(setq straight-use-package-by-default nil
-      straight-repository-branch "develop"
-      ;; straight-check-for-modifications '(check-on-save))
-      straight-check-for-modifications nil)
-
-(setq use-package-always-ensure t
-      use-package-ignore-unknown-keywords t)
+(custom-set-variables '(straight-use-package-by-default t)
+		      '(straight-repository-branch "develop")
+		      ;; straight-check-for-modifications '(check-on-save))
+		      '(straight-check-for-modifications nil))
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
@@ -54,17 +48,23 @@
 	(goto-char (point-max))
 	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage)
+    (setq use-package-always-ensure t)
     (straight-use-package 'use-package)))
 
 (require 'package)
 
 (if (package-installed-p 'use-package)
     (progn
-      (setq use-package-always-defer nil
+      (setq use-package-always-defer t
 	    use-package-always-ensure t
 	    use-package-ignore-unknown-keywords t)
-      (require 'use-package))
+      (eval-when-compile
+	(add-to-list 'load-path
+		     (expand-file-name "~/src/github.com/frobware/emacs.d/use-package"))
+	(require 'use-package)))
   (progn
+    (setq use-package-always-defer t
+	  use-package-always-ensure t)
     (aim/straight-bootstrap)))
 
 (require 'term)
@@ -121,9 +121,6 @@
 (setq x-select-enable-clipboard t
       x-select-enable-primary t
       save-interprogram-paste-before-kill t)
-
-(require 'cus-edit)
-(setq custom-file null-device)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'reverse
@@ -765,9 +762,10 @@ other, future frames."
 (use-package major-mode-hydra
   :after hydra)
 
-(use-package vterm
-  :init
-  (setq vterm-ignore-blink-cursor t))
+(if (package-installed-p 'vterm)
+    (use-package vterm
+      :init
+      (setq vterm-ignore-blink-cursor t)))
 
 ;; from https://github.com/thatwist/.emacs.d/blob/master/init.el
 ;; (pretty-hydra-define hydra-lsp
@@ -848,13 +846,8 @@ other, future frames."
 	  ("C-x C-g" . goto-line)
 	  ("C-x C-r" . recentf-open-files)
 	  ("M-/" . hippie-expand)
+	  ("<f5>" . modus-themes-toggle)
 	  ("<f11>" . aim/fullscreen)))
-
-(when (eq system-type 'darwin)
-  (progn
-    (setq shell-command-switch "-lc")
-    (global-set-key "\M-`" 'other-frame)
-    (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
 
 (add-hook 'before-save-hook 'whitespace-cleanup)
 ;;(setq notmuch-command "remote-notmuch.sh")
@@ -877,17 +870,12 @@ other, future frames."
 
 ;; Load the theme of your choice:
 (modus-themes-load-vivendi)
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(xterm-color x509-mode ws-butler which-key wgrep-ag vterm use-package unfill toml-mode smex rust-mode protobuf-mode pinentry pass notmuch nix-mode major-mode-hydra magit lua-mode lsp-ui langtool keychain-environment json-mode ibuffer-vc helm-projectile helm-lsp helm-ls-git helm-company go-mode go-add-tags git-timemachine git-gutter flycheck exec-path-from-shell dumb-jump dockerfile-mode docker-compose-mode direnv dired-narrow copy-as-format company-shell cmake-mode clipetty cargo browse-at-remote avy atomic-chrome ag)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+(when (eq system-type 'darwin)
+  (progn
+    (setq mac-command-modifier 'meta
+	  mac-right-option-modifier 'none
+	  mac-option-modifier 'super
+	  shell-command-switch "-lc")
+    (global-set-key "\M-`" 'other-frame)
+    (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
