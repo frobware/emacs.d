@@ -34,6 +34,11 @@
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
+(setq use-package-always-defer t
+      use-package-verbose t
+      use-package-always-ensure t
+      use-package-ignore-unknown-keywords t)
+
 (defun aim/straight-bootstrap nil
   "Bootstrap straight."
   (defvar bootstrap-version)		;dynamically bound
@@ -48,22 +53,14 @@
 	(goto-char (point-max))
 	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage)
-    (setq use-package-always-ensure t)
     (straight-use-package 'use-package)))
 
 (require 'package)
 
 (if (package-installed-p 'use-package)
-    (progn
-      (setq use-package-always-defer nil
-	    use-package-always-ensure t
-	    use-package-ignore-unknown-keywords t)
-      (eval-when-compile
-	(require 'use-package)))
-  (progn
-    (setq use-package-always-defer nil
-	  use-package-always-ensure t)
-    (aim/straight-bootstrap)))
+    (eval-when-compile
+      (require 'use-package))
+  (aim/straight-bootstrap))
 
 (require 'term)
 ;; prevent cursor blinking in remote terminal sessions.
@@ -74,7 +71,8 @@
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
   (pinentry-start))
 
-(use-package lua-mode)
+(use-package lua-mode
+    :mode "\\.lua\\'")
 
 (use-package clipetty
   ;; You can invoke Clipetty explicitly from a key binding to copy a
@@ -350,23 +348,20 @@ other, future frames."
 ;;(use-package xref)
 
 (use-package helm
-  :commands
-  (helm-semantic-or-imenu
-   helm-occur
-   helm-browse-project
-   helm-buffers-list
-   helm-recentf-fuzzy-match
-   helm-projects-history)
+  :config
+  (require 'helm-config)
   :init
   (setq helm-imenu-fuzzy-match t
 	helm-recentf-fuzzy-match t
 	helm-semantic-fuzzy-match t
 	helm-buffers-fuzzy-matching t)
-  :config
-  (define-key global-map (kbd "C-c h i") 'helm-semantic-or-imenu)
-  (define-key global-map (kbd "C-c h o") 'helm-occur)
-  (define-key global-map (kbd "C-c h d") 'helm-browse-project)
-  (define-key global-map (kbd "C-c h p") 'helm-projects-history))
+  :bind (("C-c h d" . helm-browse-project)
+	 ("C-c h i" . helm-semantic-or-imenu)
+	 ("C-c h o" . helm-occur)
+	 ("C-c h p" . helm-projects-history)
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-x b" . helm-mini)
+	 ("M-y" . helm-show-kill-ring)))
 
 (use-package helm-company)
 
@@ -385,11 +380,11 @@ other, future frames."
 (use-package protobuf-mode)
 
 (use-package nix-mode
+o  :mode "\\.nix\\'"
   :custom
   (nix-indent-function #'nix-indent-line)
-  :bind
-  (:map nix-mode-map
-	("C-c C-j" . aj-toggle-fold)))
+  :bind (:map nix-mode-map
+	      ("C-c C-j" . aj-toggle-fold)))
 
 ;; not sure if these two should be here
 (use-package dockerfile-mode
@@ -399,7 +394,6 @@ other, future frames."
 
 ;; Making it easier to discover Emacs key presses.
 (use-package which-key
-  :demand t
   :config
   (setq which-key-show-early-on-C-h t)
   (setq which-key-idle-delay most-positive-fixnum)
@@ -591,7 +585,7 @@ other, future frames."
 ;;(use-package go-test)
 
 (use-package go-mode
-  :mode (("\\.go\\'" . go-mode))
+  :mode "\\.go\\'"
   :custom
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
@@ -611,9 +605,10 @@ other, future frames."
 (add-hook 'prog-mode 'hl-line-mode)
 
 (require 'recentf)
-(setq recentf-max-menu-items 325
+(setq recentf-max-menu-items 32
       recentf-max-saved-items 325)
 (recentf-mode 1)
+(global-key-binding (kbd "C-x C-r") 'recentf-open-files)
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
@@ -724,7 +719,7 @@ other, future frames."
   (projectile-mode)
   (helm-projectile-on)
   ;; Remove dead projects when Emacs is idle
-  (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
+  (run-with-idle-timer 60 nil #'projectile-cleanup-known-projects)
   (setq projectile-switch-project-action
 	(lambda () (projectile-ibuffer nil)))
   (setq
@@ -823,26 +818,6 @@ other, future frames."
 ;;     ("sfr" lsp-workspace-folders-remove "folders -")
 ;;     ("sfb" lsp-workspace-blacklist-remove "blacklist -"))))
 
-(mapcar #'(lambda (x)
-	    (define-key global-map (kbd (car x)) (cdr x)))
-	'(("C-x C-b" . ibuffer)
-	  ("C-x C-b" . helm-buffers-list)
-	  ("C-x C-j" . dired-jump)
-	  ("C-x b" . helm-mini)
-	  ("C-x m" . gnus-msg-mail)
-	  ("M-x" . smex)
-	  ("M-y" . helm-show-kill-ring)
-	  ("<f1>" . gnus-slave)
-	  ("<f2>" . aim/revert-buffer-now)
-	  ("<f3>" . whitespace-cleanup)
-	  ("C-x C" . compile)
-	  ("C-x g" . goto-line)
-	  ("C-x C-g" . goto-line)
-	  ("C-x C-r" . recentf-open-files)
-	  ("M-/" . hippie-expand)
-	  ("<f5>" . modus-themes-toggle)
-	  ("<f11>" . aim/fullscreen)))
-
 (add-hook 'before-save-hook 'whitespace-cleanup)
 ;;(setq notmuch-command "remote-notmuch.sh")
 
@@ -873,3 +848,18 @@ other, future frames."
 	  shell-command-switch "-lc")
     (global-set-key "\M-`" 'other-frame)
     (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
+
+(mapcar #'(lambda (x)
+	    (define-key global-map (kbd (car x)) (cdr x)))
+	'(("<f11>" . aim/fullscreen)
+	  ("<f1>" . gnus-slave)
+	  ("<f2>" . aim/revert-buffer-now)
+	  ("<f3>" . whitespace-cleanup)
+	  ("<f5>" . modus-themes-toggle)
+	  ("C-x C" . compile)
+	  ("C-x C-g" . goto-line)
+	  ("C-x C-j" . dired-jump)
+	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
+	  ("C-x g" . goto-line)
+	  ("C-x m" . gnus-msg-mail)
+	  ("M-/" . hippie-expand)))
