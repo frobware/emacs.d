@@ -176,20 +176,15 @@
 ;;   :bind
 ;;   (("M-/" . hippie-expand)))
 
-;; (use-package files
-;;   :straight (:type built-in)
-;;   :defer nil
-;;   :custom
-;;   (require-final-newline t)
-;;   (backup-by-copying t)
-;;   (backup-directory-alist
-;;    `((".*" . ,(locate-user-emacs-file "backups"))))
-;;   (auto-save-file-name-transforms
-;;    `((".*" ,temporary-file-directory t)))
-;;   (delete-old-versions t)
-;;   (kept-new-versions 20)
-;;   (kept-old-versions 10)
-;;   (version-control t))
+(require 'files)
+(setq require-final-newline t
+      backup-by-copying t
+      backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups")))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+      delete-old-versions t
+      kept-new-versions 20
+      kept-old-versions 10
+      version-control t)
 
 (require 'executable)
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
