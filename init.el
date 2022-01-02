@@ -206,7 +206,7 @@
 ;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
 ;; thanks man!
 
-(setq hrs/default-font-size 10)
+(setq hrs/default-font-size 20)
 (setq hrs/default-font "JetBrains Mono")
 (setq hrs/current-font-size hrs/default-font-size)
 (setq hrs/font-change-increment 1.1)
@@ -371,10 +371,12 @@ other, future frames."
   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
 (use-package helm-ls-git
+  :after helm
   :bind
   (("C-c C-l" . helm-ls-git-ls)))
 
-(use-package helm-projectile)
+(use-package helm-projectile
+  :after projectile)
 
 (use-package protobuf-mode)
 
@@ -861,3 +863,8 @@ other, future frames."
 	  ("C-x g" . goto-line)
 	  ("C-x m" . gnus-msg-mail)
 	  ("M-/" . hippie-expand)))
+
+(toggle-truncate-lines)
+
+(projectile-mode)
+(helm-projectile-on)
