@@ -1,39 +1,40 @@
 ;; -*- lexical-binding: t; -*-
 
-(setq custom-file null-device)
-
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Happiness delivered in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
-
-;; From https://github.com/raxod502/straight.el/issues/757
-(setq straight-disable-native-compile nil)
-(setq native-comp-async-report-warnings-errors nil)
-
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
 (unless (functionp 'module-load)
   (error "**** you don't have modules enabled ****"))
 
-(custom-set-variables '(straight-use-package-by-default t)
-		      '(straight-repository-branch "develop")
-		      ;; straight-check-for-modifications '(check-on-save))
-		      '(straight-check-for-modifications nil))
+(defun aim/run-go-buffer ()
+  "Run current buffer using go run."
+  (interactive)
+  (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
 
-(setq-default straight-vc-git-default-clone-depth 1)
+(defun aim/fullscreen ()
+  "Toggle fullscreen."
+  (interactive)
+  (set-frame-parameter nil 'fullscreen
+		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 
-(setq use-package-always-defer nil
-      use-package-always-ensure t
-      use-package-ignore-unknown-keywords t
-      use-package-verbose t)
+(defun aim/revert-buffer-now ()
+  "Revert-(current-buffer) asking no questions."
+  (interactive)
+  (revert-buffer nil t))
+
+(defun aim/tramp-borked ()
+  "Delete all tramp buffers and their connections."
+  (interactive)
+  (tramp-cleanup-all-connections)
+  (tramp-cleanup-all-buffers))
+
+(defun aim/minibuffer-setup ()
+  "Stop squinting."
+  (set (make-local-variable 'face-remapping-alist)
+       '((default :height 1.25))))
 
 (defun aim/straight-bootstrap nil
-  "Bootstrap straight."
+  (message "Bootstrap straight.")
   (defvar bootstrap-version)		;dynamically bound
   (let ((bootstrap-file
 	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -48,12 +49,31 @@
     (load bootstrap-file nil 'nomessage)
     (straight-use-package 'use-package)))
 
-(require 'package)
+;; From https://github.com/raxod502/straight.el/issues/757
+(setq straight-disable-native-compile nil)
+(setq-default straight-vc-git-default-clone-depth 1)
 
-(if (package-installed-p 'use-package)
-    (eval-when-compile
-      (require 'use-package))
-  (aim/straight-bootstrap))
+;;; drop -foo to use Nix packages
+(and (not (require 'use-package nil 'noerror))
+     (aim/straight-bootstrap))
+
+(setq use-package-always-defer nil
+      use-package-always-ensure t
+      use-package-ignore-unknown-keywords t
+      use-package-verbose t)
+
+(setq warning-suppress-log-types '((use-package)))
+
+;; local modus-themes so that I have something that works across Emacs
+;; versions 27, 28, and 29.
+(add-to-list 'load-path (expand-file-name "modus-themes" user-emacs-directory))
+(setq modus-themes-italic-constructs t
+      modus-themes-bold-constructs nil
+      modus-themes-region '(bg-only no-extend))
+(require 'modus-themes)
+(modus-themes-load-themes)
+(modus-themes-load-vivendi)
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 
 (require 'term)
 ;; prevent cursor blinking in remote terminal sessions.
@@ -90,8 +110,8 @@
   :config
   (keychain-refresh-environment))
 
-;; avy gives us fluent jump-to-line commands mapped to the home row.
 (use-package avy
+  ;; avy gives us fluent jump-to-line commands mapped to the home row.
   :bind ("C-c l" . avy-goto-line))
 
 (use-package which-key
@@ -105,7 +125,6 @@
       select-enable-primary t
       save-interprogram-paste-before-kill t)
 
-(require 'uniquify)
 (setq uniquify-buffer-name-style 'reverse
       uniquify-separator "|"
       uniquify-after-kill-buffer-p t
@@ -116,6 +135,7 @@
 (ffap-bindings)
 
 (use-package emacs
+  :defer nil
   :init
   (put 'narrow-to-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
@@ -139,44 +159,25 @@
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
   (debug-on-error nil))
 
-;;; where can I put these? simple?
-(defalias 'ttl 'toggle-truncate-lines)
-(fset 'yes-or-no-p 'y-or-n-p)
-
-(and (executable-find "direnv")
-     (use-package direnv
-       ;; :init
-       ;; (add-hook 'prog-mode-hook #'direnv-update-environment)
-       :custom
-       (direnv-always-show-summary nil)
-       :config
-       (direnv-mode)))
-
 (use-package dired-narrow
   :init
   (setq dired-use-ls-dired nil)
   :bind (:map dired-mode-map
 	      ("/" . dired-narrow)))
 
-;; (use-package hippie-exp
-;;   :straight (:type built-in)
-;;   :defer nil
-;;   :custom
-;;   (hippie-expand-try-functions-list
-;;    '(try-expand-dabbrev
-;;      try-expand-dabbrev-from-kill
-;;      try-expand-dabbrev-all-buffers
-;;      try-complete-file-name-partially
-;;      try-complete-file-name
-;;      try-expand-all-abbrevs
-;;      try-expand-list
-;;      try-expand-line
-;;      try-complete-lisp-symbol-partially
-;;      try-complete-lisp-symbol))
-;;   :bind
-;;   (("M-/" . hippie-expand)))
+(require 'hippie-exp)
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+	try-expand-dabbrev-from-kill
+	try-expand-dabbrev-all-buffers
+	try-complete-file-name-partially
+	try-complete-file-name
+	try-expand-all-abbrevs
+	try-expand-list
+	try-expand-line
+	try-complete-lisp-symbol-partially
+	try-complete-lisp-symbol))
 
-(require 'files)
 (setq require-final-newline t
       backup-by-copying t
       backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups")))
@@ -188,51 +189,6 @@
 
 (require 'executable)
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-;; https://github.com/hrs/dotfiles/blob/master/emacs/.emacs.d/configuration.org
-;; thanks man!
-
-(setq hrs/default-font-size 20)
-(setq hrs/default-font "JetBrains Mono")
-(setq hrs/current-font-size hrs/default-font-size)
-(setq hrs/font-change-increment 1.1)
-
-(defun hrs/font-code ()
-  "Return a string representing the current font (like \"Inconsolata-14\")."
-  (concat hrs/default-font "-" (number-to-string hrs/current-font-size)))
-
-(defun hrs/set-font-size ()
-  "Set the font to `hrs/default-font' at `hrs/current-font-size'.
-Set that for the current frame, and also make it the default for
-other, future frames."
-  (let ((font-code (hrs/font-code)))
-    (add-to-list 'default-frame-alist (cons 'font font-code))
-    (set-frame-font font-code)))
-
-(defun hrs/reset-font-size ()
-  "Change font size back to `hrs/default-font-size'."
-  (interactive)
-  (setq hrs/current-font-size hrs/default-font-size)
-  (hrs/set-font-size))
-
-(defun hrs/increase-font-size ()
-  "Increase current font size by a factor of `hrs/font-change-increment'."
-  (interactive)
-  (setq hrs/current-font-size
-	(ceiling (* hrs/current-font-size hrs/font-change-increment)))
-  (hrs/set-font-size))
-
-(defun hrs/decrease-font-size ()
-  "Decrease current font size by a factor `hrs/font-change-increment', down to a minimum size of 1."
-  (interactive)
-  (setq hrs/current-font-size
-	(max 1
-	     (floor (/ hrs/current-font-size hrs/font-change-increment))))
-  (hrs/set-font-size))
-
-(define-key global-map (kbd "C-)") 'hrs/reset-font-size)
-(define-key global-map (kbd "C-+") 'hrs/increase-font-size)
-(define-key global-map (kbd "C--") 'hrs/decrease-font-size)
 
 (use-package ag
   :custom
@@ -248,7 +204,7 @@ other, future frames."
   (wgrep-auto-save-buffer t)
   (wgrep-change-readonly-file t))
 
-(use-package wgrep-ag			;TODO
+(use-package wgrep-ag
   :after ag)
 
 (use-package smex
@@ -271,15 +227,16 @@ other, future frames."
   :bind
   ("C-c C-j" . aj-toggle-fold))
 
-;; (use-package tramp
-;;   :config
-;;   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
-;;   :custom
-;;   (tramp-backup-directory-alist backup-directory-alist)
-;;   (tramp-default-method "ssh")
-;;   (tramp-default-proxies-alist nil)
-;;   ;; shell prompt additions for NixOS
-;;   (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
+
+(use-package tramp
+  :config
+  (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
+  :custom
+  (tramp-backup-directory-alist backup-directory-alist)
+  (tramp-default-method "ssh")
+  (tramp-default-proxies-alist nil)
+  ;; shell prompt additions for NixOS
+  (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
 
 (use-package magit
   ;; :config
@@ -291,7 +248,7 @@ other, future frames."
   (("C-c i" . magit-status)
    ("C-c I" . magit-dispatch)))
 
-(use-package git-commit			;TODO (spell)
+(use-package git-commit
   :hook (git-commit-setup . git-commit-turn-on-flyspell))
 
 (use-package git-timemachine)
@@ -347,64 +304,7 @@ other, future frames."
 
 (use-package docker-compose-mode)
 
-;; Making it easier to discover Emacs key presses.
-(use-package which-key
-  :config
-  (setq which-key-show-early-on-C-h t)
-  (setq which-key-idle-delay most-positive-fixnum)
-  (setq which-key-idle-secondary-delay 1e-100)
-  (which-key-mode +1))
-
-(defvar browse-url-mosaic-program nil)
-
-(use-package browse-at-remote)
-(require 'browse-url)
-(use-package cmake-mode)
-(use-package json-mode)
-(use-package markdown-mode)
-(use-package pass)
-(use-package x509-mode)
-(use-package xterm-color)
-
-(use-package toml-mode)
-
-(use-package cargo)
-
-(use-package rust-mode
-  :hook
-  (rust-mode . yas-minor-mode))
-
-;; Add keybindings for interacting with Cargo
-(use-package cargo
-  :after rust-mode
-  :hook (rust-mode . cargo-minor-mode))
-
-(use-package ws-butler
-  :hook
-  (prog-mode . ws-butler-mode))
-
-(require 'ibuffer)
-
-;; (use-package ibuffer
-;;   :bind
-;;   (:map ibuffer-mode-map
-;;	("SPC" . ibuffer-visit-buffer)))
-
-(use-package ibuffer-vc
-  :after (ibuffer vc)
-  :bind (:map ibuffer-mode-map
-	      ("/ V" . ibuffer-vc-set-filter-groups-by-vc-root)
-	      ("/ <deletechar>" . ibuffer-clear-filter-groups)))
-
-(use-package unfill
-  :bind ([remap fill-paragraph] . unfill-toggle))
-
 (use-package notmuch
-  :init
-  (setq notmuch-search-oldest-first nil
-	mail-user-agent 'message-user-agent
-	notmuch-wash-wrap-lines-length 80
-	notmuch-tree-show-out t)
   :config
   (setq notmuch-search-oldest-first nil
 	mail-user-agent 'message-user-agent
@@ -429,16 +329,6 @@ other, future frames."
   (:map git-commit-mode-map
 	("C-x `" . langtool-correct-buffer)))
 
-;; This is to speedup LSP.
-;;
-;; Increase the amount of data which Emacs reads from the process.
-;; Again the emacs default is too low 4k considering that the some
-;; of the language server responses are in 800k - 3M range.
-;; (use-package process
-;;   :straight (:type built-in)
-;;   :custom
-;;   (read-process-output-max (* 1 (* 1024 1024))))
-
 (use-package company
   :custom
   (company-idle-delay 0)
@@ -454,28 +344,6 @@ other, future frames."
 	("C-p" . company-select-previous-or-abort))
   :hook
   (after-init . global-company-mode))
-
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous))
-
-(with-eval-after-load 'company
-  (define-key company-active-map (kbd "TAB") 'company-select-previous)
-  (define-key company-active-map (kbd "<tab>") 'company-select-previous)
-  (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
-  (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
-
-;; (use-package company-quickhelp
-;;   :custom
-;;   (company-quickhelp-delay 3)
-;;   (company-quickhelp-mode 1))
-
-(use-package company-shell
-  :after company
-  :config
-  (add-to-list 'company-backends '(company-shell company-shell-env)))
 
 (use-package flycheck)
 
@@ -505,14 +373,6 @@ other, future frames."
   :commands
   (lsp lsp-deferred))
 
-;;(use-package lsp-treemacs)		;
-
-(defun aim/lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
-
-;;(use-package go-test)
-
 (use-package go-mode
   :mode "\\.go\\'"
   :custom
@@ -524,8 +384,7 @@ other, future frames."
 	      ("C-c ."   . go-test-current-test)
 	      ("C-c f"   . go-test-current-file)
 	      ("C-c a"   . go-test-current-project))
-  :hook ((go-mode . lsp-deferred)
-	 (before-save . aim/lsp-go-install-save-hooks)))
+  :hook ((go-mode . lsp-deferred)))
 
 (use-package go-add-tags)
 
@@ -533,49 +392,12 @@ other, future frames."
 (add-hook 'prog-mode-hook #'hl-line-mode)
 (add-hook 'text-mode-hook #'hl-line-mode)
 
-(require 'recentf)
-(setq recentf-max-menu-items 32
-      recentf-max-saved-items 325)
-(recentf-mode 1)
-(global-key-binding (kbd "C-x C-r") 'recentf-open-files)
-
-(defun aim/run-go-buffer ()
-  "Run current buffer using go run."
-  (interactive)
-  (shell-command (format "go run %s" (buffer-file-name (current-buffer)))))
-
-(defun aim/fullscreen ()
-  "Toggle fullscreen."
-  (interactive)
-  (set-frame-parameter nil 'fullscreen
-		       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
-
-(defun aim/revert-buffer-now ()
-  "Revert-(current-buffer) asking no questions."
-  (interactive)
-  (revert-buffer nil t))
-
-(defun aim/tramp-borked ()
-  "Delete all tramp buffers and their connections."
-  (interactive)
-  (tramp-cleanup-all-connections)
-  (tramp-cleanup-all-buffers))
-
-(defun my-minibuffer-setup ()
-  "Stop squinting."
-  (set (make-local-variable 'face-remapping-alist)
-       '((default :height 1.25))))
-
-(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((shell . t)))
-
-;;; Require confirmation before interactively evaluating code blocks
-;;; in Org buffers. The default value of this variable is t, meaning
-;;; confirmation is required for any code block evaluation.
-(setq org-confirm-babel-evaluate nil)
+(use-package recentf
+  :config
+  (setq recentf-max-menu-items 32
+	recentf-max-saved-items 325)
+  (recentf-mode 1)
+  (global-key-binding (kbd "C-x C-r") 'recentf-open-files))
 
 (use-package lsp-ui
   :after lsp-mode
@@ -603,6 +425,30 @@ other, future frames."
   (lsp-ui-doc-enable nil)
   (lsp-eldoc-hook nil))
 
+(setq kill-ring-max 30000
+      truncate-lines t)
+
+(column-number-mode 1)
+
+(use-package atomic-chrome
+  :config
+  (atomic-chrome-start-server))
+
+(require 'package)
+
+(if (package-installed-p 'vterm)
+    (use-package vterm
+      :init
+      (setq vterm-ignore-blink-cursor t)))
+
+(require 'executable)
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+
+;;; Require confirmation before interactively evaluating code blocks
+;;; in Org buffers. The default value of this variable is t, meaning
+;;; confirmation is required for any code block evaluation.
+(setq org-confirm-babel-evaluate nil)
+
 ;; The buffer *Flymake log* tends to fill up with things like:
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
 ;; > because (error Can’t find a suitable init function)
@@ -613,41 +459,7 @@ other, future frames."
 	  (lambda ()
 	    (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
 
-(require 'simple)
-(setq kill-ring-max 30000
-      truncate-lines t)
-(column-number-mode 1)
-
-(use-package atomic-chrome
-  :config
-  (atomic-chrome-start-server))
-
-(if (package-installed-p 'vterm)
-    (use-package vterm
-      :init
-      (setq vterm-ignore-blink-cursor t)))
-
-(add-hook 'before-save-hook 'whitespace-cleanup)
-;;(setq notmuch-command "remote-notmuch.sh")
-
-(add-to-list 'load-path
-	     (expand-file-name "~/src/github.com/frobware/emacs.d/modus-themes"))
-
-(require 'modus-themes)
-
-(load-theme 'modus-vivendi t t)		;dark
-(load-theme 'modus-operandi t t)	;lightness
-
-;; Add all your customizations prior to loading the themes
-(setq modus-themes-italic-constructs t
-      modus-themes-bold-constructs nil
-      modus-themes-region '(bg-only no-extend))
-
-;; Load the theme files before enabling a theme
-(modus-themes-load-themes)
-
-;; Load the theme of your choice:
-(modus-themes-load-vivendi)
+(add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
 
 (when (eq system-type 'darwin)
   (progn
@@ -657,17 +469,54 @@ other, future frames."
 	  shell-command-switch "-lc")
     (global-set-key "\M-`" 'other-frame)))
 
+(and (executable-find "direnv")
+     (use-package direnv
+       ;; :init
+       ;; (add-hook 'prog-mode-hook #'direnv-update-environment)
+       :custom
+       (direnv-always-show-summary nil)
+       :config
+       (direnv-mode)))
+
+(when (boundp 'read-process-output-max)
+  ;; This is to speedup LSP. Increase the amount of data which Emacs
+  ;; reads from the process. Again the emacs default is too low 4k
+  ;; considering that the some of the language server responses are in
+  ;; 800k - 3M range.
+  (setq-local read-process-output-max (* 4 (* 1024 1024))))
+
+(defalias 'ttl 'toggle-truncate-lines)
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;;(add-hook 'before-save-hook 'whitespace-cleanup)
+
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous)
+  (define-key company-active-map (kbd "TAB") 'company-select-previous)
+  (define-key company-active-map (kbd "<tab>") 'company-select-previous)
+  (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+  (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
+
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "Happiness delivered in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
+
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
 	'(("<f11>" . aim/fullscreen)
 	  ("<f1>" . gnus-slave)
 	  ("<f2>" . aim/revert-buffer-now)
 	  ("<f3>" . whitespace-cleanup)
-	  ("<f5>" . modus-themes-toggle)
 	  ("C-x C" . compile)
 	  ("C-x C-g" . goto-line)
 	  ("C-x C-j" . dired-jump)
 	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
 	  ("C-x g" . goto-line)
-	  ("C-x m" . gnus-msg-mail)
-	  ("M-/" . hippie-expand)))
+	  ("C-x m" . gnus-msg-mail)))
