@@ -14,9 +14,6 @@
 (setq straight-disable-native-compile nil)
 (setq native-comp-async-report-warnings-errors nil)
 
-;; this is for spicy and my custom notmuch build.
-(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
-
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
