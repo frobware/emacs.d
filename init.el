@@ -27,10 +27,10 @@
 
 (setq-default straight-vc-git-default-clone-depth 1)
 
-(setq use-package-always-defer t
-      use-package-verbose t
+(setq use-package-always-defer nil
       use-package-always-ensure t
-      use-package-ignore-unknown-keywords t)
+      use-package-ignore-unknown-keywords t
+      use-package-verbose t)
 
 (defun aim/straight-bootstrap nil
   "Bootstrap straight."
