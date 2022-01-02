@@ -20,10 +20,6 @@
 (unless (functionp 'module-load)
   (error "**** you don't have modules enabled ****"))
 
-(setq mac-command-modifier 'meta
-      mac-right-option-modifier 'none
-      mac-option-modifier 'super)
-
 (custom-set-variables '(straight-use-package-by-default t)
 		      '(straight-repository-branch "develop")
 		      ;; straight-check-for-modifications '(check-on-save))
