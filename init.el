@@ -380,7 +380,7 @@ other, future frames."
 (use-package protobuf-mode)
 
 (use-package nix-mode
-o  :mode "\\.nix\\'"
+  :mode "\\.nix\\'"
   :custom
   (nix-indent-function #'nix-indent-line)
   :bind (:map nix-mode-map
