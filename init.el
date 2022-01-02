@@ -346,38 +346,6 @@ other, future frames."
 
 ;;(use-package xref)
 
-(use-package helm
-  :config
-  (require 'helm-config)
-  :init
-  (setq helm-imenu-fuzzy-match t
-	helm-recentf-fuzzy-match t
-	helm-semantic-fuzzy-match t
-	helm-buffers-fuzzy-matching t)
-  :bind (("C-c h d" . helm-browse-project)
-	 ("C-c h i" . helm-semantic-or-imenu)
-	 ("C-c h o" . helm-occur)
-	 ("C-c h p" . helm-projects-history)
-	 ("C-x C-b" . helm-buffers-list)
-	 ("C-x b" . helm-mini)
-	 ("M-y" . helm-show-kill-ring)))
-
-(use-package helm-company)
-
-(use-package helm-lsp
-  :commands
-  lsp-deferred
-  :config
-  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
-
-(use-package helm-ls-git
-  :after helm
-  :bind
-  (("C-c C-l" . helm-ls-git-ls)))
-
-(use-package helm-projectile
-  :after projectile)
-
 (use-package protobuf-mode)
 
 (use-package nix-mode
@@ -534,10 +502,6 @@ other, future frames."
   (define-key company-active-map (kbd "<tab>") 'company-select-previous)
   (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
-
-(with-eval-after-load 'company
-  (define-key company-mode-map (kbd "C-:") 'helm-company)
-  (define-key company-active-map (kbd "C-:") 'helm-company))
 
 ;; (use-package company-quickhelp
 ;;   :custom
@@ -863,8 +827,3 @@ other, future frames."
 	  ("C-x g" . goto-line)
 	  ("C-x m" . gnus-msg-mail)
 	  ("M-/" . hippie-expand)))
-
-(toggle-truncate-lines)
-
-(projectile-mode)
-(helm-projectile-on)
