@@ -537,7 +537,8 @@ other, future frames."
 (use-package go-add-tags)
 
 (require 'hl-line)
-(add-hook 'prog-mode 'hl-line-mode)
+(add-hook 'prog-mode-hook #'hl-line-mode)
+(add-hook 'text-mode-hook #'hl-line-mode)
 
 (require 'recentf)
 (setq recentf-max-menu-items 32
