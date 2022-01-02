@@ -157,6 +157,8 @@
        (direnv-mode)))
 
 (use-package dired-narrow
+  :init
+  (setq dired-use-ls-dired nil)
   :bind (:map dired-mode-map
 	      ("/" . dired-narrow)))
 
