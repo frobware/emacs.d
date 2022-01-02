@@ -72,7 +72,7 @@
   (pinentry-start))
 
 (use-package lua-mode
-    :mode "\\.lua\\'")
+  :mode "\\.lua\\'")
 
 (use-package clipetty
   ;; You can invoke Clipetty explicitly from a key binding to copy a
@@ -87,11 +87,10 @@
 			(awk-mode . "awk")
 			(other . "linux")))
 
-(use-package exec-path-from-shell
-  :config
-  (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOPATH")))
-
 (when (memq window-system '(mac ns))
+  (require 'exec-path-from-shell)
+  (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "NIX_SSL_CERT_FILE" "NIX_PATH"))
+    (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
 (use-package keychain-environment
@@ -846,8 +845,7 @@ other, future frames."
 	  mac-right-option-modifier 'none
 	  mac-option-modifier 'super
 	  shell-command-switch "-lc")
-    (global-set-key "\M-`" 'other-frame)
-    (add-hook 'after-init-hook 'exec-path-from-shell-initialize)))
+    (global-set-key "\M-`" 'other-frame)))
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
