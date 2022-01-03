@@ -548,8 +548,13 @@
   ;; 800k - 3M range.
   (setq-local read-process-output-max (* 4 (* 1024 1024))))
 
-(defalias 'ttl 'toggle-truncate-lines)
-(fset 'yes-or-no-p 'y-or-n-p)
+(use-package simple
+  :ensure nil
+  :straight (:type built-in)
+  :commands (toggle-truncate-lines yes-or-no)
+  :config
+  (defalias 'ttl 'toggle-truncate-lines)
+  (fset 'yes-or-no-p 'y-or-n-p))
 
 ;;(add-hook 'before-save-hook 'whitespace-cleanup)
 
