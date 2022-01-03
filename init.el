@@ -428,7 +428,7 @@
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
   :commands
-  (lsp lsp-deferred))
+  (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition))
 
 (use-package go-mode
   :mode "\\.go\\'"
