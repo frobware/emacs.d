@@ -461,8 +461,15 @@
       :init
       (setq vterm-ignore-blink-cursor t)))
 
-(add-to-list 'load-path (expand-file-name "hrs" user-emacs-directory))
-(require 'hrs)
+(use-package hrs
+  :load-path (lambda () (expand-file-name "hrs" user-emacs-directory))
+  :ensure nil
+  :commands (hrs/reset-font-size
+	     hrs/increase-font-size
+	     hrs/default-font-size)
+  :bind (("C-)" . hrs/reset-font-size)
+	 ("C-+" . hrs/increase-font-size)
+	 ("C--" . hrs/decrease-font-size)))
 
 (require 'executable)
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
@@ -549,6 +556,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-auto-commit nil nil nil "Customized with use-package company")
+ '(package-selected-packages
+   '(hrs xref which-key wgrep-ag vterm smex protobuf-mode pinentry notmuch nix-mode magit lua-mode lsp-ui langtool keychain-environment go-mode go-add-tags git-timemachine git-gutter flycheck exec-path-from-shell dockerfile-mode docker-compose-mode direnv dired-narrow copy-as-format company clipetty avy atomic-chrome ag))
  '(safe-local-variable-values '((checkdoc-minor-mode . t))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

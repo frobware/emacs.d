@@ -39,8 +39,4 @@ other, future frames."
 	     (floor (/ hrs/current-font-size hrs/font-change-increment))))
   (hrs/set-font-size))
 
-(define-key global-map (kbd "C-)") 'hrs/reset-font-size)
-(define-key global-map (kbd "C-+") 'hrs/increase-font-size)
-(define-key global-map (kbd "C--") 'hrs/decrease-font-size)
-
 (provide 'hrs)
