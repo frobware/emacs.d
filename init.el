@@ -1,5 +1,13 @@
 ;; -*- lexical-binding: t; -*-
 
+(when (eq system-type 'darwin)
+  (progn
+    (setq mac-command-modifier 'meta
+	  mac-right-option-modifier 'none
+	  mac-option-modifier 'super
+	  shell-command-switch "-lc")
+    (global-set-key "\M-`" 'other-frame)))
+
 (add-to-list 'load-path (expand-file-name "gcmh" user-emacs-directory))
 (require 'gcmh)
 (gcmh-mode 1)
@@ -38,7 +46,6 @@
        '((default :height 1.25))))
 
 (defun aim/straight-bootstrap nil
-  (message "Bootstrap straight.")
   (defvar bootstrap-version)		;dynamically bound
   (let ((bootstrap-file
 	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -53,30 +60,41 @@
     (load bootstrap-file nil 'nomessage)
     (straight-use-package 'use-package)))
 
-;; From https://github.com/raxod502/straight.el/issues/757
-(setq straight-disable-native-compile nil)
-(setq-default straight-vc-git-default-clone-depth 1)
+(defvar use-nix-epkgs t)
 
-;; With this present most packages will come from Nix.
-(add-to-list 'load-path (expand-file-name "use-package" user-emacs-directory))
-(require 'use-package)
-
-;;; drop -foo to use Nix packages
-(and (not (require 'use-package nil 'noerror))
-     (aim/straight-bootstrap))
+(if use-nix-epkgs
+    (require 'use-package)
+  (progn
+    (message "Straight UP!")
+    (setq straight-use-package-by-default t
+	  straight-repository-branch "develop"
+	  straight-check-for-modifications nil
+	  straight-disable-native-compile t
+	  straight-disable-native-compilation t)
+    (setq-default straight-vc-git-default-clone-depth 1)
+    (aim/straight-bootstrap)))
 
 (setq use-package-always-defer nil
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil)
 
-(setq warning-suppress-log-types '((use-package)))
+(setq warning-suppress-log-types '((comp) (use-package)))
+
+(use-package hrs
+  :ensure nil
+  :straight (:type built-in)
+  :load-path (lambda () (expand-file-name "hrs" user-emacs-directory))
+  :commands (hrs/reset-font-size
+	     hrs/increase-font-size
+	     hrs/default-font-size)
+  :bind (("C-)" . hrs/reset-font-size)
+	 ("C-+" . hrs/increase-font-size)
+	 ("C--" . hrs/decrease-font-size)))
 
 (use-package modus-themes
   :ensure nil
-  :defer nil
-  ;; local modus-themes so that I have something that works across Emacs
-  ;; versions 27, 28, and 29.
+  :straight (:type built-in)
   :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :commands (modus-themes-load-themes
 	     modus-themes-load-operandi
@@ -253,8 +271,9 @@
   :bind
   ("C-c C-j" . aj-toggle-fold))
 
-
 (use-package tramp
+  ;;:straight (:type built-in)
+  :ensure nil
   :config
   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
   :custom
@@ -468,15 +487,12 @@
       :init
       (setq vterm-ignore-blink-cursor t)))
 
-(use-package hrs
-  :load-path (lambda () (expand-file-name "hrs" user-emacs-directory))
-  :ensure nil
-  :commands (hrs/reset-font-size
-	     hrs/increase-font-size
-	     hrs/default-font-size)
-  :bind (("C-)" . hrs/reset-font-size)
-	 ("C-+" . hrs/increase-font-size)
-	 ("C--" . hrs/decrease-font-size)))
+(use-package helm)
+
+(use-package helm-ls-git
+  :commands (helm-ls-git-ls)
+  :bind
+  (("C-c C-l" . helm-ls-git-ls)))
 
 (require 'executable)
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
@@ -497,14 +513,6 @@
 	    (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
 
 (add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
-
-(when (eq system-type 'darwin)
-  (progn
-    (setq mac-command-modifier 'meta
-	  mac-right-option-modifier 'none
-	  mac-option-modifier 'super
-	  shell-command-switch "-lc")
-    (global-set-key "\M-`" 'other-frame)))
 
 (and (executable-find "direnv")
      (use-package direnv
@@ -557,18 +565,3 @@
 	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
 	  ("C-x g" . goto-line)
 	  ("C-x m" . gnus-msg-mail)))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-auto-commit nil nil nil "Customized with use-package company")
- '(package-selected-packages
-   '(hrs xref which-key wgrep-ag vterm smex protobuf-mode pinentry notmuch nix-mode magit lua-mode lsp-ui langtool keychain-environment go-mode go-add-tags git-timemachine git-gutter flycheck exec-path-from-shell dockerfile-mode docker-compose-mode direnv dired-narrow copy-as-format company clipetty avy atomic-chrome ag))
- '(safe-local-variable-values '((checkdoc-minor-mode . t))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
