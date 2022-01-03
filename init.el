@@ -75,6 +75,7 @@
     (aim/straight-bootstrap)))
 
 (setq use-package-always-defer nil
+(setq use-package-always-defer t
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil)
