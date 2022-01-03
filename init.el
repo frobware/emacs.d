@@ -505,6 +505,11 @@
   :bind
   (("C-c C-l" . helm-ls-git-ls)))
 
+(use-package whitespace
+  :ensure nil
+  :commands (whitespace-cleanup)
+  :bind ("<f3>" . whitespace-cleanup))
+
 (require 'executable)
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
