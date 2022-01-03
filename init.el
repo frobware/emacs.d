@@ -108,9 +108,20 @@
 			(awk-mode . "awk")
 			(other . "linux")))
 
-(when (memq window-system '(mac ns))
-  (require 'exec-path-from-shell)
-  (dolist (var '("NO_COLOR" "SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "NIX_SSL_CERT_FILE" "NIX_PATH"))
+(use-package exec-path-from-shell
+  :if (eq system-type 'darwin)
+  :ensure t
+  :config
+  (dolist (var '("GPG_AGENT_INFO"
+		 "GNUPGHOME"
+		 "LANG"
+		 "LC_CTYPE"
+		 "NIX_PATH"
+		 "NIX_SSL_CERT_FILE"
+		 "NO_COLOR"
+		 "PASSWORD_STORE_DIR"
+		 "SSH_AGENT_PID"
+		 "SSH_AUTH_SOCK"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
@@ -532,3 +543,16 @@
 	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
 	  ("C-x g" . goto-line)
 	  ("C-x m" . gnus-msg-mail)))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-auto-commit nil nil nil "Customized with use-package company")
+ '(safe-local-variable-values '((checkdoc-minor-mode . t))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
