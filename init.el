@@ -72,16 +72,23 @@
 
 (setq warning-suppress-log-types '((use-package)))
 
-;; local modus-themes so that I have something that works across Emacs
-;; versions 27, 28, and 29.
-(add-to-list 'load-path (expand-file-name "modus-themes" user-emacs-directory))
-(setq modus-themes-italic-constructs t
-      modus-themes-bold-constructs nil
-      modus-themes-region '(bg-only no-extend))
-(require 'modus-themes)
-(modus-themes-load-themes)
-(modus-themes-load-vivendi)
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+(use-package modus-themes
+  :ensure nil
+  :defer nil
+  ;; local modus-themes so that I have something that works across Emacs
+  ;; versions 27, 28, and 29.
+  :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
+  :commands (modus-themes-load-themes
+	     modus-themes-load-operandi
+	     modus-themes-load-vivendi
+	     modus-themes-toggle)
+  :config
+  (setq modus-themes-italic-constructs t
+	modus-themes-bold-constructs nil
+	modus-themes-region '(bg-only no-extend))
+  (modus-themes-load-themes)
+  (modus-themes-load-vivendi)
+  :bind (("<f5>" . modus-themes-toggle)))
 
 (require 'term)
 ;; prevent cursor blinking in remote terminal sessions.
