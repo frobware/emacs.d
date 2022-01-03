@@ -94,6 +94,7 @@
 
 (use-package modus-themes
   :ensure nil
+  :defer nil
   :straight (:type built-in)
   :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :commands (modus-themes-load-themes
@@ -113,6 +114,7 @@
 (setq visible-cursor nil)
 
 (use-package pinentry
+  :defer nil
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
   (pinentry-start))
@@ -477,6 +479,7 @@
 (column-number-mode 1)
 
 (use-package atomic-chrome
+  :defer nil
   :config
   (atomic-chrome-start-server))
 
