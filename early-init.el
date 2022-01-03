@@ -21,11 +21,13 @@
   (add-to-list 'default-frame-alist '(ns-appearance . dark))
   (add-to-list 'default-frame-alist '(drag-internal-border . 1))
   (add-to-list 'default-frame-alist '(internal-border-width . 5))
-  (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (add-to-list 'default-frame-alist '(foreground-color . "white"))
+  (add-to-list 'default-frame-alist '(background-color . "black")))
 
-(and (or (string-equal system-name "spicy")
-	 (string-equal system-name "x1c"))
-     (progn
+(if (eq system-type 'darwin)
+    (add-to-list 'default-frame-alist '(font . "JetBrains Mono-20"))
+  (progn
        (add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
        (add-to-list 'default-frame-alist '(undecorated . t))
        (add-to-list 'default-frame-alist '(fullscreen . maximized))))
