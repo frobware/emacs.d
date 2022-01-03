@@ -207,6 +207,12 @@
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
   (debug-on-error nil))
 
+(use-package dired-x
+  :straight (:type built-in)
+  :ensure nil
+  :commands (dired-jump)
+  :bind ("C-x C-j" . dired-jump))
+
 (use-package dired-narrow
   :init
   (setq dired-use-ls-dired nil)
