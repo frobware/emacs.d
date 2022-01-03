@@ -59,7 +59,7 @@
     (load bootstrap-file nil 'nomessage)
     (straight-use-package 'use-package)))
 
-(defvar use-nix-epkgs nil)
+(defvar use-nix-epkgs t)
 
 (if use-nix-epkgs
     (progn
