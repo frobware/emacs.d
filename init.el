@@ -1,5 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
+(add-to-list 'load-path (expand-file-name "gcmh" user-emacs-directory))
+(require 'gcmh)
+
 (when (eq system-type 'darwin)
   (progn
     (setq mac-command-modifier 'meta
@@ -7,10 +10,6 @@
 	  mac-option-modifier 'super
 	  shell-command-switch "-lc")
     (global-set-key "\M-`" 'other-frame)))
-
-(add-to-list 'load-path (expand-file-name "gcmh" user-emacs-directory))
-(require 'gcmh)
-(gcmh-mode 1)
 
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
@@ -66,15 +65,14 @@
     (require 'use-package)
   (progn
     (message "Straight UP!")
+    (setq-default straight-vc-git-default-clone-depth 1)
+    (aim/straight-bootstrap)
     (setq straight-use-package-by-default t
 	  straight-repository-branch "develop"
 	  straight-check-for-modifications nil
-	  straight-disable-native-compile t
-	  straight-disable-native-compilation t)
-    (setq-default straight-vc-git-default-clone-depth 1)
-    (aim/straight-bootstrap)))
+	  straight-disable-native-compile t)
+    ))
 
-(setq use-package-always-defer nil
 (setq use-package-always-defer t
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
@@ -116,6 +114,7 @@
 
 (use-package pinentry
   :defer nil
+  :commands (pinentry-start)
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
   (pinentry-start))
@@ -177,9 +176,12 @@
       uniquify-after-kill-buffer-p t
       uniquify-ignore-buffers-re "^\\*")
 
-(require 'ffap)
-(setq ffap-machine-p-known 'reject)
-(ffap-bindings)
+(use-package ffap
+  :ensure nil
+  :defer nil
+  :config
+  (setq ffap-machine-p-known 'reject)
+  (ffap-bindings))
 
 (use-package emacs
   :defer nil
@@ -242,8 +244,7 @@
   (ag-highligh-search t)
   (ag-reuse-buffers t)
   (ag-reuse-window t)
-  :bind
-  ("M-s a" . ag-project))
+  :bind ("M-s a" . ag-project))
 
 (use-package wgrep
   :custom
@@ -481,6 +482,7 @@
 
 (use-package atomic-chrome
   :defer nil
+  :commands (atomic-chrome-start-server)
   :config
   (atomic-chrome-start-server))
 
@@ -553,9 +555,9 @@
 	  (lambda ()
 	    (message "Happiness delivered in %s with %d garbage collections."
 		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
+			     (float-time (time-subtract after-init-time before-init-time)))
+		     gcs-done)
+	    (gcmh-mode 1)))
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
