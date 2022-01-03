@@ -68,7 +68,7 @@
 (setq use-package-always-defer nil
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
-      use-package-verbose t)
+      use-package-verbose nil)
 
 (setq warning-suppress-log-types '((use-package)))
 
@@ -313,6 +313,7 @@
 (use-package docker-compose-mode)
 
 (use-package notmuch
+  :defer 5
   :config
   (setq notmuch-search-oldest-first nil
 	mail-user-agent 'message-user-agent
@@ -449,6 +450,9 @@
       :init
       (setq vterm-ignore-blink-cursor t)))
 
+(add-to-list 'load-path (expand-file-name "hrs" user-emacs-directory))
+(require 'hrs)
+
 (require 'executable)
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
@@ -484,7 +488,7 @@
        :custom
        (direnv-always-show-summary nil)
        :config
-       (direnv-mode)))
+       (direnv-mode))))
 
 (when (boundp 'read-process-output-max)
   ;; This is to speedup LSP. Increase the amount of data which Emacs
