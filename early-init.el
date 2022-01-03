@@ -1,9 +1,5 @@
 ;;; early-init.el -*- lexical-binding: t; -*-
 
-(add-to-list 'load-path (expand-file-name "~/src/github.com/frobware/emacs.d/gcmh"))
-(require 'gcmh)
-(gcmh-mode 1)
-
 ;; Emacs HEAD (27+) introduces early-init.el, which is run before init.el,
 ;; before package and UI initialization happens.
 

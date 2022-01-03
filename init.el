@@ -1,5 +1,9 @@
 ;; -*- lexical-binding: t; -*-
 
+(add-to-list 'load-path (expand-file-name "gcmh" user-emacs-directory))
+(require 'gcmh)
+(gcmh-mode 1)
+
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
@@ -52,6 +56,10 @@
 ;; From https://github.com/raxod502/straight.el/issues/757
 (setq straight-disable-native-compile nil)
 (setq-default straight-vc-git-default-clone-depth 1)
+
+;; With this present most packages will come from Nix.
+(add-to-list 'load-path (expand-file-name "use-package" user-emacs-directory))
+(require 'use-package)
 
 ;;; drop -foo to use Nix packages
 (and (not (require 'use-package nil 'noerror))
