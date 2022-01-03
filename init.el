@@ -574,10 +574,8 @@
 	'(("<f11>" . aim/fullscreen)
 	  ("<f1>" . gnus-slave)
 	  ("<f2>" . aim/revert-buffer-now)
-	  ("<f3>" . whitespace-cleanup)
 	  ("C-x C" . compile)
 	  ("C-x C-g" . goto-line)
-	  ("C-x C-j" . dired-jump)
 	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
 	  ("C-x g" . goto-line)
 	  ("C-x m" . gnus-msg-mail)))
