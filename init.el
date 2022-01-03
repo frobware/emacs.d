@@ -185,6 +185,7 @@
   (ffap-bindings))
 
 (use-package emacs
+  :ensure nil
   :defer nil
   :init
   (put 'narrow-to-region 'disabled nil)
@@ -207,7 +208,14 @@
   (use-dialog-box nil "Disable dialog boxes")
   (x-gtk-use-system-tooltips nil)
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
-  (debug-on-error nil))
+  (debug-on-error nil)
+  :config
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (setq kill-ring-max 30000)
+  (column-number-mode 1)
+  (defalias 'ttl 'toggle-truncate-lines)
+  (setq truncate-lines t)
+  (toggle-truncate-lines))
 
 (use-package dired-x
   :straight (:type built-in)
@@ -482,11 +490,6 @@
   (lsp-ui-doc-enable nil)
   (lsp-eldoc-hook nil))
 
-(setq kill-ring-max 30000
-      truncate-lines t)
-
-(column-number-mode 1)
-
 (use-package atomic-chrome
   :defer nil
   :commands (atomic-chrome-start-server)
@@ -509,11 +512,17 @@
 
 (use-package whitespace
   :ensure nil
+  :straight (:type built-in)
+  :defer nil
   :commands (whitespace-cleanup)
-  :bind ("<f3>" . whitespace-cleanup))
+  :bind ("<f3>" . whitespace-cleanup)
+  :hook (before-save-hook . whitespace-cleanup))
 
-(require 'executable)
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+(use-package executable
+  :ensure nil
+  :straight (:type built-in)
+  :defer nil
+  :hook (after-save-hook . executable-make-buffer-file-executable-if-script-p))
 
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
@@ -547,16 +556,6 @@
   ;; considering that the some of the language server responses are in
   ;; 800k - 3M range.
   (setq-local read-process-output-max (* 4 (* 1024 1024))))
-
-(use-package simple
-  :ensure nil
-  :straight (:type built-in)
-  :commands (toggle-truncate-lines yes-or-no)
-  :config
-  (defalias 'ttl 'toggle-truncate-lines)
-  (fset 'yes-or-no-p 'y-or-n-p))
-
-;;(add-hook 'before-save-hook 'whitespace-cleanup)
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
