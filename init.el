@@ -62,7 +62,9 @@
 (defvar use-nix-epkgs nil)
 
 (if use-nix-epkgs
-    (require 'use-package)
+    (progn
+      (add-to-list 'load-path (expand-file-name "use-package" user-emacs-directory))
+      (require 'use-package))
   (progn
     (setq-default straight-vc-git-default-clone-depth 1)
     (aim/straight-bootstrap)))
