@@ -488,7 +488,7 @@
        :custom
        (direnv-always-show-summary nil)
        :config
-       (direnv-mode))))
+       (direnv-mode)))
 
 (when (boundp 'read-process-output-max)
   ;; This is to speedup LSP. Increase the amount of data which Emacs
