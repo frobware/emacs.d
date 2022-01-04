@@ -306,7 +306,8 @@
   ("C-c C-j" . aj-toggle-fold))
 
 (use-package tramp
-  ;;:straight (:type built-in)
+  ;; Using the built-in version avoids; Symbol's function definition is void: "tramp-register-crypt-file-name-handler
+  :straight (:type built-in)
   :ensure nil
   :config
   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
