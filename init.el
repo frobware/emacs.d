@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
-(defvar use-nix-epkgs t)
+(defvar use-nix-epkgs nil)
 
 (when (eq system-type 'darwin)
   (progn
@@ -72,7 +72,7 @@
       straight-disable-native-compile t
       use-package-compute-statistics t)
 
-(setq use-package-always-defer t
+(setq use-package-always-defer nil
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil)
@@ -572,14 +572,14 @@
 
 (add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
 
-(and (executable-find "direnv")
-     (use-package direnv
-       ;; :init
-       ;; (add-hook 'prog-mode-hook #'direnv-update-environment)
-       :custom
-       (direnv-always-show-summary nil)
-       :config
-       (direnv-mode)))
+(use-package direnv
+  :if (executable-find "direnv")
+  ;; :init
+  ;; (add-hook 'prog-mode-hook #'direnv-update-environment)
+  :custom
+  (direnv-always-show-summary nil)
+  :config
+  (direnv-mode))
 
 (when (boundp 'read-process-output-max)
   ;; This is to speedup LSP. Increase the amount of data which Emacs
