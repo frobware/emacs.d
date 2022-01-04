@@ -385,11 +385,12 @@
 
 (use-package notmuch
   :defer 5
-  :config
+  :init
   (setq notmuch-search-oldest-first nil
 	mail-user-agent 'message-user-agent
 	notmuch-wash-wrap-lines-length 80
 	notmuch-tree-show-out t)
+  :config
   (setq notmuch-saved-searches
 	'((:key "i" :name "inbox" :query "tag:inbox")
 	  (:key "u" :name "unread" :query "tag:unread")
