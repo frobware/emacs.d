@@ -573,8 +573,7 @@
 	    (message "Happiness delivered in %s with %d garbage collections."
 		     (format "%.2f seconds"
 			     (float-time (time-subtract after-init-time before-init-time)))
-		     gcs-done)
-	    (gcmh-mode 1)))
+		     gcs-done)))
 
 (mapcar #'(lambda (x)
 	    (define-key global-map (kbd (car x)) (cdr x)))
