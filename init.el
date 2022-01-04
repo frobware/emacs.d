@@ -1,6 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
-(defvar use-nix-epkgs nil)
+(defvar use-nix-epkgs (or (string= system-name "mba")
+			  (string= system-name "x1c")))
 
 (when (eq system-type 'darwin)
   (progn
