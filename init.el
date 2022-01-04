@@ -194,7 +194,7 @@
   (ffap-bindings))
 
 (use-package emacs
-  :ensure nil
+  :straight (:type built-in)
   :defer nil
   :init
   (put 'narrow-to-region 'disabled nil)
@@ -218,13 +218,14 @@
   (x-gtk-use-system-tooltips nil)
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
   (debug-on-error nil)
-  :config
   (fset 'yes-or-no-p 'y-or-n-p)
+  :config
   (setq kill-ring-max 30000)
   (column-number-mode 1)
-  (defalias 'ttl 'toggle-truncate-lines)
   (setq truncate-lines t)
   (toggle-truncate-lines))
+
+(defalias 'ttl 'toggle-truncate-lines)
 
 (use-package dired-x
   :straight (:type built-in)
