@@ -408,6 +408,8 @@
 	("C-x `" . langtool-correct-buffer)))
 
 (use-package company
+  :commands (company-select-next-or-abort
+	     company-select-previous-or-abort)
   :custom
   (company-idle-delay 0)
   (company-tooltip-limit 20)
