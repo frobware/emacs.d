@@ -72,7 +72,8 @@
 (setq straight-use-package-by-default t
       straight-repository-branch "develop"
       straight-check-for-modifications nil
-      straight-disable-native-compile t)
+      straight-disable-native-compile t
+      use-package-compute-statistics t)
 
 (setq use-package-always-defer t
       use-package-always-ensure t
