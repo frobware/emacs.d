@@ -470,11 +470,12 @@
 (add-hook 'text-mode-hook #'hl-line-mode)
 
 (use-package recentf
+  :commands (recentf-open-files)
   :config
-  (setq recentf-max-menu-items 32
-	recentf-max-saved-items 325)
   (recentf-mode 1)
-  (global-key-binding (kbd "C-x C-r") 'recentf-open-files))
+  (setq recentf-max-menu-items 32
+	recentf-max-saved-items 32)
+  :bind ("C-x C-r" . recentf-open-files))
 
 (use-package lsp-ui
   :after lsp-mode
