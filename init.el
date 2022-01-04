@@ -517,7 +517,22 @@
       :init
       (setq vterm-ignore-blink-cursor t)))
 
-(use-package helm)
+(use-package helm
+  :commands (helm-buffers-list helm-mini)
+  :config
+  (require 'helm-config)
+  :init
+  (setq helm-imenu-fuzzy-match t
+	helm-recentf-fuzzy-match t
+	helm-semantic-fuzzy-match t
+	helm-buffers-fuzzy-matching t)
+  :bind (("C-c h d" . helm-browse-project)
+	 ("C-c h i" . helm-semantic-or-imenu)
+	 ("C-c h o" . helm-occur)
+	 ("C-c h p" . helm-projects-history)
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-x b" . helm-mini)
+	 ("M-y" . helm-show-kill-ring)))
 
 (use-package helm-ls-git
   :commands (helm-ls-git-ls)
