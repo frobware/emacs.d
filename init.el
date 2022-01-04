@@ -1,7 +1,5 @@
 ;; -*- lexical-binding: t; -*-
 
-(add-to-list 'load-path (expand-file-name "gcmh" user-emacs-directory))
-(require 'gcmh)
 
 (when (eq system-type 'darwin)
   (progn
