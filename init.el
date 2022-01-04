@@ -73,7 +73,7 @@
       straight-disable-native-compile t
       use-package-compute-statistics t)
 
-(setq use-package-always-defer nil
+(setq use-package-always-defer t
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil)
