@@ -27,6 +27,14 @@
 (advice-add #'x-apply-session-resources :override #'ignore)
 
 (setq initial-major-mode 'fundamental-mode)
+  
+;; Contrary to what many Emacs users have in their configs, you don't
+;; need more than this to make UTF-8 the default coding system:
+(set-language-environment "UTF-8")
+
+;; set-language-enviornment sets default-input-method, which is
+;; unwanted.
+(setq default-input-method nil)
 
 ;;; The rest is largely my gunk.
 
@@ -61,11 +69,3 @@
 	  ('light (load-theme 'modus-operandi t))
 	  ('dark (load-theme 'modus-vivendi t))))
       (add-hook 'ns-system-appearance-change-functions #'aim/apply-theme)))
-  
-;; Contrary to what many Emacs users have in their configs, you don't
-;; need more than this to make UTF-8 the default coding system:
-(set-language-environment "UTF-8")
-
-;; set-language-enviornment sets default-input-method, which is
-;; unwanted.
-(setq default-input-method nil)
