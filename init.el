@@ -82,6 +82,17 @@
 
 (setq warning-suppress-log-types '((comp) (use-package)))
 
+(use-package gcmh
+  :ensure nil
+  :defer nil
+  :straight (:type built-in)
+  :load-path (lambda () (expand-file-name "gcmh" user-emacs-directory))
+  :diminish gcmh-mode
+  :init
+  (setq gcmh-idle-delay 0.5
+	gcmh-high-cons-threshold (* 16 1024 1024)) 
+  (gcmh-mode 1))
+
 (use-package hrs
   :ensure nil
   :straight (:type built-in)
