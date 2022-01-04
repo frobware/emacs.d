@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
+(defvar use-nix-epkgs t)
 
 (when (eq system-type 'darwin)
   (progn
@@ -56,8 +57,6 @@
 	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage)
     (straight-use-package 'use-package)))
-
-(defvar use-nix-epkgs t)
 
 (if use-nix-epkgs
     (progn
