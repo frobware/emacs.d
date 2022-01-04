@@ -454,6 +454,8 @@
   :commands
   (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition))
 
+(use-package gotest)
+
 (use-package go-mode
   :mode "\\.go\\'"
   :custom
@@ -465,6 +467,11 @@
 	      ("C-c ."   . go-test-current-test)
 	      ("C-c f"   . go-test-current-file)
 	      ("C-c a"   . go-test-current-project))
+  :commands (go-run
+	     go-coverage
+	     go-test-current-test
+	     go-test-current-file
+	     go-test-current-project)
   :hook ((go-mode . lsp-deferred)))
 
 (use-package go-add-tags)
