@@ -222,8 +222,7 @@
   :config
   (setq kill-ring-max 30000)
   (column-number-mode 1)
-  (setq truncate-lines t)
-  (toggle-truncate-lines))
+  (setq truncate-lines t))
 
 (defalias 'ttl 'toggle-truncate-lines)
 
