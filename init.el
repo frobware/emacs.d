@@ -60,9 +60,7 @@
     (straight-use-package 'use-package)))
 
 (if use-nix-epkgs
-    (progn
-      (add-to-list 'load-path (expand-file-name "use-package" user-emacs-directory))
-      (require 'use-package))
+    (require 'use-package)
   (progn
     (setq-default straight-vc-git-default-clone-depth 1)
     (aim/straight-bootstrap)))
@@ -84,7 +82,7 @@
   :ensure nil
   :defer nil
   :straight (:type built-in)
-  :load-path (lambda () (expand-file-name "gcmh" user-emacs-directory))
+  ;;:load-path (lambda () (expand-file-name "gcmh" user-emacs-directory))
   :diminish gcmh-mode
   :commands (gcmh-mode)
   :init
@@ -107,7 +105,7 @@
   :ensure nil
   :defer nil
   :straight (:type built-in)
-  :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
+  ;;:load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :commands (modus-themes-load-themes
 	     modus-themes-load-operandi
 	     modus-themes-load-vivendi
