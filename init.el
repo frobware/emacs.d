@@ -90,6 +90,35 @@
 	gcmh-high-cons-threshold (* 16 1024 1024)) 
   (gcmh-mode 1))
 
+;;; PACKAGES
+
+(use-package desktop
+  :demand t
+  :custom ((desktop-restore-eager 8)
+           (desktop-globals-to-save nil)
+           (desktop-files-not-to-save
+            (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
+                    (seq "(ftp)" eol)
+                    (seq "*" (one-or-more not-newline) "*")))))
+  :config
+  (desktop-save-mode t))
+
+(use-package savehist
+  :ensure t
+  :custom ((history-delete-duplicates t)
+           (savehist-save-minibuffer-history t)
+           (savehist-additional-variables '(kill-ring
+                                            compile-command
+                                            search-ring))
+           (savehist-ignored-variables '(yes-or-no-p-history)))
+  :config
+  (savehist-mode t))
+
+(use-package saveplace
+  :demand t
+  :config
+  (save-place-mode t))
+
 (use-package hrs
   :ensure nil
   :straight (:type built-in)
