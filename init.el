@@ -68,18 +68,18 @@
 (setq straight-use-package-by-default t
       straight-repository-branch "develop"
       straight-check-for-modifications nil
-      straight-disable-native-compile t
-      use-package-compute-statistics t)
+      straight-disable-native-compile t)
 
 (setq use-package-always-defer t
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
-      use-package-verbose nil)
+      use-package-verbose nil
+      use-package-compute-statistics t)
 
 (setq warning-suppress-log-types '((comp) (use-package)))
 
 (use-package gcmh
-  :ensure nil
+  ;;:ensure nil
   :defer nil
   :straight (:type built-in)
   ;;:load-path (lambda () (expand-file-name "gcmh" user-emacs-directory))
