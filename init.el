@@ -104,7 +104,7 @@
   (desktop-save-mode t))
 
 (use-package savehist
-  :ensure t
+  :demand t
   :custom ((history-delete-duplicates t)
            (savehist-save-minibuffer-history t)
            (savehist-additional-variables '(kill-ring
