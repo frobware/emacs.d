@@ -18,12 +18,14 @@ other, future frames."
     (add-to-list 'default-frame-alist (cons 'font font-code))
     (set-frame-font font-code)))
 
+;;;###autoload
 (defun hrs/reset-font-size ()
   "Change font size back to `hrs/default-font-size'."
   (interactive)
   (setq hrs/current-font-size hrs/default-font-size)
   (hrs/set-font-size))
 
+;;;###autoload
 (defun hrs/increase-font-size ()
   "Increase current font size by a factor of `hrs/font-change-increment'."
   (interactive)
@@ -31,6 +33,7 @@ other, future frames."
 	(ceiling (* hrs/current-font-size hrs/font-change-increment)))
   (hrs/set-font-size))
 
+;;;###autoload
 (defun hrs/decrease-font-size ()
   "Decrease current font size by a factor `hrs/font-change-increment', down to a minimum size of 1."
   (interactive)
