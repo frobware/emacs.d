@@ -583,8 +583,12 @@
   :straight (:type built-in)
   :defer nil
   :commands (whitespace-cleanup)
-  :bind ("<f3>" . whitespace-cleanup)
-  :hook (before-save-hook . whitespace-cleanup))
+  :bind ("<f3>" . whitespace-cleanup))
+
+(use-package ws-butler
+  :defer nil
+  :config
+  (ws-butler-global-mode))
 
 (use-package executable
   :ensure nil
