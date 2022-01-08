@@ -63,12 +63,11 @@
     (require 'use-package)
   (progn
     (setq-default straight-vc-git-default-clone-depth 1)
-    (aim/straight-bootstrap)))
-
-(setq straight-use-package-by-default t
-      straight-repository-branch "develop"
-      straight-check-for-modifications nil
-      straight-disable-native-compile t)
+    (aim/straight-bootstrap)
+    (setq straight-use-package-by-default t
+	  straight-repository-branch "develop"
+	  straight-check-for-modifications nil
+	  straight-disable-native-compile t)))
 
 (setq use-package-always-defer t
       use-package-always-ensure t
