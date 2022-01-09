@@ -307,9 +307,6 @@
       kept-old-versions 10
       version-control t)
 
-(require 'executable)
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
 (use-package ag
   :custom
   (ag-highligh-search t)
@@ -606,7 +603,7 @@
   :ensure nil
   :straight (:type built-in)
   :defer nil
-  :hook (after-save-hook . executable-make-buffer-file-executable-if-script-p))
+  :hook (after-save . executable-make-buffer-file-executable-if-script-p))
 
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
