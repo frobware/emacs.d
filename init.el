@@ -592,10 +592,10 @@
   :straight (:type built-in)
   :defer nil
   :commands (whitespace-cleanup)
-  :bind ("<f3>" . whitespace-cleanup))
+  :bind ("<f3>" . whitespace-cleanup)
+  :hook (before-save . whitespace-cleanup))
 
 (use-package ws-butler
-  :defer nil
   :config
   (ws-butler-global-mode))
 
