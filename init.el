@@ -94,30 +94,38 @@
   :commands (gcmh-mode)
   :init
   (setq gcmh-idle-delay 0.5
-	gcmh-high-cons-threshold (* 16 1024 1024)) 
+	gcmh-high-cons-threshold (* 16 1024 1024))
   (gcmh-mode 1))
 
 ;;; PACKAGES
 
+(use-package nov
+  :mode "\\.epub\\'"
+  :config (setq nov-text-width 80))
+
+;; (require 'nov)
+;; (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
+;;
+
 (use-package desktop
   :demand t
   :custom ((desktop-restore-eager 8)
-           (desktop-globals-to-save nil)
-           (desktop-files-not-to-save
-            (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
-                    (seq "(ftp)" eol)
-                    (seq "*" (one-or-more not-newline) "*")))))
+	   (desktop-globals-to-save nil)
+	   (desktop-files-not-to-save
+	    (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
+		    (seq "(ftp)" eol)
+		    (seq "*" (one-or-more not-newline) "*")))))
   :config
   (desktop-save-mode t))
 
 (use-package savehist
   :demand t
   :custom ((history-delete-duplicates t)
-           (savehist-save-minibuffer-history t)
-           (savehist-additional-variables '(kill-ring
-                                            compile-command
-                                            search-ring))
-           (savehist-ignored-variables '(yes-or-no-p-history)))
+	   (savehist-save-minibuffer-history t)
+	   (savehist-additional-variables '(kill-ring
+					    compile-command
+					    search-ring))
+	   (savehist-ignored-variables '(yes-or-no-p-history)))
   :config
   (savehist-mode t))
 
@@ -666,22 +674,27 @@
 (defun zge/reverse-face (face &optional frame)
   (interactive (list (read-face-name "Reverse face" (face-at-point t))))
   (let* ((fg (face-attribute face :foreground frame))
-         (bg (face-attribute face :background frame)))
+	 (bg (face-attribute face :background frame)))
     (set-face-attribute
      face frame
      :foreground
      (color-complement-hex
       (if (eq fg 'unspecified)
-          (face-attribute 'default :foreground frame)
-        fg))
+	  (face-attribute 'default :foreground frame)
+	fg))
      :background
      (color-complement-hex
       (if (eq bg 'unspecified)
-          (face-attribute 'default :background frame)
-        bg))))
+	  (face-attribute 'default :background frame)
+	bg))))
   face)
 
 (defun zge/toggle-dark-mode ()
   (interactive)
   (dolist (face '(mode-line default))
     (zge/reverse-face face)))
+
+(global-set-key (kbd "M-i") 'imenu)
+
+(setq completion-styles `(basic partial-completion emacs22
+				initials ,(if (version<= emacs-version "27.0") 'helm-flex 'flex)))
