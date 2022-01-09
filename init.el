@@ -63,11 +63,12 @@
     (require 'use-package)
   (progn
     (setq-default straight-vc-git-default-clone-depth 1)
-    (aim/straight-bootstrap)
-    (setq straight-use-package-by-default t
-	  straight-repository-branch "develop"
-	  straight-check-for-modifications nil
-	  straight-disable-native-compile t)))
+    (aim/straight-bootstrap)))
+
+(setq straight-use-package-by-default t
+      straight-repository-branch "develop"
+      straight-check-for-modifications nil
+      straight-disable-native-compile t)
 
 (setq use-package-always-defer t
       use-package-always-ensure t
@@ -81,7 +82,8 @@
   :straight (:type built-in)
   :defer nil
   :custom
-  (custom-file null-device "Don't store customizations"))
+  ;;(custom-file null-device "Don't store customizations")
+  (custom-file (expand-file-name "custom" user-emacs-directory)))
 
 (use-package gcmh
   ;;:ensure nil
@@ -445,20 +447,17 @@
 (use-package company
   :commands (company-select-next-or-abort
 	     company-select-previous-or-abort)
-  :custom
-  (company-idle-delay 0)
-  (company-tooltip-limit 20)
-  (company-minimum-prefix-length 3)
-  (company-echo-delay 0)
-  (company-require-match nil)
-  (company-tooltip-align-annotations t) ; Align annotation to the right side.
-  (company-auto-complete nil)
-  :bind
-  (:map company-active-map
-	("C-n" . company-select-next-or-abort)
-	("C-p" . company-select-previous-or-abort))
-  :hook
-  (after-init . global-company-mode))
+  :custom ((company-idle-delay 0)
+	   (company-tooltip-limit 20)
+	   (company-minimum-prefix-length 3)
+	   (company-echo-delay 0)
+	   (company-require-match nil)
+	   (company-tooltip-align-annotations t) ; Align annotation to the right side.
+	   (company-auto-complete nil))
+  :bind (:map company-active-map
+	      ("C-n" . company-select-next-or-abort)
+	      ("C-p" . company-select-previous-or-abort))
+  :hook (after-init . global-company-mode))
 
 (use-package flycheck)
 
