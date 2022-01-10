@@ -569,6 +569,7 @@
   :commands (helm-buffers-list helm-mini)
   :config
   (require 'helm-config)
+  (helm-mode -1)
   :init
   (setq helm-imenu-fuzzy-match t
 	helm-recentf-fuzzy-match t
@@ -583,9 +584,9 @@
 	 ("M-y" . helm-show-kill-ring)))
 
 (use-package helm-ls-git
-  :commands (helm-ls-git-ls)
+  :commands (helm-ls-git)
   :bind
-  (("C-c C-l" . helm-ls-git-ls)))
+  (("C-c C-l" . helm-ls-git)))
 
 (use-package whitespace
   :ensure nil
