@@ -262,8 +262,8 @@
   (x-gtk-use-system-tooltips nil)
   (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
   (debug-on-error nil)
-  (fset 'yes-or-no-p 'y-or-n-p)
   :config
+  (fset 'yes-or-no-p 'y-or-n-p)
   (setq kill-ring-max 30000)
   (column-number-mode 1)
   (setq truncate-lines t))
@@ -409,10 +409,16 @@
 
 (use-package protobuf-mode)
 
+(use-package nixpkgs-fmt
+  :demand t
+  :custom
+  (nixpkgs-fmt-command "nixfmt"))
+
 (use-package nix-mode
   :mode "\\.nix\\'"
   :custom
   (nix-indent-function #'nix-indent-line)
+  ;;:hook 'nix-mode #'nixpkgs-fmt-on-save-mode
   :bind (:map nix-mode-map
 	      ("C-c C-j" . aj-toggle-fold)))
 
