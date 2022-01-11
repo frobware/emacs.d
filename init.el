@@ -612,6 +612,13 @@
   :defer nil
   :hook (after-save . executable-make-buffer-file-executable-if-script-p))
 
+(use-package swift-mode)
+
+(use-package lsp-sourcekit
+  :after lsp-mode
+  :config
+  (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "Xcrun --find sourcekit-lsp"))))
+
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
 ;;; confirmation is required for any code block evaluation.
