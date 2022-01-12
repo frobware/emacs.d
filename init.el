@@ -58,6 +58,15 @@
       visible-cursor nil
       window-resize-pixelwise t)
 
+(setq select-enable-clipboard t
+      select-enable-primary t
+      save-interprogram-paste-before-kill t)
+
+(setq uniquify-buffer-name-style 'reverse
+      uniquify-separator "|"
+      uniquify-after-kill-buffer-p t
+      uniquify-ignore-buffers-re "^\\*")
+
 (setq gc-cons-threshold (* 100 1048576))
 
 (setq use-package-always-defer nil
@@ -248,16 +257,6 @@
   (which-key-mode)
   (which-key-setup-side-window-bottom)
   :custom (which-key-idle-delay 1.2))
-
-(require 'select)
-(setq select-enable-clipboard t
-      select-enable-primary t
-      save-interprogram-paste-before-kill t)
-
-(setq uniquify-buffer-name-style 'reverse
-      uniquify-separator "|"
-      uniquify-after-kill-buffer-p t
-      uniquify-ignore-buffers-re "^\\*")
 
 (use-package ffap
   :ensure nil
