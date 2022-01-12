@@ -218,11 +218,6 @@
   ;; :bind ("M-w" . clipetty-kill-ring-save))
   :config (global-clipetty-mode))
 
-(require 'cc-mode)
-(setq c-default-style '((java-mode . "java")
-                        (awk-mode . "awk")
-                        (other . "linux")))
-
 (use-package exec-path-from-shell
   :if (eq system-type 'darwin)
   :ensure t
