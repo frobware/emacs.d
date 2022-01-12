@@ -222,7 +222,7 @@
   :ensure nil
   :defer nil
   :straight (:type built-in)
-  ;;:load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :commands (modus-themes-load-themes
              modus-themes-load-operandi
              modus-themes-load-vivendi
