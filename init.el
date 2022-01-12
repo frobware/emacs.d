@@ -29,7 +29,6 @@
 
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
       backup-by-copying t
-      backup-directory-alist '(("." . "~/.emacs.d/backups"))
       backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups")))
       comp-deferred-compilation nil
       create-lockfiles nil
@@ -50,7 +49,7 @@
       ring-bell-function #'ignore
       sentence-end-double-space nil
       show-paren-delay 0
-      site-run-file nil
+      ;;site-run-file nil
       truncate-lines t
       use-dialog-box nil
       vc-follow-symlinks t
