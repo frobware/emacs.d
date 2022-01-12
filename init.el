@@ -1,5 +1,11 @@
 ;; -*- lexical-binding: t; -*-
 
+(unless (functionp 'json-serialize)
+  (error "**** you don't have a json-serialize built-in function ****"))
+
+(unless (functionp 'module-load)
+  (error "**** you don't have modules enabled ****"))
+
 (and (boundp 'use-package-report)
      (use-package-report))
 
@@ -22,13 +28,20 @@
       truncate-lines t
       use-dialog-box nil
       vc-follow-symlinks t
-      version-control t)
+      version-control t
+      ;; prevent cursor blinking in remote terminal sessions.
+      visible-cursor nil)
 
-(setq use-package-always-defer t
+(setq use-package-always-defer nil
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
       use-package-compute-statistics t)
+
+(setq straight-use-package-by-default t
+      straight-repository-branch "develop"
+      straight-check-for-modifications nil
+      straight-disable-native-compile t)
 
 (customize-set-variable 'kill-ring-max 30000)
 
@@ -40,7 +53,7 @@
 (defvar use-nix-epkgs (or (string= system-name "mba")
 			  (string= system-name "x1c")))
 
-(setq use-nix-epkgs nil)
+(setq use-nix-epkgs t)
 
 (when (eq system-type 'darwin)
   (progn
@@ -49,12 +62,6 @@
 	  mac-option-modifier 'super
 	  shell-command-switch "-lc")
     (global-set-key "\M-`" 'other-frame)))
-
-(unless (functionp 'json-serialize)
-  (error "**** you don't have a json-serialize built-in function ****"))
-
-(unless (functionp 'module-load)
-  (error "**** you don't have modules enabled ****"))
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
@@ -103,11 +110,6 @@
   (progn
     (setq-default straight-vc-git-default-clone-depth 1)
     (aim/straight-bootstrap)))
-
-(setq straight-use-package-by-default t
-      straight-repository-branch "develop"
-      straight-check-for-modifications nil
-      straight-disable-native-compile t)
 
 (setq warning-suppress-log-types '((comp) (use-package)))
 
@@ -174,10 +176,6 @@
   (modus-themes-load-themes)
   (modus-themes-load-vivendi)
   :bind (("<f5>" . modus-themes-toggle)))
-
-(require 'term)
-;; prevent cursor blinking in remote terminal sessions.
-(setq visible-cursor nil)
 
 (use-package pinentry
   :defer nil
