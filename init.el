@@ -72,12 +72,18 @@
 
 (customize-set-variable 'kill-ring-max 30000)
 
-(blink-cursor-mode -1)
 (auto-compression-mode t)
-(fset 'yes-or-no-p 'y-or-n-p)
+(blink-cursor-mode -1)
 (column-number-mode 1)
-(show-paren-mode -1)
+(fset 'yes-or-no-p 'y-or-n-p)
+(global-hl-line-mode)                ; Show current line
+(menu-bar-mode (not (eq system-type 'darwin))) ; Disable the menu bar
 (put 'narrow-to-region 'disabled nil)
+(scroll-bar-mode -1)                 ; Disable scrollbar
+(set-fringe-mode 4)                  ; Give us some space
+(show-paren-mode -1)                 ; Enable show paren matching mode
+(tool-bar-mode -1)                   ; Disable toolbar
+(tooltip-mode -1)                    ; Disable tooltip
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
