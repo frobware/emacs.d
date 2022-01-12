@@ -552,12 +552,9 @@
   :config
   (atomic-chrome-start-server))
 
-(require 'package)
-
-(if (package-installed-p 'vterm)
-    (use-package vterm
-      :init
-      (setq vterm-ignore-blink-cursor t)))
+(use-package vterm
+  :custom
+  (setq vterm-ignore-blink-cursor t))
 
 ;;; Copied from somebody - can't recall whom, but thanks!
 (defun my-vterm/split-horizontal ()
