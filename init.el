@@ -1,17 +1,34 @@
 ;; -*- lexical-binding: t; -*-
 
+(and (boundp 'use-package-report)
+     (use-package-report))
+
 (setq debug-on-error t)
 
 (put 'narrow-to-region 'disabled nil)
 
-(setq enable-recursive-minibuffers t)
-(setq inhibit-startup-message t)
-(setq mouse-yank-at-point nil)
-(setq ring-bell-function #'ignore)
-(setq sentence-end-double-space nil)
-(setq vc-follow-symlinks t)
-(setq use-dialog-box nil)
-(setq truncate-lines t)
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+      backup-by-copying t
+      backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups")))
+      delete-old-versions t
+      enable-recursive-minibuffers t
+      inhibit-startup-message t
+      kept-new-versions 20
+      kept-old-versions 10
+      mouse-yank-at-point nil
+      require-final-newline t
+      ring-bell-function #'ignore
+      sentence-end-double-space nil
+      truncate-lines t
+      use-dialog-box nil
+      vc-follow-symlinks t
+      version-control t)
+
+(setq use-package-always-defer t
+      use-package-always-ensure t
+      use-package-ignore-unknown-keywords t
+      use-package-verbose nil
+      use-package-compute-statistics t)
 
 (customize-set-variable 'kill-ring-max 30000)
 
@@ -92,35 +109,16 @@
       straight-check-for-modifications nil
       straight-disable-native-compile t)
 
-(setq use-package-always-defer t
-      use-package-always-ensure t
-      use-package-ignore-unknown-keywords t
-      use-package-verbose nil
-      use-package-compute-statistics t)
-
 (setq warning-suppress-log-types '((comp) (use-package)))
-
-(use-package gcmh
-  ;;:ensure nil
-  :defer nil
-  :straight (:type built-in)
-  ;;:load-path (lambda () (expand-file-name "gcmh" user-emacs-directory))
-  :diminish gcmh-mode
-  :commands (gcmh-mode)
-  :init
-  (setq gcmh-idle-delay 0.5
-	gcmh-high-cons-threshold (* 16 1024 1024))
-  (gcmh-mode 1))
 
 ;;; PACKAGES
 
-(use-package nov
-  :mode "\\.epub\\'"
-  :config (setq nov-text-width 80))
-
-;; (require 'nov)
-;; (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode))
-;;
+(use-package gcmh
+  :demand t
+  :straight (:type built-in)
+  :custom (gcmh-verbose t)
+  :config
+  (gcmh-mode))
 
 (use-package desktop
   :demand t
@@ -197,7 +195,7 @@
   ;; global minor modes. To that end, Clipetty has a function called
   ;; clipetty-kill-ring-save which I like to bind to M-w like so:
   ;; :bind ("M-w" . clipetty-kill-ring-save))
-  :hook (after-init . global-clipetty-mode))
+  :config (global-clipetty-mode))
 
 (require 'cc-mode)
 (setq c-default-style '((java-mode . "java")
@@ -281,15 +279,6 @@
 	  try-expand-line
 	  try-complete-lisp-symbol-partially
 	  try-complete-lisp-symbol)))
-
-(setq require-final-newline t
-      backup-by-copying t
-      backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups")))
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
-      delete-old-versions t
-      kept-new-versions 20
-      kept-old-versions 10
-      version-control t)
 
 (use-package ag
   :custom
