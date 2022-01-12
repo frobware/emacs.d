@@ -564,6 +564,16 @@
       :init
       (setq vterm-ignore-blink-cursor t)))
 
+;;; Copied from somebody - can't recall whom, but thanks!
+(defun my-vterm/split-horizontal ()
+  "Create a new vterm window under of the current one."
+  (interactive)
+  (let* ((ignore-window-parameters t)
+         (dedicated-p (window-dedicated-p)))
+    (split-window-vertically)
+    (other-window 1)
+    (vterm default-directory)))
+
 (use-package helm
   :commands (helm-buffers-list helm-mini)
   :config
