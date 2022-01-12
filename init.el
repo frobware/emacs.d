@@ -137,6 +137,32 @@
     (load bootstrap-file nil 'nomessage)
     (straight-use-package 'use-package)))
 
+(require 'color)
+
+;; https://ruzkuku.com/emacs.d.html#org08dc33e
+(defun zge/reverse-face (face &optional frame)
+  (interactive (list (read-face-name "Reverse face" (face-at-point t))))
+  (let* ((fg (face-attribute face :foreground frame))
+         (bg (face-attribute face :background frame)))
+    (set-face-attribute
+     face frame
+     :foreground
+     (color-complement-hex
+      (if (eq fg 'unspecified)
+          (face-attribute 'default :foreground frame)
+        fg))
+     :background
+     (color-complement-hex
+      (if (eq bg 'unspecified)
+          (face-attribute 'default :background frame)
+        bg))))
+  face)
+
+(defun zge/toggle-dark-mode ()
+  (interactive)
+  (dolist (face '(mode-line default))
+    (zge/reverse-face face)))
+
 (if use-nix-epkgs
     (require 'use-package)
   (progn
@@ -674,31 +700,6 @@
           ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
           ("C-x g" . goto-line)
           ("C-x m" . gnus-msg-mail)))
-(require 'color)
-
-;; https://ruzkuku.com/emacs.d.html#org08dc33e
-(defun zge/reverse-face (face &optional frame)
-  (interactive (list (read-face-name "Reverse face" (face-at-point t))))
-  (let* ((fg (face-attribute face :foreground frame))
-         (bg (face-attribute face :background frame)))
-    (set-face-attribute
-     face frame
-     :foreground
-     (color-complement-hex
-      (if (eq fg 'unspecified)
-          (face-attribute 'default :foreground frame)
-        fg))
-     :background
-     (color-complement-hex
-      (if (eq bg 'unspecified)
-          (face-attribute 'default :background frame)
-        bg))))
-  face)
-
-(defun zge/toggle-dark-mode ()
-  (interactive)
-  (dolist (face '(mode-line default))
-    (zge/reverse-face face)))
 
 (global-set-key (kbd "M-i") 'imenu)
 
