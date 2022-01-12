@@ -12,7 +12,7 @@
                           (string= system-name "x1c")))
 
 (setq use-nix-epkgs t)
-(setq debug-on-error t)
+(setq debug-on-error nil)
 
 (and (boundp 'use-package-report)
      (use-package-report))
