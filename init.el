@@ -1,7 +1,29 @@
 ;; -*- lexical-binding: t; -*-
 
+(setq debug-on-error t)
+
+(put 'narrow-to-region 'disabled nil)
+
+(setq enable-recursive-minibuffers t)
+(setq inhibit-startup-message t)
+(setq mouse-yank-at-point nil)
+(setq ring-bell-function #'ignore)
+(setq sentence-end-double-space nil)
+(setq vc-follow-symlinks t)
+(setq use-dialog-box nil)
+(setq truncate-lines t)
+
+(customize-set-variable 'kill-ring-max 30000)
+
+(blink-cursor-mode -1)
+(auto-compression-mode t)
+(fset 'yes-or-no-p 'y-or-n-p)
+(column-number-mode 1)
+
 (defvar use-nix-epkgs (or (string= system-name "mba")
 			  (string= system-name "x1c")))
+
+(setq use-nix-epkgs nil)
 
 (when (eq system-type 'darwin)
   (progn
@@ -236,37 +258,6 @@
   :config
   (setq ffap-machine-p-known 'reject)
   (ffap-bindings))
-
-(use-package emacs
-  :straight (:type built-in)
-  :defer nil
-  :init
-  (put 'narrow-to-region 'disabled nil)
-  (put 'upcase-region 'disabled nil)
-  (put 'downcase-region 'disabled nil)
-  (put 'set-goal-column 'disabled nil)
-  :custom
-  (auto-compression-mode t)
-  (sentence-end-double-space nil)
-  (blink-cursor-mode nil)
-  (vc-follow-symlinks t)
-  (inhibit-startup-screen t)
-  (inhibit-splash-screen t)
-  (inhibit-startup-message t)
-  (inhibit-startup-echo-area-message (getenv "USER"))
-  (initial-scratch-message nil)
-  (ring-bell-function #'ignore)
-  (mouse-yank-at-point t)
-  (inhibit-startup-screen t "Don't show splash screen")
-  (use-dialog-box nil "Disable dialog boxes")
-  (x-gtk-use-system-tooltips nil)
-  (enable-recursive-minibuffers t "Allow minibuffer commands in the minibuffer")
-  (debug-on-error nil)
-  :config
-  (fset 'yes-or-no-p 'y-or-n-p)
-  (setq kill-ring-max 30000)
-  (column-number-mode 1)
-  (setq truncate-lines t))
 
 (defalias 'ttl 'toggle-truncate-lines)
 
