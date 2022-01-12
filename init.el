@@ -11,7 +11,7 @@
 (defvar use-nix-epkgs (or (string= system-name "mba")
                           (string= system-name "x1c")))
 
-(setq use-nix-epkgs t)
+(setq use-nix-epkgs nil)
 (setq debug-on-error nil)
 
 (and (boundp 'use-package-report)
