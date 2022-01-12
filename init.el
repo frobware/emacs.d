@@ -100,13 +100,6 @@
 
 (setq warning-suppress-log-types '((comp) (use-package)))
 
-(use-package cus-edit
-  :straight (:type built-in)
-  :defer nil
-  :custom
-  ;;(custom-file null-device "Don't store customizations")
-  (custom-file (expand-file-name "custom" user-emacs-directory)))
-
 (use-package gcmh
   ;;:ensure nil
   :defer nil
