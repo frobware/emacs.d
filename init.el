@@ -87,7 +87,7 @@
 (column-number-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
 (global-hl-line-mode)                ; Show current line
-(menu-bar-mode (not (eq system-type 'darwin))) ; Disable the menu bar
+(menu-bar-mode -1)
 (put 'narrow-to-region 'disabled nil)
 (scroll-bar-mode -1)                 ; Disable scrollbar
 (set-fringe-mode 4)                  ; Give us some space
@@ -176,7 +176,7 @@
 (use-package gcmh
   :demand t
   :straight (:type built-in)
-  :custom (gcmh-verbose t)
+  :custom (gcmh-verbose nil)
   :config
   (gcmh-mode))
 
