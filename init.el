@@ -86,14 +86,14 @@
 (blink-cursor-mode -1)
 (column-number-mode 1)
 (fset 'yes-or-no-p 'y-or-n-p)
-(global-hl-line-mode)                ; Show current line
+(global-hl-line-mode)
 (menu-bar-mode -1)
 (put 'narrow-to-region 'disabled nil)
-(scroll-bar-mode -1)                 ; Disable scrollbar
-(set-fringe-mode 4)                  ; Give us some space
-(show-paren-mode -1)                 ; Enable show paren matching mode
-(tool-bar-mode -1)                   ; Disable toolbar
-(tooltip-mode -1)                    ; Disable tooltip
+(scroll-bar-mode -1)
+(set-fringe-mode 4)
+(show-paren-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
