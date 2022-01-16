@@ -64,7 +64,7 @@
 
 (setq gc-cons-threshold (* 100 1048576))
 
-(setq use-package-always-defer nil
+(setq use-package-always-defer t
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
