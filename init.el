@@ -12,11 +12,6 @@
                           (string= system-name "x1c")))
 
 (setq use-nix-epkgs nil)
-(setq debug-on-error nil)
-
-(and (boundp 'use-package-report)
-     (use-package-report))
-
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
@@ -79,6 +74,13 @@
       straight-repository-branch "develop"
       straight-check-for-modifications nil
       straight-disable-native-compile t)
+
+(when (boundp 'read-process-output-max)
+  ;; This is to speedup LSP. Increase the amount of data which Emacs
+  ;; reads from the process. Again the emacs default is too low 4k
+  ;; considering that the some of the language server responses are in
+  ;; 800k - 3M range.
+  (setq-local read-process-output-max (* 4 (* 1024 1024))))
 
 (customize-set-variable 'kill-ring-max 30000)
 
@@ -170,6 +172,13 @@
     (aim/straight-bootstrap)))
 
 (setq warning-suppress-log-types '((comp) (use-package)))
+
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            (message "Happiness delivered in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
 
 ;;; PACKAGES
 
@@ -666,13 +675,6 @@
   :config
   (direnv-mode))
 
-(when (boundp 'read-process-output-max)
-  ;; This is to speedup LSP. Increase the amount of data which Emacs
-  ;; reads from the process. Again the emacs default is too low 4k
-  ;; considering that the some of the language server responses are in
-  ;; 800k - 3M range.
-  (setq-local read-process-output-max (* 4 (* 1024 1024))))
-
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
@@ -682,13 +684,6 @@
   (define-key company-active-map (kbd "<tab>") 'company-select-previous)
   (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
-
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Happiness delivered in %s with %d garbage collections."
-                     (format "%.2f seconds"
-                             (float-time (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
 
 (mapcar #'(lambda (x)
             (define-key global-map (kbd (car x)) (cdr x)))
