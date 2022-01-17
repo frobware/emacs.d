@@ -643,11 +643,12 @@
   :hook (after-save . executable-make-buffer-file-executable-if-script-p))
 
 (use-package swift-mode
-  :if (eq 'system-name 'darwin))
+  :mode "\\.swift\\'"
+  :if (eq system-type 'darwin)
+  :hook ((swift-mode . lsp-deferred)))
 
 (use-package lsp-sourcekit
-  :if (eq 'system-name 'darwin)
-  :after lsp-mode
+  :if (eq system-type 'darwin)
   :config
   (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "Xcrun --find sourcekit-lsp"))))
 
