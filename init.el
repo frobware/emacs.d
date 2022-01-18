@@ -620,9 +620,9 @@
          ("M-y" . helm-show-kill-ring)))
 
 (use-package helm-ls-git
-  :commands (helm-ls-git)
+  :commands (helm-ls-git-ls)
   :bind
-  (("C-c C-l" . helm-ls-git)))
+  (("C-c C-l" . helm-ls-git-ls)))
 
 (use-package whitespace
   :ensure nil
