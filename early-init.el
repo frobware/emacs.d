@@ -48,23 +48,21 @@
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 (add-to-list 'default-frame-alist '(drag-internal-border . 1))
 (add-to-list 'default-frame-alist '(internal-border-width . 5))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(foreground-color . "white"))
 (add-to-list 'default-frame-alist '(background-color . "black"))
 
-(if (eq system-type 'darwin)
-    (add-to-list 'default-frame-alist '(font . "JetBrains Mono-20"))
-  (progn
-       (add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
-       (add-to-list 'default-frame-alist '(undecorated . t))
-       (add-to-list 'default-frame-alist '(fullscreen . maximized))))
+(defun aim/apply-theme (appearance)
+  "Load theme, taking current system APPEARANCE into consideration."
+  (mapc #'disable-theme custom-enabled-themes)
+  (pcase appearance
+    ('light (load-theme 'modus-operandi t))
+    ('dark (load-theme 'modus-vivendi t))))
 
 (if (eq system-type 'darwin)
     (progn
-      (defun aim/apply-theme (appearance)
-        "Load theme, taking current system APPEARANCE into consideration."
-        (mapc #'disable-theme custom-enabled-themes)
-        (pcase appearance
-          ('light (load-theme 'modus-operandi t))
-          ('dark (load-theme 'modus-vivendi t))))
-      (add-hook 'ns-system-appearance-change-functions #'aim/apply-theme)))
+      (add-hook 'ns-system-appearance-change-functions #'aim/apply-theme)
+      (add-to-list 'default-frame-alist '(font . "JetBrains Mono-20")))
+  (progn
+    (add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
+    (add-to-list 'default-frame-alist '(undecorated . t))
+    (add-to-list 'default-frame-alist '(fullscreen . maximized))))
