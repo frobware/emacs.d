@@ -27,7 +27,7 @@
 (advice-add #'x-apply-session-resources :override #'ignore)
 
 (setq initial-major-mode 'fundamental-mode)
-  
+
 ;; Contrary to what many Emacs users have in their configs, you don't
 ;; need more than this to make UTF-8 the default coding system:
 (set-language-environment "UTF-8")
@@ -44,14 +44,13 @@
 (push '(tool-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars) default-frame-alist)
 
-(progn
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark))
-  (add-to-list 'default-frame-alist '(drag-internal-border . 1))
-  (add-to-list 'default-frame-alist '(internal-border-width . 5))
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  (add-to-list 'default-frame-alist '(foreground-color . "white"))
-  (add-to-list 'default-frame-alist '(background-color . "black")))
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+(add-to-list 'default-frame-alist '(drag-internal-border . 1))
+(add-to-list 'default-frame-alist '(internal-border-width . 5))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(foreground-color . "white"))
+(add-to-list 'default-frame-alist '(background-color . "black"))
 
 (if (eq system-type 'darwin)
     (add-to-list 'default-frame-alist '(font . "JetBrains Mono-20"))
@@ -63,9 +62,9 @@
 (if (eq system-type 'darwin)
     (progn
       (defun aim/apply-theme (appearance)
-	"Load theme, taking current system APPEARANCE into consideration."
-	(mapc #'disable-theme custom-enabled-themes)
-	(pcase appearance
-	  ('light (load-theme 'modus-operandi t))
-	  ('dark (load-theme 'modus-vivendi t))))
+        "Load theme, taking current system APPEARANCE into consideration."
+        (mapc #'disable-theme custom-enabled-themes)
+        (pcase appearance
+          ('light (load-theme 'modus-operandi t))
+          ('dark (load-theme 'modus-vivendi t))))
       (add-hook 'ns-system-appearance-change-functions #'aim/apply-theme)))
