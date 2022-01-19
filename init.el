@@ -402,9 +402,9 @@
         git-gutter:added-sign " "
         git-gutter:deleted-sign " "
         git-gutter:lighter " GG")
-  (set-face-background 'git-gutter:modified "systemOrangeColor")
-  (set-face-foreground 'git-gutter:added "systemGreenColor")
-  (set-face-foreground 'git-gutter:deleted "systemRedColor")
+  (set-face-background 'git-gutter:modified "orange")
+  (set-face-foreground 'git-gutter:added "green")
+  (set-face-foreground 'git-gutter:deleted "brown")
   (global-git-gutter-mode 1))
 
 (use-package copy-as-format
