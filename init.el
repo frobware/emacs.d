@@ -305,7 +305,9 @@
 (use-package dired-x
   :straight (:type built-in)
   :ensure nil
-  :commands (dired-jump)
+  :demand t
+  :commands (dired-jump dired-omit-mode)
+  :config (add-hook 'dired-mode-hook 'dired-omit-mode)
   :bind ("C-x C-j" . dired-jump))
 
 (use-package dired-narrow
