@@ -189,6 +189,10 @@
   :config
   (gcmh-mode))
 
+(use-package auth-source
+  :config
+  (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
+
 (use-package desktop
   :demand t
   :custom ((desktop-restore-eager 8)
