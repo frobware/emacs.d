@@ -193,6 +193,13 @@
   :config
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
 
+(use-package epa-file
+  :straight (:type built-in)
+  :config
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  :init
+  (epa-file-enable))
+
 (use-package desktop
   :demand t
   :custom ((desktop-restore-eager 8)
