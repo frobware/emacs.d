@@ -255,6 +255,15 @@
   (modus-themes-load-vivendi)
   :bind (("<f5>" . modus-themes-toggle)))
 
+(use-package browse-at-remote)
+(use-package browse-url)
+(use-package cmake-mode)
+(use-package json-mode)
+(use-package markdown-mode)
+(use-package pass)
+(use-package x509-mode)
+(use-package xterm-color)
+
 (use-package pinentry
   :defer nil
   :commands (pinentry-start)
