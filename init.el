@@ -64,7 +64,7 @@
 
 (setq gc-cons-threshold (* 100 1048576))
 
-(setq use-package-always-defer nil
+(setq use-package-always-defer t
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
@@ -276,12 +276,20 @@
 
 (use-package browse-at-remote)
 (use-package browse-url)
-(use-package cmake-mode)
-(use-package json-mode)
-(use-package markdown-mode)
-(use-package pass)
+
+(use-package cmake-mode
+  :mode "CMakeLists.txt")
+
+(use-package json-mode
+    :mode "\\.json\\'")
+
+(use-package markdown-mode
+    :mode "\\.md\\'")
+
+(use-package pass
+  :demand t)
+
 (use-package x509-mode)
-(use-package xterm-color)
 
 (use-package pinentry
   :commands (pinentry-start)
