@@ -1,11 +1,11 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (when (eq system-type 'darwin)
-  (setq  mac-command-modifier 'meta
-         mac-right-option-modifier 'none
-         mac-option-modifier 'super
-         shell-command-switch "-lc"
-         with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
+  (setq mac-command-modifier 'meta
+        mac-right-option-modifier 'none
+        mac-option-modifier 'super
+        shell-command-switch "-lc"
+        with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
   (global-set-key "\M-`" 'other-frame))
 
 (unless (functionp 'json-serialize)
