@@ -216,9 +216,10 @@
 
 (use-package epa-file
   :straight (:type built-in)
+  :ensure nil
+  :defer nil
   :config
   (setq epa-file-cache-passphrase-for-symmetric-encryption t)
-  :init
   (epa-file-enable))
 
 (use-package desktop
