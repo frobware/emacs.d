@@ -8,9 +8,6 @@
          with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
   (global-set-key "\M-`" 'other-frame))
 
-(defvar use-nix-epkgs (or (string= system-name "mba")
-                          (string= system-name "x1c")))
-
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
@@ -61,12 +58,6 @@
       uniquify-ignore-buffers-re "^\\*")
 
 (setq gc-cons-threshold (* 100 1048576))
-
-(setq use-package-always-defer t
-      use-package-always-ensure nil
-      use-package-ignore-unknown-keywords t
-      use-package-verbose nil
-      use-package-compute-statistics t)
 
 (when (boundp 'read-process-output-max)
   ;; This is to speedup LSP. Increase the amount of data which Emacs
@@ -123,10 +114,6 @@
 
 (defun aim/straight-bootstrap nil
   (defvar bootstrap-version)		;dynamically bound
-  (setq straight-use-package-by-default t
-        straight-repository-branch "develop"
-        straight-check-for-modifications nil
-        straight-disable-native-compile t)
   (let ((bootstrap-file
          (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
         (bootstrap-version 5))
@@ -166,11 +153,10 @@
   (dolist (face '(mode-line default))
     (zge/reverse-face face)))
 
-(if use-nix-epkgs
-    (require 'use-package)
-  (progn
-    (setq-default straight-vc-git-default-clone-depth 1)
-    (aim/straight-bootstrap)))
+(defvar use-nix-epkgs (or (string= system-name "mba")
+                          (string= system-name "x1c")))
+
+;;(setq use-nix-epkgs nil)
 
 (when (not use-nix-epkgs)
   (setq-default straight-vc-git-default-clone-depth 1)
@@ -178,6 +164,17 @@
 
 ;; we either have this from straight or nixpkgs
 (require 'use-package)
+
+(setq use-package-always-defer t
+      use-package-always-ensure nil
+      use-package-ignore-unknown-keywords t
+      use-package-verbose nil
+      use-package-compute-statistics t)
+
+(setq straight-use-package-by-default t
+      straight-repository-branch "develop"
+      straight-check-for-modifications nil
+      straight-disable-native-compile t)
 
 (setq warning-suppress-log-types '((comp) (use-package)))
 
@@ -191,6 +188,7 @@
 ;; ;;; PACKAGES
 
 (use-package cus-edit
+  :straight (:type built-in)
   :demand t
   :custom
   (custom-file (expand-file-name "custom.el" user-emacs-directory)))
@@ -219,6 +217,7 @@
 ;; XXX this is importing
 
 (use-package epa-file
+  :straight (:type built-in)
   :after exec-path-from-shell
   :config
   (setq epa-file-cache-passphrase-for-symmetric-encryption t))
@@ -295,6 +294,7 @@
 (use-package x509-mode)
 
 (use-package pinentry
+  :demand t
   :commands (pinentry-start)
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
