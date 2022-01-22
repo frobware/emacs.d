@@ -193,8 +193,11 @@
   :custom
   (custom-file (expand-file-name "custom.el" user-emacs-directory)))
 
-(use-package diminish)
-(use-package delight)
+(use-package diminish
+  :demand t)
+
+(use-package delight
+  :demand t)
 
 ;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
 (use-package emacs
