@@ -1,12 +1,9 @@
-;; -*- lexical-binding: t; -*-
-
 (when (eq system-type 'darwin)
-  (progn
-    (setq mac-command-modifier 'meta
-          mac-right-option-modifier 'none
-          mac-option-modifier 'super
-          shell-command-switch "-lc")
-    (global-set-key "\M-`" 'other-frame)))
+  (setq-default mac-command-modifier 'meta
+                mac-right-option-modifier 'none
+                mac-option-modifier 'super
+                shell-command-switch "-lc")
+  (global-set-key "\M-`" 'other-frame))
 
 (defvar use-nix-epkgs (or (string= system-name "mba")
                           (string= system-name "x1c")))
@@ -35,6 +32,7 @@
       frame-resize-pixelwise t
       inhibit-compacting-font-caches t
       inhibit-startup-message t
+      inhibit-startup-screen t
       kept-new-versions 20
       kept-old-versions 10
       mouse-yank-at-point nil
@@ -45,7 +43,7 @@
       sentence-end-double-space nil
       show-paren-delay 0
       ;;site-run-file nil
-      truncate-lines t
+      truncate-lines nil
       use-dialog-box nil
       vc-follow-symlinks t
       version-control t
@@ -182,8 +180,25 @@
 
 ;;; PACKAGES
 
+(use-package diminish
+  :demand t
+  :ensure t
+  :defer nil)
+
+(use-package delight
+  :demand t
+  :ensure t
+  :defer nil)
+
+;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
+(use-package emacs
+  :demand t
+  :delight
+  (visual-line-mode))
+
 (use-package gcmh
   :demand t
+  :diminish
   :straight (:type built-in)
   :custom (gcmh-verbose nil)
   :config
@@ -275,6 +290,7 @@
   :mode "\\.lua\\'")
 
 (use-package clipetty
+  :diminish
   ;; You can invoke Clipetty explicitly from a key binding to copy a
   ;; region to the clipboard rather than using either the local or
   ;; global minor modes. To that end, Clipetty has a function called
@@ -308,6 +324,7 @@
   :bind ("C-c l" . avy-goto-line))
 
 (use-package which-key
+  :diminish
   :config
   (which-key-mode)
   (which-key-setup-side-window-bottom)
@@ -328,11 +345,11 @@
   :defer nil
   :commands (dired-jump dired-omit-mode)
   :custom (dired-omit-size-limit 100000)
-  :init (add-hook 'dired-mode-hook 'dired-omit-mode)
+  :config (add-hook 'dired-mode-hook 'dired-omit-mode)
   :bind ("C-x C-j" . dired-jump))
 
 (use-package dired-narrow
-  :init
+  :config
   (setq dired-use-ls-dired nil)
   :bind (:map dired-mode-map
               ("/" . dired-narrow)))
@@ -418,14 +435,13 @@
 (use-package git-timemachine)
 
 (use-package git-gutter
+  :diminish
   :config
   (setq git-gutter:modified-sign " "
         git-gutter:added-sign " "
         git-gutter:deleted-sign " "
-        git-gutter:lighter " GG")
-  (set-face-background 'git-gutter:modified "orange")
-  (set-face-foreground 'git-gutter:added "green")
-  (set-face-foreground 'git-gutter:deleted "brown")
+        ;;git-gutter:lighter " GG"
+        )
   (global-git-gutter-mode 1))
 
 (use-package copy-as-format
@@ -502,6 +518,7 @@
         ("C-x `" . langtool-correct-buffer)))
 
 (use-package company
+  :diminish
   :commands (company-select-next-or-abort
              company-select-previous-or-abort)
   :custom ((company-idle-delay 0)
@@ -627,13 +644,12 @@
 (use-package helm
   :commands (helm-buffers-list helm-mini)
   :config
-  (require 'helm-config)
-  (helm-mode -1)
-  :init
   (setq helm-imenu-fuzzy-match t
         helm-recentf-fuzzy-match t
         helm-semantic-fuzzy-match t
         helm-buffers-fuzzy-matching t)
+  (require 'helm-config)
+  (helm-mode -1)
   :bind (("C-c h d" . helm-browse-project)
          ("C-c h i" . helm-semantic-or-imenu)
          ("C-c h o" . helm-occur)
@@ -643,9 +659,9 @@
          ("M-y" . helm-show-kill-ring)))
 
 (use-package helm-ls-git
-  :commands (helm-ls-git-ls)
+  :commands (helm-ls-git)
   :bind
-  (("C-c C-l" . helm-ls-git-ls)))
+  (("C-c C-l" . helm-ls-git)))
 
 (use-package whitespace
   :ensure nil
@@ -656,6 +672,7 @@
   :hook (before-save . whitespace-cleanup))
 
 (use-package ws-butler
+  :diminish
   :config
   (ws-butler-global-mode))
 
@@ -723,6 +740,4 @@
           ("C-x m" . gnus-msg-mail)))
 
 (global-set-key (kbd "M-i") 'imenu)
-
-(setq completion-styles `(basic partial-completion emacs22
-                                initials ,(if (version<= emacs-version "27.0") 'helm-flex 'flex)))
+(toggle-truncate-lines)
