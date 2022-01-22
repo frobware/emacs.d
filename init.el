@@ -283,10 +283,10 @@
   :mode "CMakeLists.txt")
 
 (use-package json-mode
-    :mode "\\.json\\'")
+  :mode "\\.json\\'")
 
 (use-package markdown-mode
-    :mode "\\.md\\'")
+  :mode "\\.md\\'")
 
 (use-package pass
   :demand t)
