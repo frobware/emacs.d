@@ -17,7 +17,7 @@
 (unless (functionp 'module-load)
   (error "**** you don't have modules enabled ****"))
 
-(setq-default show-trailing-whitespace t)
+(setq-default show-trailing-whitespace nil)
 (setq-default indicate-empty-lines nil)
 (setq-default indent-tabs-mode nil)
 
@@ -96,6 +96,10 @@
 (show-paren-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
+
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (setq show-trailing-whitespace t)))
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
