@@ -1,3 +1,5 @@
+(setq custom-file null-device)
+
 (when (eq system-type 'darwin)
   (setq-default mac-command-modifier 'meta
                 mac-right-option-modifier 'none
