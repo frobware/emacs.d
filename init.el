@@ -217,8 +217,6 @@
   :config
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
 
-;; XXX this is importing
-
 (use-package epa-file
   :straight (:type built-in)
   :after exec-path-from-shell
