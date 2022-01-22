@@ -61,7 +61,8 @@
 (if (eq system-type 'darwin)
     (progn
       (add-hook 'ns-system-appearance-change-functions #'aim/apply-theme)
-      (add-to-list 'default-frame-alist '(font . "JetBrains Mono-20")))
+      (add-to-list 'default-frame-alist '(font . "JetBrains Mono-20"))
+      (add-to-list 'default-frame-alist '(fullscreen . maximized)))
   (progn
     (add-to-list 'default-frame-alist '(font . "JetBrains Mono"))
     (add-to-list 'default-frame-alist '(undecorated . t))
