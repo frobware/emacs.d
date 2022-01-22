@@ -42,7 +42,6 @@
       kept-old-versions 10
       mouse-yank-at-point nil
       ns-pop-up-frames nil
-      package-enable-at-startup nil
       require-final-newline t
       ring-bell-function #'ignore
       sentence-end-double-space nil
