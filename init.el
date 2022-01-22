@@ -10,7 +10,8 @@
 (defvar use-nix-epkgs (or (string= system-name "mba")
                           (string= system-name "x1c")))
 
-(setq use-nix-epkgs nil)
+(setq use-nix-epkgs nil)                ; force straight
+
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
 
@@ -44,8 +45,6 @@
       require-final-newline t
       ring-bell-function #'ignore
       sentence-end-double-space nil
-      show-paren-delay 0
-      ;;site-run-file nil
       truncate-lines nil
       use-dialog-box nil
       vc-follow-symlinks t
@@ -65,7 +64,7 @@
 
 (setq gc-cons-threshold (* 100 1048576))
 
-(setq use-package-always-defer t
+(setq use-package-always-defer nil
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
@@ -97,6 +96,7 @@
 (show-paren-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
+(toggle-truncate-lines)
 
 (add-hook 'prog-mode-hook
           (lambda ()
@@ -187,41 +187,31 @@
 
 ;;; PACKAGES
 
-(use-package diminish
-  :demand t
-  :ensure t
-  :defer nil)
-
-(use-package delight
-  :demand t
-  :ensure t
-  :defer nil)
+(use-package diminish)
+(use-package delight)
 
 ;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
 (use-package emacs
-  :demand t
   :delight
   (visual-line-mode))
 
 (use-package gcmh
+  :straight (:type built-in)
   :demand t
   :diminish
-  :straight (:type built-in)
-  :custom (gcmh-verbose nil)
+  :custom (gcmh-verbose t)
   :config
   (gcmh-mode))
 
 (use-package auth-source
+  :straight (:type built-in)
   :config
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
 
 (use-package epa-file
   :straight (:type built-in)
-  :ensure nil
-  :defer nil
   :config
-  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
-  (epa-file-enable))
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 
 (use-package desktop
   :demand t
@@ -251,8 +241,8 @@
   (save-place-mode t))
 
 (use-package hrs
-  :ensure nil
   :straight (:type built-in)
+  :defer nil
   :load-path (lambda () (expand-file-name "hrs" user-emacs-directory))
   :commands (hrs/reset-font-size
              hrs/increase-font-size
@@ -262,9 +252,8 @@
          ("C--" . hrs/decrease-font-size)))
 
 (use-package modus-themes
-  :ensure nil
-  :defer nil
   :straight (:type built-in)
+  :defer nil
   :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :commands (modus-themes-load-themes
              modus-themes-load-operandi
@@ -288,7 +277,6 @@
 (use-package xterm-color)
 
 (use-package pinentry
-  :defer nil
   :commands (pinentry-start)
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
@@ -308,7 +296,6 @@
 
 (use-package exec-path-from-shell
   :if (eq system-type 'darwin)
-  :ensure t
   :config
   (dolist (var '("GPG_AGENT_INFO"
                  "GNUPGHOME"
@@ -339,8 +326,6 @@
   :custom (which-key-idle-delay 1.2))
 
 (use-package ffap
-  :ensure nil
-  :defer nil
   :config
   (setq ffap-machine-p-known 'reject)
   (ffap-bindings))
@@ -349,8 +334,6 @@
 
 (use-package dired-x
   :straight (:type built-in)
-  :ensure nil
-  :defer nil
   :commands (dired-jump dired-omit-mode)
   :custom (dired-omit-size-limit 100000)
   :config (add-hook 'dired-mode-hook 'dired-omit-mode)
@@ -364,7 +347,6 @@
 
 (use-package hippie-exp
   :straight (:type built-in)
-  :defer nil
   :config
   (setq hippie-expand-try-functions-list
         '(try-expand-dabbrev
@@ -417,7 +399,6 @@
 (use-package tramp
   ;; Using the built-in version avoids; Symbol's function definition is void: "tramp-register-crypt-file-name-handler
   :straight (:type built-in)
-  :ensure nil
   :config
   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
   :custom
@@ -499,7 +480,6 @@
 (use-package docker-compose-mode)
 
 (use-package notmuch
-  :defer 5
   :init
   (setq notmuch-search-oldest-first nil
         mail-user-agent 'message-user-agent
@@ -630,7 +610,6 @@
   (lsp-eldoc-hook nil))
 
 (use-package atomic-chrome
-  :defer nil
   :commands (atomic-chrome-start-server)
   :config
   (atomic-chrome-start-server))
@@ -672,9 +651,7 @@
   (("C-c C-l" . helm-ls-git)))
 
 (use-package whitespace
-  :ensure nil
   :straight (:type built-in)
-  :defer nil
   :commands (whitespace-cleanup)
   :bind ("<f3>" . whitespace-cleanup)
   :hook (before-save . whitespace-cleanup))
@@ -685,9 +662,7 @@
   (ws-butler-global-mode))
 
 (use-package executable
-  :ensure nil
   :straight (:type built-in)
-  :defer nil
   :hook (after-save . executable-make-buffer-file-executable-if-script-p))
 
 (use-package swift-mode
@@ -748,4 +723,3 @@
           ("C-x m" . gnus-msg-mail)))
 
 (global-set-key (kbd "M-i") 'imenu)
-(toggle-truncate-lines)
