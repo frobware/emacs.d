@@ -4,7 +4,8 @@
   (setq-default mac-command-modifier 'meta
                 mac-right-option-modifier 'none
                 mac-option-modifier 'super
-                shell-command-switch "-lc")
+                shell-command-switch "-lc"
+                with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
   (global-set-key "\M-`" 'other-frame))
 
 (defvar use-nix-epkgs (or (string= system-name "mba")
