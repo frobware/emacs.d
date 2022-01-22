@@ -35,6 +35,7 @@
       inhibit-compacting-font-caches t
       inhibit-startup-message t
       inhibit-startup-screen t
+      initial-scratch-message ""
       kept-new-versions 20
       kept-old-versions 10
       mouse-yank-at-point nil
