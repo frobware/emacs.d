@@ -1,7 +1,5 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(setq custom-file null-device)
-
 (when (eq system-type 'darwin)
   (setq  mac-command-modifier 'meta
          mac-right-option-modifier 'none
@@ -65,7 +63,7 @@
 (setq gc-cons-threshold (* 100 1048576))
 
 (setq use-package-always-defer t
-      use-package-always-ensure t
+      use-package-always-ensure nil
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
       use-package-compute-statistics t)
@@ -168,11 +166,11 @@
   (dolist (face '(mode-line default))
     (zge/reverse-face face)))
 
-;; (if use-nix-epkgs
-;;     (require 'use-package)
-;;   (progn
-;;     (setq-default straight-vc-git-default-clone-depth 1)
-;;     (aim/straight-bootstrap)))
+(if use-nix-epkgs
+    (require 'use-package)
+  (progn
+    (setq-default straight-vc-git-default-clone-depth 1)
+    (aim/straight-bootstrap)))
 
 (when (not use-nix-epkgs)
   (setq-default straight-vc-git-default-clone-depth 1)
@@ -192,10 +190,15 @@
 
 ;; ;;; PACKAGES
 
+(use-package cus-edit
+  :demand t
+  :custom
+  (custom-file (expand-file-name "custom.el" user-emacs-directory)))
+
 (use-package diminish)
 (use-package delight)
 
-;; ;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
+;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
 (use-package emacs
   :delight
   (visual-line-mode))
@@ -215,10 +218,10 @@
 
 ;; XXX this is importing
 
-;; (use-package epa-file
-;;   :after exec-path-from-shell
-;;   :config
-;;   (setq epa-file-cache-passphrase-for-symmetric-encryption t))
+(use-package epa-file
+  :after exec-path-from-shell
+  :config
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 
 (use-package desktop
   :demand t
@@ -351,18 +354,17 @@
   :ensure nil
   :straight (:type built-in)
   :commands (dired-jump dired-omit-mode)
-  :custom (dired-omit-size-limit 100000)
-  :config (add-hook 'dired-mode-hook 'dired-omit-mode)
-  :bind ("C-x C-j" . dired-jump))
+  :custom
+  (dired-omit-size-limit 100000)
+  (dired-use-ls-dired nil)
+  :bind
+  ("C-x C-j" . dired-jump))
 
-(use-package dired-narrow
-  :config
-  (setq dired-use-ls-dired nil)
-  :bind (:map dired-mode-map
-              ("/" . dired-narrow)))
+(add-hook 'dired-mode-hook 'dired-omit-mode)
 
 (use-package hippie-exp
   :straight (:type built-in)
+  :demand t
   :config
   (setq hippie-expand-try-functions-list
         '(try-expand-dabbrev
