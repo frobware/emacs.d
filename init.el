@@ -729,8 +729,13 @@
   (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
 
+;; The main advantage of using bind-key over define-key or
+;; global-set-key is that you can use M-x
+;; describe-personal-keybindings to see a list of all the customized
+;; keybindings you have defined.
+(require 'bind-key)
 (mapcar #'(lambda (x)
-            (define-key global-map (kbd (car x)) (cdr x)))
+            (bind-key (kbd (car x)) (cdr x)))
         '(("<f11>" . aim/fullscreen)
           ("<f1>" . gnus-slave)
           ("<f2>" . aim/revert-buffer-now)
@@ -738,6 +743,5 @@
           ("C-x C-g" . goto-line)
           ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
           ("C-x g" . goto-line)
-          ("C-x m" . gnus-msg-mail)))
-
-(global-set-key (kbd "M-i") 'imenu)
+          ("C-x m" . gnus-msg-mail)
+          ("M-i" . imenu)))
