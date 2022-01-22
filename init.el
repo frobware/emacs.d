@@ -1,17 +1,17 @@
+(fset 'yes-or-no-p 'y-or-n-p)
+
 (setq custom-file null-device)
 
 (when (eq system-type 'darwin)
-  (setq-default mac-command-modifier 'meta
-                mac-right-option-modifier 'none
-                mac-option-modifier 'super
-                shell-command-switch "-lc"
-                with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
+  (setq  mac-command-modifier 'meta
+         mac-right-option-modifier 'none
+         mac-option-modifier 'super
+         shell-command-switch "-lc"
+         with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
   (global-set-key "\M-`" 'other-frame))
 
 (defvar use-nix-epkgs (or (string= system-name "mba")
                           (string= system-name "x1c")))
-
-(setq use-nix-epkgs nil)                ; force straight
 
 (unless (functionp 'json-serialize)
   (error "**** you don't have a json-serialize built-in function ****"))
@@ -70,11 +70,6 @@
       use-package-verbose nil
       use-package-compute-statistics t)
 
-(setq straight-use-package-by-default t
-      straight-repository-branch "develop"
-      straight-check-for-modifications nil
-      straight-disable-native-compile t)
-
 (when (boundp 'read-process-output-max)
   ;; This is to speedup LSP. Increase the amount of data which Emacs
   ;; reads from the process. Again the emacs default is too low 4k
@@ -87,7 +82,6 @@
 (auto-compression-mode t)
 (blink-cursor-mode -1)
 (column-number-mode 1)
-(fset 'yes-or-no-p 'y-or-n-p)
 (global-hl-line-mode)
 (menu-bar-mode -1)
 (put 'narrow-to-region 'disabled nil)
@@ -131,6 +125,10 @@
 
 (defun aim/straight-bootstrap nil
   (defvar bootstrap-version)		;dynamically bound
+  (setq straight-use-package-by-default t
+        straight-repository-branch "develop"
+        straight-check-for-modifications nil
+        straight-disable-native-compile t)
   (let ((bootstrap-file
          (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
         (bootstrap-version 5))
@@ -170,11 +168,18 @@
   (dolist (face '(mode-line default))
     (zge/reverse-face face)))
 
-(if use-nix-epkgs
-    (require 'use-package)
-  (progn
-    (setq-default straight-vc-git-default-clone-depth 1)
-    (aim/straight-bootstrap)))
+;; (if use-nix-epkgs
+;;     (require 'use-package)
+;;   (progn
+;;     (setq-default straight-vc-git-default-clone-depth 1)
+;;     (aim/straight-bootstrap)))
+
+(when (not use-nix-epkgs)
+  (setq-default straight-vc-git-default-clone-depth 1)
+  (aim/straight-bootstrap))
+
+;; we either have this from straight or nixpkgs
+(require 'use-package)
 
 (setq warning-suppress-log-types '((comp) (use-package)))
 
@@ -185,12 +190,12 @@
                              (float-time (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 
-;;; PACKAGES
+;; ;;; PACKAGES
 
 (use-package diminish)
 (use-package delight)
 
-;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
+;; ;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
 (use-package emacs
   :delight
   (visual-line-mode))
@@ -208,10 +213,12 @@
   :config
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
 
-(use-package epa-file
-  :straight (:type built-in)
-  :config
-  (setq epa-file-cache-passphrase-for-symmetric-encryption t))
+;; XXX this is importing
+
+;; (use-package epa-file
+;;   :after exec-path-from-shell
+;;   :config
+;;   (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 
 (use-package desktop
   :demand t
@@ -333,6 +340,7 @@
 (defalias 'ttl 'toggle-truncate-lines)
 
 (use-package dired-x
+  :ensure nil
   :straight (:type built-in)
   :commands (dired-jump dired-omit-mode)
   :custom (dired-omit-size-limit 100000)
