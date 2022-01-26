@@ -1,5 +1,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
+;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=31194#40
+(set-face-background 'glyphless-char "red")
+
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
         mac-right-option-modifier 'none
