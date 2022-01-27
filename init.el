@@ -192,15 +192,15 @@
 
 (use-package cus-edit
   :straight (:type built-in)
-  :demand t
+  :demand
   :custom
   (custom-file (expand-file-name "custom.el" user-emacs-directory)))
 
 (use-package diminish
-  :demand t)
+  :demand)
 
 (use-package delight
-  :demand t)
+  :demand)
 
 ;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
 (use-package emacs
@@ -209,7 +209,7 @@
 
 (use-package gcmh
   :straight (:type built-in)
-  :demand t
+  :demand
   :diminish
   :custom (gcmh-verbose t)
   :config
@@ -227,7 +227,7 @@
   (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 
 (use-package desktop
-  :demand t
+  :demand
   :custom ((desktop-restore-eager 8)
            (desktop-globals-to-save nil)
            (desktop-files-not-to-save
@@ -238,7 +238,7 @@
   (desktop-save-mode t))
 
 (use-package savehist
-  :demand t
+  :demand
   :custom ((history-delete-duplicates t)
            (savehist-save-minibuffer-history t)
            (savehist-additional-variables '(kill-ring
@@ -249,7 +249,7 @@
   (savehist-mode t))
 
 (use-package saveplace
-  :demand t
+  :demand
   :config
   (save-place-mode t))
 
@@ -293,12 +293,12 @@
   :mode "\\.md\\'")
 
 (use-package pass
-  :demand t)
+  :demand)
 
 (use-package x509-mode)
 
 (use-package pinentry
-  :demand t
+  :demand
   :commands (pinentry-start)
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
@@ -368,7 +368,7 @@
 
 (use-package hippie-exp
   :straight (:type built-in)
-  :demand t
+  :demand
   :config
   (setq hippie-expand-try-functions-list
         '(try-expand-dabbrev
@@ -483,7 +483,7 @@
 (use-package protobuf-mode)
 
 (use-package nixpkgs-fmt
-  :demand t
+  :demand
   :custom
   (nixpkgs-fmt-command "nixfmt"))
 
