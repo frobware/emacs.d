@@ -96,8 +96,9 @@
 (defun aim/fullscreen ()
   "Toggle fullscreen."
   (interactive)
-  (set-frame-parameter nil 'fullscreen
-                       (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
+  (let (f (current-frame (selected-frame)))
+    (set-frame-parameter f 'fullscreen
+                         (if (frame-parameter f 'fullscreen) nil 'fullboth))))
 
 (defun aim/revert-buffer-now ()
   "Revert-(current-buffer) asking no questions."
