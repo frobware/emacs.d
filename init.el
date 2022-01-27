@@ -283,8 +283,11 @@
 (use-package browse-at-remote)
 (use-package browse-url)
 
+(use-package cmake-font-lock
+  :hook (cmake-mode . cmake-font-lock-activate))
+
 (use-package cmake-mode
-  :mode "CMakeLists.txt")
+  :mode ("CMakeLists.txt" "\\.cmake\\'"))
 
 (use-package json-mode
   :mode "\\.json\\'")
