@@ -169,7 +169,7 @@
 (require 'use-package)
 
 (setq use-package-always-defer t
-      use-package-always-ensure nil
+      use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
       use-package-compute-statistics t)
