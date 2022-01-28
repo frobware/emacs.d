@@ -511,6 +511,17 @@
         notmuch-wash-wrap-lines-length 80
         notmuch-tree-show-out t)
   :config
+  (setq notmuch-search-oldest-first nil
+        mail-user-agent 'message-user-agent
+        notmuch-wash-wrap-lines-length 80
+        notmuch-tree-show-out t)
+  (unless (string= system-name "spicy")
+    (setq notmuch-command "remote-notmuch.sh"))
+  ;;; remote-notmuch should look like:
+  ;;;
+  ;;; #!/usr/bin/env bash
+  ;;; printf -v ARGS "%q " "$@"
+  ;;; exec ssh notmuch notmuch ${ARGS}
   (setq notmuch-saved-searches
         '((:key "i" :name "inbox" :query "tag:inbox")
           (:key "u" :name "unread" :query "tag:unread")
