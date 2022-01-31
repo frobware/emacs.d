@@ -742,37 +742,37 @@
   :config
   (direnv-mode))
 
-(use-package diff-ansi
-  :commands (diff-ansi-mode diff-ansi-buffer))
+;; (use-package diff-ansi
+;;   :commands (diff-ansi-mode diff-ansi-buffer))
 
-(use-package vterm-toggle
-  :demand
-  :config
-  (global-set-key [f2] 'vterm-toggle)
-  (global-set-key [C-f2] 'vterm-toggle-cd)
-  ;; you can cd to the directory where your previous buffer file
-  ;; exists after you have toggle to the vterm buffer with
-  ;; `vterm-toggle'.
-  (define-key vterm-mode-map [(control return)]   #'vterm-toggle-insert-cd)
-  ;; Switch to next vterm buffer
-  (define-key vterm-mode-map (kbd "s-n") 'vterm-toggle-forward)
-  ;;Switch to previous vterm buffer
-  (define-key vterm-mode-map (kbd "s-p") 'vterm-toggle-backward))
+;; (use-package vterm-toggle
+;;   :demand
+;;   :config
+;;   (global-set-key [f2] 'vterm-toggle)
+;;   (global-set-key [C-f2] 'vterm-toggle-cd)
+;;   ;; you can cd to the directory where your previous buffer file
+;;   ;; exists after you have toggle to the vterm buffer with
+;;   ;; `vterm-toggle'.
+;;   (define-key vterm-mode-map [(control return)]   #'vterm-toggle-insert-cd)
+;;   ;; Switch to next vterm buffer
+;;   (define-key vterm-mode-map (kbd "s-n") 'vterm-toggle-forward)
+;;   ;;Switch to previous vterm buffer
+;;   (define-key vterm-mode-map (kbd "s-p") 'vterm-toggle-backward))
 
 ;; (setq initial-buffer-choice 'vterm)
 
-(use-package centaur-tabs
-  :demand
-  :config
-  (setq centaur-tabs-height 128)
-  (setq centaur-tabs-set-icons t)
-  (setq centaur-tabs-style "bar")
-  (centaur-tabs-mode t)
-  (centaur-tabs-headline-match)
-  :commands (centaur-tabs-forward centaur-tabs-backwardax)
-  :bind
-  ("C-<prior>" . centaur-tabs-backward)
-  ("C-<next>" . centaur-tabs-forward))
+;; (use-package centaur-tabs
+;;   :demand
+;;   :config
+;;   (setq centaur-tabs-height 128)
+;;   (setq centaur-tabs-set-icons t)
+;;   (setq centaur-tabs-style "bar")
+;;   (centaur-tabs-mode t)
+;;   (centaur-tabs-headline-match)
+;;   :commands (centaur-tabs-forward centaur-tabs-backwardax)
+;;   :bind
+;;   ("C-<prior>" . centaur-tabs-backward)
+;;   ("C-<next>" . centaur-tabs-forward))
 
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
