@@ -450,6 +450,7 @@
 (use-package git-timemachine)
 
 (use-package git-gutter
+  :demand
   :diminish
   :config
   (setq git-gutter:modified-sign " "
@@ -482,7 +483,8 @@
         ("r" . copy-as-format-rst)
         ("s" . copy-as-format-slack)))
 
-;;(use-package xref)
+(use-package xref
+  :demand)
 
 (use-package protobuf-mode)
 
@@ -538,6 +540,7 @@
   (setq langtool-http-server-host "localhost"
         langtool-http-server-port 8081
         langtool-default-language "en-GB")
+  :commands (langtool-correct-buffer)
   :bind
   (:map git-commit-mode-map
         ("C-x `" . langtool-correct-buffer)))
@@ -589,6 +592,7 @@
 (use-package gotest)
 
 (use-package go-mode
+  :demand
   :mode "\\.go\\'"
   :custom
   (go-fontify-function-calls nil)
@@ -738,6 +742,38 @@
   :config
   (direnv-mode))
 
+(use-package diff-ansi
+  :commands (diff-ansi-mode diff-ansi-buffer))
+
+(use-package vterm-toggle
+  :demand
+  :config
+  (global-set-key [f2] 'vterm-toggle)
+  (global-set-key [C-f2] 'vterm-toggle-cd)
+  ;; you can cd to the directory where your previous buffer file
+  ;; exists after you have toggle to the vterm buffer with
+  ;; `vterm-toggle'.
+  (define-key vterm-mode-map [(control return)]   #'vterm-toggle-insert-cd)
+  ;; Switch to next vterm buffer
+  (define-key vterm-mode-map (kbd "s-n") 'vterm-toggle-forward)
+  ;;Switch to previous vterm buffer
+  (define-key vterm-mode-map (kbd "s-p") 'vterm-toggle-backward))
+
+;; (setq initial-buffer-choice 'vterm)
+
+(use-package centaur-tabs
+  :demand
+  :config
+  (setq centaur-tabs-height 128)
+  (setq centaur-tabs-set-icons t)
+  (setq centaur-tabs-style "bar")
+  (centaur-tabs-mode t)
+  (centaur-tabs-headline-match)
+  :commands (centaur-tabs-forward centaur-tabs-backwardax)
+  :bind
+  ("C-<prior>" . centaur-tabs-backward)
+  ("C-<next>" . centaur-tabs-forward))
+
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
@@ -748,19 +784,14 @@
   (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
 
-;; The main advantage of using bind-key over define-key or
-;; global-set-key is that you can use M-x
-;; describe-personal-keybindings to see a list of all the customized
-;; keybindings you have defined.
-(require 'bind-key)
 (mapcar #'(lambda (x)
             (bind-key (kbd (car x)) (cdr x)))
-        '(("<f11>" . aim/fullscreen)
-          ("<f1>" . gnus-slave)
-          ("<f2>" . aim/revert-buffer-now)
-          ("C-x C" . compile)
+        '(("<f11>"   . aim/fullscreen)
+          ("<f1>"    . gnus-slave)
+          ("<f2>"    . aim/revert-buffer-now)
+          ("C-x C"   . compile)
           ("C-x C-g" . goto-line)
           ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
-          ("C-x g" . goto-line)
-          ("C-x m" . gnus-msg-mail)
-          ("M-i" . imenu)))
+          ("C-x g"   . goto-line)
+          ("C-x m"   . gnus-msg-mail)
+          ("M-i"     . imenu)))
