@@ -169,7 +169,7 @@
 ;; we either have this from straight or nixpkgs
 (require 'use-package)
 
-(setq use-package-always-defer t
+(setq use-package-always-defer nil
       use-package-always-ensure t
       use-package-ignore-unknown-keywords t
       use-package-verbose nil
