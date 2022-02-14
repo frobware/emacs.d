@@ -589,6 +589,13 @@
   :commands
   (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition))
 
+(use-package rust-mode
+  :demand
+  :mode "\\.rs\\'")
+
+(use-package dap-mode
+  :demand)
+
 (use-package gotest)
 
 (use-package go-mode
