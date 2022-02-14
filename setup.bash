@@ -13,7 +13,7 @@ safe_link() {
         exit 1
     fi
 
-    ln -sf "$1" "$2"
+    (cd $(dirname $2); ln -sf "$1")
 }
 
 mkdir -p "$HOME/.emacs.d/straight/versions"
