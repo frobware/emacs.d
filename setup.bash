@@ -9,8 +9,8 @@ srcdir="$(dirname "$script")"
 
 safe_link() {
     if [[ -e "$2" && ! -L "$2" ]]; then
-	echo "already exists and not a symlink: $2" >&2
-	exit 1
+        echo "already exists and not a symlink: $2" >&2
+        exit 1
     fi
 
     ln -sf "$1" "$2"
@@ -23,3 +23,4 @@ safe_link "$srcdir/modus-themes" "$HOME/.emacs.d/modus-themes"
 safe_link "$srcdir/use-package" "$HOME/.emacs.d/use-package"
 safe_link "$srcdir/gcmh" "$HOME/.emacs.d/gcmh"
 safe_link "$srcdir/hrs" "$HOME/.emacs.d/hrs"
+safe_link "$srcdir/magit" "$HOME/.emacs.d/magit"

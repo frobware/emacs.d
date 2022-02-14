@@ -7,3 +7,6 @@
 [submodule "gcmh"]
 	path = gcmh
 	url = https://gitlab.com/koral/gcmh
+[submodule "magit"]
+	path = magit
+	url = https://github.com/magit/magit
