@@ -435,8 +435,6 @@
   (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
 
 (use-package magit
-  :demand
-  :straight (:type built-in)
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   ;; :config
   ;; (global-magit-file-mode -1)
