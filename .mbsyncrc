@@ -1,0 +1,26 @@
+IMAPAccount amcdermo@redhat.com
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+Host imap.gmail.com
+PassCmd "pass rhat/app-password/gnus"
+PipelineDepth 1
+SSLType IMAPS
+Timeout 120
+User amcdermo@redhat.com
+
+IMAPStore amcdermo@redhat.com-remote
+Account amcdermo@redhat.com
+
+MaildirStore amcdermo@redhat.com-local
+Inbox /Users/aim/Maildir/amcdermo@redhat.com/Inbox
+Path /Users/aim/Maildir/amcdermo@redhat.com/
+SubFolders Verbatim
+
+Channel amcdermo@redhat.com
+Create Both
+Expunge Both
+Far :amcdermo@redhat.com-remote:
+Patterns * ![Gmail]* "![Gmail]/Sent Mail" ![Gmail]/Starred "![Gmail]/All Mail"
+Remove None
+Near :amcdermo@redhat.com-local:
+Sync All
+SyncState *

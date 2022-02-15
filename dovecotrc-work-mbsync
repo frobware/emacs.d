@@ -1,0 +1,6 @@
+protocols = imap
+mail_location =  maildir:~/Maildir/amcdermo@redhat.com:INBOX=~/Maildir/amcdermo@redhat.com/Inbox:LAYOUT=fs:INDEX=~/.dovecot-work-mbsync/indexes
+ssl = no
+disable_plaintext_auth = no
+base_dir = ~/tmp
+
