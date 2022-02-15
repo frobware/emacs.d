@@ -5,10 +5,10 @@
 
 (when (eq system-type 'darwin)
   (setq mac-command-modifier 'meta
-        mac-right-option-modifier 'none
-        mac-option-modifier 'super
-        shell-command-switch "-lc"
-        with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
+	mac-right-option-modifier 'none
+	mac-option-modifier 'super
+	shell-command-switch "-lc"
+	with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient")
   (global-set-key "\M-`" 'other-frame))
 
 (unless (functionp 'json-serialize)
@@ -85,8 +85,8 @@
 (toggle-truncate-lines)
 
 (add-hook 'prog-mode-hook
-          (lambda ()
-            (setq show-trailing-whitespace t)))
+	  (lambda ()
+	    (setq show-trailing-whitespace t)))
 
 (defun aim/run-go-buffer ()
   "Run current buffer using go run."
@@ -98,7 +98,7 @@
   (interactive)
   (let (f (current-frame (selected-frame)))
     (set-frame-parameter f 'fullscreen
-                         (if (frame-parameter f 'fullscreen) nil 'fullboth))))
+			 (if (frame-parameter f 'fullscreen) nil 'fullboth))))
 
 (defun aim/revert-buffer-now ()
   "Revert-(current-buffer) asking no questions."
@@ -119,15 +119,15 @@
 (defun aim/straight-bootstrap nil
   (defvar bootstrap-version)		;dynamically bound
   (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 5))
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage)
     (straight-use-package 'use-package)))
 
@@ -137,19 +137,19 @@
 (defun zge/reverse-face (face &optional frame)
   (interactive (list (read-face-name "Reverse face" (face-at-point t))))
   (let* ((fg (face-attribute face :foreground frame))
-         (bg (face-attribute face :background frame)))
+	 (bg (face-attribute face :background frame)))
     (set-face-attribute
      face frame
      :foreground
      (color-complement-hex
       (if (eq fg 'unspecified)
-          (face-attribute 'default :foreground frame)
-        fg))
+	  (face-attribute 'default :foreground frame)
+	fg))
      :background
      (color-complement-hex
       (if (eq bg 'unspecified)
-          (face-attribute 'default :background frame)
-        bg))))
+	  (face-attribute 'default :background frame)
+	bg))))
   face)
 
 (defun zge/toggle-dark-mode ()
@@ -158,7 +158,7 @@
     (zge/reverse-face face)))
 
 (defvar use-nix-epkgs (or (string= system-name "mba")
-                          (string= system-name "x1c")))
+			  (string= system-name "x1c")))
 
 (setq use-nix-epkgs nil)
 
@@ -183,11 +183,11 @@
 (setq warning-suppress-log-types '((comp) (use-package)))
 
 (add-hook 'emacs-startup-hook
-          (lambda ()
-            (message "Happiness delivered in %s with %d garbage collections."
-                     (format "%.2f seconds"
-                             (float-time (time-subtract after-init-time before-init-time)))
-                     gcs-done)))
+	  (lambda ()
+	    (message "Happiness delivered in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
 
 ;; ;;; PACKAGES
 
@@ -230,22 +230,22 @@
 (use-package desktop
   :demand
   :custom ((desktop-restore-eager 8)
-           (desktop-globals-to-save nil)
-           (desktop-files-not-to-save
-            (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
-                    (seq "(ftp)" eol)
-                    (seq "*" (one-or-more not-newline) "*")))))
+	   (desktop-globals-to-save nil)
+	   (desktop-files-not-to-save
+	    (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
+		    (seq "(ftp)" eol)
+		    (seq "*" (one-or-more not-newline) "*")))))
   :config
   (desktop-save-mode t))
 
 (use-package savehist
   :demand
   :custom ((history-delete-duplicates t)
-           (savehist-save-minibuffer-history t)
-           (savehist-additional-variables '(kill-ring
-                                            compile-command
-                                            search-ring))
-           (savehist-ignored-variables '(yes-or-no-p-history)))
+	   (savehist-save-minibuffer-history t)
+	   (savehist-additional-variables '(kill-ring
+					    compile-command
+					    search-ring))
+	   (savehist-ignored-variables '(yes-or-no-p-history)))
   :config
   (savehist-mode t))
 
@@ -259,24 +259,24 @@
   :defer nil
   :load-path (lambda () (expand-file-name "hrs" user-emacs-directory))
   :commands (hrs/reset-font-size
-             hrs/increase-font-size
-             hrs/default-font-size)
+	     hrs/increase-font-size
+	     hrs/default-font-size)
   :bind (("C-)" . hrs/reset-font-size)
-         ("C-+" . hrs/increase-font-size)
-         ("C--" . hrs/decrease-font-size)))
+	 ("C-+" . hrs/increase-font-size)
+	 ("C--" . hrs/decrease-font-size)))
 
 (use-package modus-themes
   :straight (:type built-in)
   :defer nil
   :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :commands (modus-themes-load-themes
-             modus-themes-load-operandi
-             modus-themes-load-vivendi
-             modus-themes-toggle)
+	     modus-themes-load-operandi
+	     modus-themes-load-vivendi
+	     modus-themes-toggle)
   :config
   (setq modus-themes-italic-constructs t
-        modus-themes-bold-constructs nil
-        modus-themes-region '(bg-only no-extend))
+	modus-themes-bold-constructs nil
+	modus-themes-region '(bg-only no-extend))
   (modus-themes-load-themes)
   (modus-themes-load-vivendi)
   :bind (("<f5>" . modus-themes-toggle)))
@@ -324,15 +324,15 @@
   :if (eq system-type 'darwin)
   :config
   (dolist (var '("GPG_AGENT_INFO"
-                 "GNUPGHOME"
-                 "LANG"
-                 "LC_CTYPE"
-                 "NIX_PATH"
-                 "NIX_SSL_CERT_FILE"
-                 "NO_COLOR"
-                 "PASSWORD_STORE_DIR"
-                 "SSH_AGENT_PID"
-                 "SSH_AUTH_SOCK"))
+		 "GNUPGHOME"
+		 "LANG"
+		 "LC_CTYPE"
+		 "NIX_PATH"
+		 "NIX_SSL_CERT_FILE"
+		 "NO_COLOR"
+		 "PASSWORD_STORE_DIR"
+		 "SSH_AGENT_PID"
+		 "SSH_AUTH_SOCK"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
@@ -375,16 +375,16 @@
   :demand
   :config
   (setq hippie-expand-try-functions-list
-        '(try-expand-dabbrev
-          try-expand-dabbrev-from-kill
-          try-expand-dabbrev-all-buffers
-          try-complete-file-name-partially
-          try-complete-file-name
-          try-expand-all-abbrevs
-          try-expand-list
-          try-expand-line
-          try-complete-lisp-symbol-partially
-          try-complete-lisp-symbol)))
+	'(try-expand-dabbrev
+	  try-expand-dabbrev-from-kill
+	  try-expand-dabbrev-all-buffers
+	  try-complete-file-name-partially
+	  try-complete-file-name
+	  try-expand-all-abbrevs
+	  try-expand-list
+	  try-expand-line
+	  try-complete-lisp-symbol-partially
+	  try-complete-lisp-symbol)))
 
 (use-package ag
   :custom
@@ -404,7 +404,7 @@
 
 (use-package smex
   :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands))
+	 ("M-X" . smex-major-mode-commands))
   :config
   (smex-initialize))
 
@@ -455,10 +455,10 @@
   :diminish
   :config
   (setq git-gutter:modified-sign " "
-        git-gutter:added-sign " "
-        git-gutter:deleted-sign " "
-        ;;git-gutter:lighter " GG"
-        )
+	git-gutter:added-sign " "
+	git-gutter:deleted-sign " "
+	;;git-gutter:lighter " GG"
+	)
   (global-git-gutter-mode 1))
 
 (use-package copy-as-format
@@ -466,23 +466,23 @@
   (setq copy-as-format-default "slack")
   :bind
   (:map mode-specific-map
-        :prefix-map copy-as-format-prefix-map
-        :prefix "f"
-        ("f" . copy-as-format)
-        ("a" . copy-as-format-asciidoc)
-        ("b" . copy-as-format-bitbucket)
-        ("d" . copy-as-format-disqus)
-        ("g" . copy-as-format-github)
-        ("l" . copy-as-format-gitlab)
-        ("c" . copy-as-format-hipchat)
-        ("h" . copy-as-format-html)
-        ("j" . copy-as-format-jira)
-        ("m" . copy-as-format-markdown)
-        ("w" . copy-as-format-mediawiki)
-        ("o" . copy-as-format-org-mode)
-        ("p" . copy-as-format-pod)
-        ("r" . copy-as-format-rst)
-        ("s" . copy-as-format-slack)))
+	:prefix-map copy-as-format-prefix-map
+	:prefix "f"
+	("f" . copy-as-format)
+	("a" . copy-as-format-asciidoc)
+	("b" . copy-as-format-bitbucket)
+	("d" . copy-as-format-disqus)
+	("g" . copy-as-format-github)
+	("l" . copy-as-format-gitlab)
+	("c" . copy-as-format-hipchat)
+	("h" . copy-as-format-html)
+	("j" . copy-as-format-jira)
+	("m" . copy-as-format-markdown)
+	("w" . copy-as-format-mediawiki)
+	("o" . copy-as-format-org-mode)
+	("p" . copy-as-format-pod)
+	("r" . copy-as-format-rst)
+	("s" . copy-as-format-slack)))
 
 (use-package xref
   :demand)
@@ -500,7 +500,7 @@
   (nix-indent-function #'nix-indent-line)
   ;;:hook 'nix-mode #'nixpkgs-fmt-on-save-mode
   :bind (:map nix-mode-map
-              ("C-c C-j" . aj-toggle-fold)))
+	      ("C-c C-j" . aj-toggle-fold)))
 
 ;; not sure if these two should be here
 (use-package dockerfile-mode
@@ -511,14 +511,14 @@
 (use-package notmuch
   :init
   (setq notmuch-search-oldest-first nil
-        mail-user-agent 'message-user-agent
-        notmuch-wash-wrap-lines-length 80
-        notmuch-tree-show-out t)
+	mail-user-agent 'message-user-agent
+	notmuch-wash-wrap-lines-length 80
+	notmuch-tree-show-out t)
   :config
   (setq notmuch-search-oldest-first nil
-        mail-user-agent 'message-user-agent
-        notmuch-wash-wrap-lines-length 80
-        notmuch-tree-show-out t)
+	mail-user-agent 'message-user-agent
+	notmuch-wash-wrap-lines-length 80
+	notmuch-tree-show-out t)
   (unless (string= system-name "spicy")
     (setq notmuch-command "remote-notmuch.sh"))
   ;;; remote-notmuch should look like:
@@ -527,39 +527,39 @@
   ;;; printf -v ARGS "%q " "$@"
   ;;; exec ssh notmuch notmuch ${ARGS}
   (setq notmuch-saved-searches
-        '((:key "i" :name "inbox" :query "tag:inbox")
-          (:key "u" :name "unread" :query "tag:unread")
-          (:key "g" :name "github/mentions" :query "tag:github/mentions is:unread")
-          (:key "b" :name "bugs" :query "tag:bugs date:today")
-          (:key "T" :name "today" :query "date:today and not tag:trash")
-          (:key "U" :name "unread today" :query "date:today is:unread")
-          (:key "F" :name "flagged" :query "tag:flagged")
-          (:key "S" :name "sent" :query "tag:Sent Mail"))))
+	'((:key "i" :name "inbox" :query "tag:inbox")
+	  (:key "u" :name "unread" :query "tag:unread")
+	  (:key "g" :name "github/mentions" :query "tag:github/mentions is:unread")
+	  (:key "b" :name "bugs" :query "tag:bugs date:today")
+	  (:key "T" :name "today" :query "date:today and not tag:trash")
+	  (:key "U" :name "unread today" :query "date:today is:unread")
+	  (:key "F" :name "flagged" :query "tag:flagged")
+	  (:key "S" :name "sent" :query "tag:Sent Mail"))))
 
 (use-package langtool
   :config
   (setq langtool-http-server-host "localhost"
-        langtool-http-server-port 8081
-        langtool-default-language "en-GB")
+	langtool-http-server-port 8081
+	langtool-default-language "en-GB")
   :commands (langtool-correct-buffer)
   :bind
   (:map git-commit-mode-map
-        ("C-x `" . langtool-correct-buffer)))
+	("C-x `" . langtool-correct-buffer)))
 
 (use-package company
   :diminish
   :commands (company-select-next-or-abort
-             company-select-previous-or-abort)
+	     company-select-previous-or-abort)
   :custom ((company-idle-delay 0)
-           (company-tooltip-limit 20)
-           (company-minimum-prefix-length 3)
-           (company-echo-delay 0)
-           (company-require-match nil)
-           (company-tooltip-align-annotations t) ; Align annotation to the right side.
-           (company-auto-complete nil))
+	   (company-tooltip-limit 20)
+	   (company-minimum-prefix-length 3)
+	   (company-echo-delay 0)
+	   (company-require-match nil)
+	   (company-tooltip-align-annotations t) ; Align annotation to the right side.
+	   (company-auto-complete nil))
   :bind (:map company-active-map
-              ("C-n" . company-select-next-or-abort)
-              ("C-p" . company-select-previous-or-abort))
+	      ("C-n" . company-select-next-or-abort)
+	      ("C-p" . company-select-previous-or-abort))
   :hook (after-init . global-company-mode))
 
 (use-package flycheck)
@@ -571,22 +571,22 @@
 (use-package lsp-mode
   :init
   (setq lsp-keymap-prefix "C-c l"
-        lsp-enable-file-watchers nil
-        lsp-enable-on-type-formatting nil
-        lsp-enable-snippet nil
-        lsp-prefer-capf t
-        lsp-prefer-flymake nil)
+	lsp-enable-file-watchers nil
+	lsp-enable-on-type-formatting nil
+	lsp-enable-snippet nil
+	lsp-prefer-capf t
+	lsp-prefer-flymake nil)
   :config
   (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
   (lsp-enable-which-key-integration t)
   :bind (("C-c d" . lsp-describe-thing-at-point)
-         ("C-c e n" . flycheck-next-error)
-         ("C-c e p" . flycheck-previous-error)
-         ("C-c e l" . flycheck-list-errors)
-         ("C-c e r" . lsp-find-references)
-         ("C-c e R" . lsp-rename)
-         ("C-c e i" . lsp-find-implementation)
-         ("C-c e t" . lsp-find-type-definition))
+	 ("C-c e n" . flycheck-next-error)
+	 ("C-c e p" . flycheck-previous-error)
+	 ("C-c e l" . flycheck-list-errors)
+	 ("C-c e r" . lsp-find-references)
+	 ("C-c e R" . lsp-rename)
+	 ("C-c e i" . lsp-find-implementation)
+	 ("C-c e t" . lsp-find-type-definition))
   :commands
   (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition))
 
@@ -606,16 +606,16 @@
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
   :bind (:map go-mode-map
-              ("C-c C-n" . go-run)
-              ("C-c C-c" . go-coverage)
-              ("C-c ."   . go-test-current-test)
-              ("C-c f"   . go-test-current-file)
-              ("C-c a"   . go-test-current-project))
+	      ("C-c C-n" . go-run)
+	      ("C-c C-c" . go-coverage)
+	      ("C-c ."   . go-test-current-test)
+	      ("C-c f"   . go-test-current-file)
+	      ("C-c a"   . go-test-current-project))
   :commands (go-run
-             go-coverage
-             go-test-current-test
-             go-test-current-file
-             go-test-current-project)
+	     go-coverage
+	     go-test-current-test
+	     go-test-current-file
+	     go-test-current-project)
   :hook ((go-mode . lsp-deferred)))
 
 (use-package go-add-tags)
@@ -629,7 +629,7 @@
   :config
   (recentf-mode 1)
   (setq recentf-max-menu-items 32
-        recentf-max-saved-items 32)
+	recentf-max-saved-items 32)
   :bind ("C-x C-r" . recentf-open-files))
 
 (use-package lsp-ui
@@ -639,9 +639,9 @@
   ;; (lsp-ui-doc-background ((t (:background nil))))
   ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
   :bind (:map lsp-ui-mode-map
-              ;; ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
-              ("C-c u" . lsp-ui-imenu))
+	      ;; ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+	      ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
+	      ("C-c u" . lsp-ui-imenu))
   :custom
   (lsp-enable-symbol-highlighting nil)
   (lsp-ui-peek-fontify 'always)
@@ -672,7 +672,7 @@
   "Create a new vterm window under of the current one."
   (interactive)
   (let* ((ignore-window-parameters t)
-         (dedicated-p (window-dedicated-p)))
+	 (dedicated-p (window-dedicated-p)))
     (split-window-vertically)
     (other-window 1)
     (vterm default-directory)))
@@ -681,34 +681,23 @@
   :commands (helm-buffers-list helm-mini)
   :config
   (setq helm-imenu-fuzzy-match t
-        helm-recentf-fuzzy-match t
-        helm-semantic-fuzzy-match t
-        helm-buffers-fuzzy-matching t)
+	helm-recentf-fuzzy-match t
+	helm-semantic-fuzzy-match t
+	helm-buffers-fuzzy-matching t)
   (require 'helm-config)
   (helm-mode -1)
   :bind (("C-c h d" . helm-browse-project)
-         ("C-c h i" . helm-semantic-or-imenu)
-         ("C-c h o" . helm-occur)
-         ("C-c h p" . helm-projects-history)
-         ("C-x C-b" . helm-buffers-list)
-         ("C-x b" . helm-mini)
-         ("M-y" . helm-show-kill-ring)))
+	 ("C-c h i" . helm-semantic-or-imenu)
+	 ("C-c h o" . helm-occur)
+	 ("C-c h p" . helm-projects-history)
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-x b" . helm-mini)
+	 ("M-y" . helm-show-kill-ring)))
 
 (use-package helm-ls-git
   :commands (helm-ls-git)
   :bind
   (("C-c C-l" . helm-ls-git)))
-
-(use-package whitespace
-  :straight (:type built-in)
-  :commands (whitespace-cleanup)
-  :bind ("<f3>" . whitespace-cleanup)
-  :hook (before-save . whitespace-cleanup))
-
-(use-package ws-butler
-  :diminish
-  :config
-  (ws-butler-global-mode))
 
 (use-package executable
   :straight (:type built-in)
@@ -736,8 +725,8 @@
 
 ;; https://github.com/emacs-lsp/lsp-mode/issues/631#issuecomment-457866187
 (add-hook 'c++-mode-hook
-          (lambda ()
-            (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
+	  (lambda ()
+	    (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
 
 (add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
 
@@ -793,13 +782,13 @@
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
 
 (mapcar #'(lambda (x)
-            (bind-key (kbd (car x)) (cdr x)))
-        '(("<f11>"   . aim/fullscreen)
-          ("<f1>"    . gnus-slave)
-          ("<f2>"    . aim/revert-buffer-now)
-          ("C-x C"   . compile)
-          ("C-x C-g" . goto-line)
-          ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
-          ("C-x g"   . goto-line)
-          ("C-x m"   . gnus-msg-mail)
-          ("M-i"     . imenu)))
+	    (bind-key (kbd (car x)) (cdr x)))
+	'(("<f11>"   . aim/fullscreen)
+	  ("<f1>"    . gnus-slave)
+	  ("<f2>"    . aim/revert-buffer-now)
+	  ("C-x C"   . compile)
+	  ("C-x C-g" . goto-line)
+	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
+	  ("C-x g"   . goto-line)
+	  ("C-x m"   . gnus-msg-mail)
+	  ("M-i"     . imenu)))
