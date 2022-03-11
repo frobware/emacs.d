@@ -713,6 +713,11 @@
   :config
   (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "Xcrun --find sourcekit-lsp"))))
 
+(use-package cargo
+  :demand t)
+
+(require 'dap-cpptools)
+
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
 ;;; confirmation is required for any code block evaluation.
