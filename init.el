@@ -234,6 +234,7 @@
 	   (desktop-files-not-to-save
 	    (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
 		    (seq "(ftp)" eol)
+		    (seq ".gpg" eol)
 		    (seq "*" (one-or-more not-newline) "*")))))
   :config
   (desktop-save-mode t))
