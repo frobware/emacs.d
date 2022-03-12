@@ -593,7 +593,8 @@
 
 (use-package rust-mode
   :demand
-  :mode "\\.rs\\'")
+  :mode "\\.rs\\'"
+  :hook ((rust-mode . lsp-deferred)))
 
 (use-package dap-mode
   :demand)
