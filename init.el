@@ -160,7 +160,7 @@
 (defvar use-nix-epkgs (or (string= system-name "mba")
 			  (string= system-name "x1c")))
 
-(setq use-nix-epkgs nil)
+(setq use-nix-epkgs t)
 
 (when (not use-nix-epkgs)
   (setq-default straight-vc-git-default-clone-depth 1)
@@ -716,7 +716,7 @@
 (use-package cargo
   :demand t)
 
-(require 'dap-cpptools)
+(require 'dap-cpptools nil 'noerror)
 
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
