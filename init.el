@@ -160,7 +160,7 @@
 (defvar use-nix-epkgs (or (string= system-name "mba")
 			  (string= system-name "x1c")))
 
-(setq use-nix-epkgs (string= system-name "mba"))
+(setq use-nix-epkgs nil)
 
 (when (not use-nix-epkgs)
   (setq-default straight-vc-git-default-clone-depth 1)
