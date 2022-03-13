@@ -700,6 +700,13 @@
   :bind
   (("C-c C-l" . helm-ls-git)))
 
+(use-package helm-lsp
+  :after lsp
+  :commands
+  lsp-deferred
+  :config
+  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+
 (use-package executable
   :straight (:type built-in)
   :hook (after-save . executable-make-buffer-file-executable-if-script-p))
