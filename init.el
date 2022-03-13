@@ -607,6 +607,7 @@
   :custom
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
+  (gofmt-command "goimports")
   :bind (:map go-mode-map
 	      ("C-c C-n" . go-run)
 	      ("C-c C-c" . go-coverage)
@@ -618,7 +619,8 @@
 	     go-test-current-test
 	     go-test-current-file
 	     go-test-current-project)
-  :hook ((go-mode . lsp-deferred)))
+  :hook ((before-save . gofmt-before-save)
+         (go-mode . lsp-deferred)))
 
 (use-package go-add-tags)
 
