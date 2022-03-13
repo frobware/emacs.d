@@ -280,7 +280,7 @@
 	modus-themes-region '(bg-only no-extend))
   (modus-themes-load-themes)
   (modus-themes-load-vivendi)
-  :bind (("<f5>" . modus-themes-toggle)))
+  :bind (("<f6>" . modus-themes-toggle)))
 
 (use-package browse-at-remote)
 (use-package browse-url)
