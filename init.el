@@ -596,9 +596,6 @@
   :mode "\\.rs\\'"
   :hook ((rust-mode . lsp-deferred)))
 
-(use-package dap-mode
-  :demand)
-
 (use-package gotest)
 
 (use-package go-mode
@@ -719,8 +716,6 @@
 
 (use-package cargo
   :demand t)
-
-(require 'dap-cpptools nil 'noerror)
 
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
