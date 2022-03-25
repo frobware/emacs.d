@@ -857,3 +857,15 @@
 	  ("C-x g"   . goto-line)
 	  ("C-x m"   . gnus-msg-mail)
 	  ("M-i"     . imenu)))
+
+(add-to-list 'tramp-remote-path "/home/aim/bin")
+(add-to-list 'tramp-remote-path "/home/aim/.local/bin")
+
+(add-to-list 'tramp-remote-path "/Users/aim/bin")
+(add-to-list 'tramp-remote-path "/Users/aim/.local/bin")
+
+(lsp-register-client
+    (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
+                     :major-modes '(go-mode)
+                     :remote? t
+                     :server-id 'gopls-remote))
