@@ -673,6 +673,10 @@
   (lsp-ui-doc-enable nil)
   (lsp-eldoc-hook nil))
 
+(use-package lsp-treemacs
+  :after lsp-mode
+  :demand)
+
 (use-package atomic-chrome
   :commands (atomic-chrome-start-server)
   :config
