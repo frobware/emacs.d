@@ -570,6 +570,7 @@
   (lsp-headerline-breadcrumb-mode))
 
 (use-package lsp-mode
+  :demand
   :init
   (setq lsp-keymap-prefix "C-c l"
 	lsp-enable-file-watchers nil
@@ -580,6 +581,11 @@
   :config
   (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
   (lsp-enable-which-key-integration t)
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
+                    :major-modes '(go-mode)
+                    :remote? t
+                    :server-id 'gopls-remote))
   :bind (("C-c d" . lsp-describe-thing-at-point)
 	 ("C-c e n" . flycheck-next-error)
 	 ("C-c e p" . flycheck-previous-error)
@@ -589,7 +595,7 @@
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
   :commands
-  (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition))
+  (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client))
 
 (use-package rust-mode
   :demand
@@ -730,6 +736,7 @@
   :demand t)
 
 (use-package projectile
+  :demand
   :commands
   (projectile-ack
    projectile-ag
