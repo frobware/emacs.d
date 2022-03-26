@@ -485,8 +485,8 @@
 	("r" . copy-as-format-rst)
 	("s" . copy-as-format-slack)))
 
-(use-package xref
-  :demand)
+(remove-hook 'xref-after-jump-hook 'xref-pulse-momentarily)
+(remove-hook 'xref-after-return-hook 'xref-pulse-momentarily)
 
 (use-package protobuf-mode)
 
