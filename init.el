@@ -869,8 +869,13 @@
 (add-to-list 'tramp-remote-path "/Users/aim/bin")
 (add-to-list 'tramp-remote-path "/Users/aim/.local/bin")
 
-(lsp-register-client
-    (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
-                     :major-modes '(go-mode)
-                     :remote? t
-                     :server-id 'gopls-remote))
+(setq vc-ignore-dir-regexp
+      (format "\\(%s\\)\\|\\(%s\\)"
+              vc-ignore-dir-regexp
+              tramp-file-name-regexp))
+
+(setq remote-file-name-inhibit-cache nil)
+
+(setq vc-handled-backends '(Git))
+
+(customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
