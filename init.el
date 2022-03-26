@@ -74,7 +74,7 @@
 (auto-compression-mode t)
 (blink-cursor-mode -1)
 (column-number-mode 1)
-(global-hl-line-mode)
+(global-hl-line-mode -1)
 (menu-bar-mode -1)
 (put 'narrow-to-region 'disabled nil)
 (scroll-bar-mode -1)
