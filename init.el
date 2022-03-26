@@ -598,13 +598,17 @@
 
 (use-package gotest)
 
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
 (use-package go-mode
   :demand
   :mode "\\.go\\'"
   :custom
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
-  (gofmt-command "goimports")
+  ;;(gofmt-command "goimports")
   :bind (:map go-mode-map
 	      ("C-c C-n" . go-run)
 	      ("C-c C-c" . go-coverage)
@@ -616,7 +620,8 @@
 	     go-test-current-test
 	     go-test-current-file
 	     go-test-current-project)
-  :hook ((before-save . gofmt-before-save)
+  :hook (;;(before-save . gofmt-before-save)
+         (go-mode . lsp-go-install-save-hooks)
          (go-mode . lsp-deferred)))
 
 (use-package go-add-tags)
