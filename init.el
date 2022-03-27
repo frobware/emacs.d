@@ -1,3 +1,5 @@
+;; (native-compile-async "~/.emacs.d/straight" 'recursively)
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=31194#40
