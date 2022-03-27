@@ -875,19 +875,11 @@
 	  ("C-x m"   . gnus-msg-mail)
 	  ("M-i"     . imenu)))
 
-(add-to-list 'tramp-remote-path "/home/aim/bin")
-(add-to-list 'tramp-remote-path "/home/aim/.local/bin")
-
-(add-to-list 'tramp-remote-path "/Users/aim/bin")
-(add-to-list 'tramp-remote-path "/Users/aim/.local/bin")
-
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-(setq remote-file-name-inhibit-cache nil)
-
-(setq vc-handled-backends '(Git))
-
-(customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
+;; (setq remote-file-name-inhibit-cache nil)
+;; (setq vc-handled-backends '(Git))
+;; (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
