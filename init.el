@@ -428,6 +428,7 @@
   :straight (:type built-in)
   :config
   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path) ;makes remote login use -l
   :custom
   (tramp-backup-directory-alist backup-directory-alist)
   (tramp-default-method "ssh")
