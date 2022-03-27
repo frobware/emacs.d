@@ -676,8 +676,10 @@
   (atomic-chrome-start-server))
 
 (use-package vterm
+  :config
+  (setq vterm-timer-delay nil)
   :custom
-  (setq vterm-ignore-blink-cursor t))
+  (vterm-ignore-blink-cursor t))
 
 ;;; Copied from somebody - can't recall whom, but thanks!
 (defun my-vterm/split-horizontal ()
