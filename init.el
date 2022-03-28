@@ -386,6 +386,80 @@
   (setq modus-themes-italic-constructs t
 	modus-themes-bold-constructs nil
 	modus-themes-region '(bg-only no-extend))
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs nil
+        modus-themes-mixed-fonts nil
+        modus-themes-subtle-line-numbers nil
+        modus-themes-intense-markup t
+        modus-themes-deuteranopia t
+        modus-themes-tabs-accented t
+        modus-themes-variable-pitch-ui nil
+        modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
+
+        modus-themes-fringes nil ; {nil,'subtle,'intense}
+
+        ;; Options for `modus-themes-lang-checkers' are either nil (the
+        ;; default), or a list of properties that may include any of those
+        ;; symbols: `straight-underline', `text-also', `background',
+        ;; `intense' OR `faint'.
+        modus-themes-lang-checkers nil
+
+        ;; Options for `modus-themes-mode-line' are either nil, or a list
+        ;; that can combine any of `3d' OR `moody', `borderless',
+        ;; `accented', and a natural number for extra padding
+        modus-themes-mode-line '(4 accented borderless)
+
+        ;; Options for `modus-themes-syntax' are either nil (the default),
+        ;; or a list of properties that may include any of those symbols:
+        ;; `faint', `yellow-comments', `green-strings', `alt-syntax'
+        modus-themes-syntax nil
+
+        ;; Options for `modus-themes-hl-line' are either nil (the default),
+        ;; or a list of properties that may include any of those symbols:
+        ;; `accented', `underline', `intense'
+        modus-themes-hl-line '(intense accented)
+
+        ;; Options for `modus-themes-paren-match' are either nil (the
+        ;; default), or a list of properties that may include any of those
+        ;; symbols: `bold', `intense', `underline'
+        modus-themes-paren-match '(bold intense)
+
+        ;; Options for `modus-themes-links' are either nil (the default),
+        ;; or a list of properties that may include any of those symbols:
+        ;; `neutral-underline' OR `no-underline', `faint' OR `no-color',
+        ;; `bold', `italic', `background'
+        modus-themes-links '(neutral-underline background)
+
+        ;; Options for `modus-themes-prompts' are either nil (the
+        ;; default), or a list of properties that may include any of those
+        ;; symbols: `background', `bold', `gray', `intense', `italic'
+        modus-themes-prompts '(intense bold)
+
+        modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
+
+        modus-themes-mail-citations nil ; {nil,'faint,'monochrome}
+
+        ;; Options for `modus-themes-region' are either nil (the default),
+        ;; or a list of properties that may include any of those symbols:
+        ;; `no-extend', `bg-only', `accented'
+        modus-themes-region '(bg-only no-extend)
+
+        ;; Options for `modus-themes-diffs': nil, 'desaturated, 'bg-only
+        modus-themes-diffs 'desaturated
+
+        modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
+
+        modus-themes-org-agenda ; this is an alist: read the manual or its doc string
+        '((header-block . (variable-pitch 1.3))
+          (header-date . (grayscale workaholic bold-today 1.1))
+          (event . (accented varied))
+          (scheduled . uniform)
+          (habit . traffic-light))
+
+        modus-themes-headings ; this is an alist: read the manual or its doc string
+        '((1 . (overline background variable-pitch 1.3))
+          (2 . (rainbow overline 1.1))
+          (t . (semibold))))
   (modus-themes-load-themes)
   (modus-themes-load-vivendi)
   :bind (("<f6>" . modus-themes-toggle)))
