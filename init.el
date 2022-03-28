@@ -882,4 +882,23 @@
 
 ;; (setq remote-file-name-inhibit-cache nil)
 ;; (setq vc-handled-backends '(Git))
-;; (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
+
+(customize-set-variable 'tramp-use-ssh-controlmaster-options t)
+
+(add-to-list 'tramp-connection-properties
+             (list (regexp-quote "/ssh:mba.int.frobware.com:")
+                   "remote-shell" "/bin/bash"))
+
+(customize-set-variable
+ 'tramp-ssh-controlmaster-options
+ (concat
+   "-o ControlPath=/tmp/ssh-TRAMP-ControlPath-%%r@%%h:%%p "
+   "-o ControlMaster=auto -o ControlPersist=yes"))
+
+(customize-set-variable 'lsp-go-gopls-server-args "-logfile=auto -vv -debug=:6060")
+
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
+;;                   :major-modes '(go-mode)
+;;                   :remote? t
+;;                   :server-id 'gopls-remote))
