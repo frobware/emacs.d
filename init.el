@@ -463,7 +463,7 @@
 	git-gutter:deleted-sign " "
 	;;git-gutter:lighter " GG"
 	)
-  (global-git-gutter-mode 1))
+  (global-git-gutter-mode -1))
 
 (use-package copy-as-format
   :config
