@@ -390,8 +390,7 @@
         modus-themes-bold-constructs nil
         modus-themes-mixed-fonts nil
         modus-themes-subtle-line-numbers nil
-        modus-themes-intense-markup t
-        modus-themes-deuteranopia t
+        modus-themes-deuteranopia nil
         modus-themes-tabs-accented t
         modus-themes-variable-pitch-ui nil
         modus-themes-inhibit-reload t ; only applies to `customize-set-variable' and related
@@ -434,8 +433,6 @@
         ;; default), or a list of properties that may include any of those
         ;; symbols: `background', `bold', `gray', `intense', `italic'
         modus-themes-prompts '(intense bold)
-
-        modus-themes-completions 'moderate ; {nil,'moderate,'opinionated}
 
         modus-themes-mail-citations nil ; {nil,'faint,'monochrome}
 
