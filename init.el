@@ -253,7 +253,7 @@
 
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
-    (treemacs-resize-icons 44)
+    (treemacs-resize-icons 22)
 
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
@@ -769,6 +769,10 @@
                     :major-modes '(go-mode)
                     :remote? t
                     :server-id 'gopls-remote))
+  :custom
+  (lsp-lens-enable nil)
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-headerline-breadcrumb-enable nil)
   :bind (("C-c d" . lsp-describe-thing-at-point)
 	 ("C-c e n" . flycheck-next-error)
 	 ("C-c e p" . flycheck-previous-error)
@@ -838,7 +842,6 @@
 	      ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
 	      ("C-c u" . lsp-ui-imenu))
   :custom
-  (lsp-enable-symbol-highlighting nil)
   (lsp-ui-peek-fontify 'always)
   (lsp-ui-doc-enable t)
   (lsp-ui-doc-header t)
