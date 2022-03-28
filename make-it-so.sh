@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-function totally_unacceptable {
+totally_unacceptable() {
     # Catalina's notarization is a disaster for cli apps (aka the real world).
     sudo spctl --master-disable
 
