@@ -1072,16 +1072,25 @@
              (list (regexp-quote "/ssh:mba.int.frobware.com:")
                    "remote-shell" "/bin/bash"))
 
+(add-to-list 'tramp-connection-properties
+             (list (regexp-quote "/ssh:spicy.int.frobware.com:")
+                   "remote-shell" "/bin/bash"))
+
+(add-to-list 'tramp-connection-properties
+             (list (regexp-quote "/ssh:x1c.int.frobware.com:")
+                   "remote-shell" "/bin/bash"))
+
 (customize-set-variable
  'tramp-ssh-controlmaster-options
  (concat
    "-o ControlPath=/tmp/ssh-TRAMP-ControlPath-%%r@%%h:%%p "
    "-o ControlMaster=auto -o ControlPersist=yes"))
 
-(customize-set-variable 'lsp-go-gopls-server-args "-logfile=auto -vv -debug=:6060")
+;; (customize-set-variable 'lsp-go-gopls-server-args "-logfile=auto -vv -debug=:6060")
 
-;; (lsp-register-client
-;;  (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
-;;                   :major-modes '(go-mode)
-;;                   :remote? t
-;;                   :server-id 'gopls-remote))
+(customize-set-variable
+ 'tramp-sh-extra-args '(("/bash\\'" . "-noediting -norc -noprofile -l")
+                        ("/zsh\\'" . "-f +Z -V")))
+
+(setq inhibit-eol-conversion t)
+(setq tramp-verbose 6)
