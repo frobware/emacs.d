@@ -13,9 +13,6 @@
         ns-use-thin-smoothing t)
   (and (string= system-name "mba")
        (setq with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient"))
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; assuming you are using a dark theme
-  (setq ns-use-proxy-icon nil)
   (setq frame-title-format nil)
   (global-set-key "\M-`" 'other-frame))
 
