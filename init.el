@@ -381,14 +381,7 @@
   :straight (:type built-in)
   :defer nil
   :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
-  :commands (modus-themes-load-themes
-	     modus-themes-load-operandi
-	     modus-themes-load-vivendi
-	     modus-themes-toggle)
-  :config
-  (setq modus-themes-italic-constructs t
-	modus-themes-bold-constructs nil
-	modus-themes-region '(bg-only no-extend))
+  :init
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs nil
         modus-themes-mixed-fonts nil
