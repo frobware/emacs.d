@@ -453,6 +453,11 @@
         '((1 . (overline background variable-pitch 1.3))
           (2 . (rainbow overline 1.1))
           (t . (semibold))))
+  :commands (modus-themes-load-themes
+	     modus-themes-load-operandi
+	     modus-themes-load-vivendi
+	     modus-themes-toggle)
+  :config
   (modus-themes-load-themes)
   (modus-themes-load-vivendi)
   :bind (("<f6>" . modus-themes-toggle)))
