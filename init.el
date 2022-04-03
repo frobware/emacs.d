@@ -90,6 +90,9 @@
 (tooltip-mode -1)
 (toggle-truncate-lines)
 
+(and (fboundp 'pixel-scroll-precision-mode)
+     (pixel-scroll-precision-mode))
+
 (add-hook 'prog-mode-hook
 	  (lambda ()
 	    (setq show-trailing-whitespace t)))
