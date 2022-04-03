@@ -897,6 +897,10 @@
 	 ("C-x C-b" . helm-buffers-list)
 	 ("C-x b" . helm-mini)
 	 ("M-y" . helm-show-kill-ring)))
+(use-package helm-projectile
+  :after helm
+  :config
+  (helm-projectile-on))
 
 (use-package helm-ls-git
   :commands (helm-ls-git)
