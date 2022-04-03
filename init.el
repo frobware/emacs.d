@@ -867,7 +867,7 @@
 
 (use-package vterm
   :config
-  (setq vterm-timer-delay nil)
+  (setq vterm-timer-delay 0.1)
   :custom
   (vterm-ignore-blink-cursor t))
 
