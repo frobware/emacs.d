@@ -1,3 +1,4 @@
+;; (setq native-comp-async-jobs-number 8)
 ;; (native-compile-async "~/.emacs.d/straight" 'recursively)
 
 (fset 'yes-or-no-p 'y-or-n-p)
