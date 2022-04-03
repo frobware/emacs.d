@@ -196,6 +196,11 @@
 
 ;; ;;; PACKAGES
 
+(use-package dumb-jump
+  :config
+  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
+
 (use-package treemacs
   :ensure t
   :defer t
