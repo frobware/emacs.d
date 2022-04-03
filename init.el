@@ -791,6 +791,9 @@
   :commands
   (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client))
 
+(use-package lsp-treemacs
+  :commands lsp-treemacs-errors-list)
+
 (use-package rust-mode
   :demand
   :mode "\\.rs\\'"
