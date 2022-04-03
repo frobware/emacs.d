@@ -956,15 +956,13 @@
    projectile-run-shell-command-in-root
    projectile-switch-project
    projectile-switch-to-buffer
-   projectile-vc
-   helm-projectile-on)
+   projectile-vc)
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (setq-default projectile-completion-system 'helm
 		;; Do not track known projects automatically, instead call projectile-add-known-project
 		projectile-track-known-projects-automatically nil)
   (projectile-mode)
-  (helm-projectile-on)
   ;; Remove dead projects when Emacs is idle
   (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
   (setq projectile-switch-project-action
