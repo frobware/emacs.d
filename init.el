@@ -265,7 +265,7 @@
 
     ;; The default width and height of the icons is 22 pixels. If you are
     ;; using a Hi-DPI display, uncomment this to double the icon size.
-    (treemacs-resize-icons 22)
+    ;; (treemacs-resize-icons 22)
 
     (treemacs-follow-mode t)
     (treemacs-filewatch-mode t)
@@ -293,9 +293,9 @@
   :after (treemacs projectile)
   :ensure t)
 
-(use-package treemacs-icons-dired
-  :hook (dired-mode . treemacs-icons-dired-enable-once)
-  :ensure t)
+;; (use-package treemacs-icons-dired
+;;   :hook (dired-mode . treemacs-icons-dired-enable-once)
+;;   :ensure t)
 
 (use-package treemacs-magit
   :after (treemacs magit)
