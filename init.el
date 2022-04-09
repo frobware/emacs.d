@@ -200,6 +200,13 @@
 
 ;; ;;; PACKAGES
 
+(use-package guess-offset)
+
+(use-package cc-mode
+  :ensure nil
+  :config
+  (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
+
 (use-package dumb-jump
   :config
   (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
