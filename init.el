@@ -175,8 +175,18 @@
   (setq-default straight-vc-git-default-clone-depth 1)
   (aim/straight-bootstrap))
 
-;; we either have this from straight or nixpkgs
-(require 'use-package)
+;; we either get use-package from:
+;; - straight
+;; - nix's epkgs
+;; - a git clone
+(condition-case nil
+    (require 'use-package)
+  (error (progn
+           (message "uh oh...")
+           (sit-for 3)
+           (message "last-gasp use-package")
+           (add-to-list 'load-path (expand-file-name "~/.emacs.d/use-package"))
+           (require 'use-package))))
 
 (setq use-package-always-defer nil
       use-package-always-ensure t
