@@ -26,6 +26,7 @@
 (setq-default show-trailing-whitespace nil)
 (setq-default indicate-empty-lines nil)
 (setq-default indent-tabs-mode nil)
+(set-default 'truncate-lines t)
 
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
       backup-by-copying t
@@ -49,7 +50,6 @@
       require-final-newline t
       ring-bell-function #'ignore
       sentence-end-double-space nil
-      truncate-lines nil
       use-dialog-box nil
       vc-follow-symlinks t
       version-control t
@@ -88,7 +88,6 @@
 (show-paren-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
-(toggle-truncate-lines)
 
 (and (fboundp 'pixel-scroll-precision-mode)
      (pixel-scroll-precision-mode))
