@@ -625,6 +625,7 @@
        (if selective-display nil (or col 1))))))
 
 (use-package yaml-mode
+  :mode ("\\.yaml" "\\.yml\\'")
   :bind
   ("C-c C-j" . aj-toggle-fold))
 
