@@ -1,5 +1,9 @@
+;;; -*- lexical-binding: t; -*-
+
 ;; (setq native-comp-async-jobs-number 8)
 ;; (native-compile-async "~/.emacs.d/straight" 'recursively)
+
+(setq ispell-dictionary "en")
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
