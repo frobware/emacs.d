@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
+(setq read-process-output-max (* 4 (* 1024 1024)))
+
 ;; (setq native-comp-async-jobs-number 8)
 ;; (native-compile-async "~/.emacs.d/straight" 'recursively)
 
@@ -71,13 +73,6 @@
       uniquify-ignore-buffers-re "^\\*")
 
 (setq gc-cons-threshold (* 100 1048576))
-
-(when (boundp 'read-process-output-max)
-  ;; This is to speedup LSP. Increase the amount of data which Emacs
-  ;; reads from the process. Again the emacs default is too low 4k
-  ;; considering that the some of the language server responses are in
-  ;; 800k - 3M range.
-  (setq-local read-process-output-max (* 4 (* 1024 1024))))
 
 (customize-set-variable 'kill-ring-max 30000)
 
@@ -368,6 +363,7 @@
   (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 
 (use-package desktop
+  :straight (:type built-in)
   :demand
   :custom ((desktop-restore-eager 8)
 	   (desktop-globals-to-save nil)
@@ -788,8 +784,16 @@
 	lsp-enable-on-type-formatting nil
 	lsp-enable-snippet nil
 	lsp-prefer-capf t
-	lsp-prefer-flymake nil)
+	lsp-prefer-flymake nil
+        lsp-use-plists t
+        lsp-idle-delay 0.500)
   :config
+  (when (boundp 'read-process-output-max)
+    ;; This is to speedup LSP. Increase the amount of data which Emacs
+    ;; reads from the process. Again the emacs default is too low 4k
+    ;; considering that the some of the language server responses are
+    ;; in 800k - 3M range.
+    (setq-local read-process-output-max (* 4 (* 1024 1024))))
   (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
   (lsp-enable-which-key-integration t)
   (lsp-register-client
