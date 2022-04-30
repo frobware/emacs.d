@@ -778,6 +778,8 @@
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
 
+(setq read-process-output-max (* 8 (* 1024 1024)))
+
 (use-package lsp-mode
   :demand
   :init
@@ -785,11 +787,14 @@
 	lsp-enable-file-watchers nil
 	lsp-enable-on-type-formatting nil
 	lsp-enable-snippet nil
-	lsp-prefer-capf t
-	lsp-prefer-flymake nil
         lsp-use-plists t
         lsp-idle-delay 0.500)
   :config
+  (setq lsp-enable-file-watchers nil
+	lsp-enable-on-type-formatting nil
+	lsp-enable-snippet nil
+        lsp-use-plists t
+        lsp-idle-delay 0.500)
   (when (boundp 'read-process-output-max)
     ;; This is to speedup LSP. Increase the amount of data which Emacs
     ;; reads from the process. Again the emacs default is too low 4k
@@ -816,15 +821,13 @@
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition))
   :commands
-  (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client))
-
-(use-package lsp-treemacs
-  :commands lsp-treemacs-errors-list)
+  (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client)
+  :hook
+  ((python-mode swift-mode rust-mode) . lsp-deferred))
 
 (use-package rust-mode
   :demand
-  :mode "\\.rs\\'"
-  :hook ((rust-mode . lsp-deferred)))
+  :mode "\\.rs\\'")
 
 (use-package gotest)
 
@@ -850,9 +853,8 @@
 	     go-test-current-test
 	     go-test-current-file
 	     go-test-current-project)
-  :hook (;;(before-save . gofmt-before-save)
-         (go-mode . lsp-go-install-save-hooks)
-         (go-mode . lsp-deferred)))
+  :hook (;; (before-save . gofmt-before-save)
+         (go-mode . lsp-go-install-save-hooks)))
 
 (use-package go-add-tags)
 
@@ -942,8 +944,6 @@
 
 (use-package helm-lsp
   :after lsp
-  :commands
-  lsp-deferred
   :config
   (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
