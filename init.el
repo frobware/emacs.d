@@ -901,6 +901,7 @@
   (atomic-chrome-start-server))
 
 (use-package vterm
+  :if (executable-find "cmake")
   :config
   (setq vterm-timer-delay 0.1)
   :custom
