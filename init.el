@@ -167,12 +167,6 @@
 (defvar use-nix-epkgs (or (string= system-name "mba")
 			  (string= system-name "x1c")))
 
-(setq use-nix-epkgs nil)
-
-(when (not use-nix-epkgs)
-  (setq-default straight-vc-git-default-clone-depth 1)
-  (aim/straight-bootstrap))
-
 ;; we either get use-package from:
 ;; - straight
 ;; - nix's epkgs
@@ -184,7 +178,12 @@
            (sit-for 3)
            (message "last-gasp use-package")
            (add-to-list 'load-path (expand-file-name "~/.emacs.d/use-package"))
+           (setq use-nix-epkgs nil)
            (require 'use-package))))
+
+(when (not use-nix-epkgs)
+  (setq-default straight-vc-git-default-clone-depth 1)
+  (aim/straight-bootstrap))
 
 (setq use-package-always-defer nil
       use-package-always-ensure t
@@ -357,6 +356,7 @@
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
 
 (use-package epa-file
+  :ensure nil
   :straight (:type built-in)
   :after exec-path-from-shell
   :config
