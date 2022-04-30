@@ -527,18 +527,20 @@
   :config (global-clipetty-mode))
 
 (use-package exec-path-from-shell
-  :if (eq system-type 'darwin)
+  :if (and (eq system-type 'darwin)
+           (string= (getenv "PASSWORD_STORE_DIR") ""))
   :config
-  (dolist (var '("GPG_AGENT_INFO"
-		 "GNUPGHOME"
-		 "LANG"
-		 "LC_CTYPE"
-		 "NIX_PATH"
-		 "NIX_SSL_CERT_FILE"
-		 "NO_COLOR"
-		 "PASSWORD_STORE_DIR"
-		 "SSH_AGENT_PID"
-		 "SSH_AUTH_SOCK"))
+  (dolist (var '("GNUPGHOME"
+                 "GPG_AGENT_INFO"
+                 "LANG"
+                 "LC_CTYPE"
+                 "LSP_USE_PLISTS"
+                 "NIX_PATH"
+                 "NIX_SSL_CERT_FILE"
+                 "NO_COLOR"
+                 "PASSWORD_STORE_DIR"
+                 "SSH_AGENT_PID"
+                 "SSH_AUTH_SOCK"))
     (add-to-list 'exec-path-from-shell-variables var))
   (exec-path-from-shell-initialize))
 
