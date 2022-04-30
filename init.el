@@ -1088,7 +1088,6 @@
 (mapcar #'(lambda (x)
 	    (bind-key (kbd (car x)) (cdr x)))
 	'(("<f11>"   . aim/fullscreen)
-	  ("<f1>"    . gnus-slave)
 	  ("<f2>"    . aim/revert-buffer-now)
 	  ("<f3>"    . whitespace-cleanup)
 	  ("C-x C"   . compile)
