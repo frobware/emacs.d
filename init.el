@@ -1,11 +1,7 @@
 ;;; -*- lexical-binding: t; -*-
 
-(setq read-process-output-max (* 4 (* 1024 1024)))
-
 ;; (setq native-comp-async-jobs-number 8)
 ;; (native-compile-async "~/.emacs.d/straight" 'recursively)
-
-(setq ispell-dictionary "en")
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -954,8 +950,7 @@
 
 (use-package swift-mode
   :mode "\\.swift\\'"
-  :if (eq system-type 'darwin)
-  :hook ((swift-mode . lsp-deferred)))
+  :if (eq system-type 'darwin))
 
 (use-package lsp-sourcekit
   :if (eq system-type 'darwin)
@@ -1105,31 +1100,51 @@
 ;; (setq remote-file-name-inhibit-cache nil)
 ;; (setq vc-handled-backends '(Git))
 
-(customize-set-variable 'tramp-use-ssh-controlmaster-options t)
+;; (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
 
-(add-to-list 'tramp-connection-properties
-             (list (regexp-quote "/ssh:mba.int.frobware.com:")
-                   "remote-shell" "/bin/bash"))
+;; (add-to-list 'tramp-connection-properties
+;;              (list (regexp-quote "/ssh:mba.int.frobware.com:")
+;;                    "remote-shell" "/bin/bash"))
 
-(add-to-list 'tramp-connection-properties
-             (list (regexp-quote "/ssh:spicy.int.frobware.com:")
-                   "remote-shell" "/bin/bash"))
+;; (add-to-list 'tramp-connection-properties
+;;              (list (regexp-quote "/ssh:spicy.int.frobware.com:")
+;;                    "remote-shell" "/bin/bash"))
 
-(add-to-list 'tramp-connection-properties
-             (list (regexp-quote "/ssh:x1c.int.frobware.com:")
-                   "remote-shell" "/bin/bash"))
+;; (add-to-list 'tramp-connection-properties
+;;              (list (regexp-quote "/ssh:x1c.int.frobware.com:")
+;;                    "remote-shell" "/bin/bash"))
 
 (customize-set-variable
  'tramp-ssh-controlmaster-options
  (concat
-   "-o ControlPath=/tmp/ssh-TRAMP-ControlPath-%%r@%%h:%%p "
-   "-o ControlMaster=auto -o ControlPersist=yes"))
+  "-o ControlPath=/tmp/ssh-TRAMP-ControlPath-%%r@%%h:%%p "
+  "-o ControlMaster=auto -o ControlPersist=yes"))
 
 ;; (customize-set-variable 'lsp-go-gopls-server-args "-logfile=auto -vv -debug=:6060")
 
-(customize-set-variable
- 'tramp-sh-extra-args '(("/bash\\'" . "-noediting -norc -noprofile -l")
-                        ("/zsh\\'" . "-f +Z -V")))
+;; (customize-set-variable
+;;  'tramp-sh-extra-args '(("/bash\\'" . "-noediting -norc -noprofile -l")
+;;                         ("/zsh\\'" . "-f +Z -V")))
 
 (setq inhibit-eol-conversion t)
-(setq tramp-verbose 6)
+(setq tramp-verbose 6)                  ;
+
+;; (straight-pull-package "melpa")
+;; (straight-use-package 'tree-sitter)
+;; (straight-use-package 'tree-sitter-langs)
+
+;; (require 'tree-sitter)
+;; (require 'tree-sitter-langs)
+
+;;(font-lock-mode -1)
+;;(global-tree-sitter-mode)
+
+;; (use-package eglot
+;;   :diminish
+;;   :demand t
+;;   :config
+;;   (add-hook 'go-mode-hook 'eglot-ensure))
+
+;; (global-tree-sitter-mode)
+;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+;;(setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
