@@ -3,6 +3,9 @@
 ;; (setq native-comp-async-jobs-number 8)
 ;; (native-compile-async "~/.emacs.d/straight" 'recursively)
 
+(defvar temporary-git-bin-dir (expand-file-name "~/.emacs.d/bin"))
+(add-to-list 'exec-path temporary-git-bin-dir)
+
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=31194#40
@@ -14,8 +17,8 @@
 	mac-option-modifier 'super
 	shell-command-switch "-lc"
         ns-use-thin-smoothing t)
-  (and (string= system-name "mba")
-       (setq with-editor-emacsclient-executable "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"))
+  (and (string= (system-name) "mba")
+       (setq-default with-editor-emacsclient-executable "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"))
   (setq frame-title-format nil)
   (global-set-key "\M-`" 'other-frame))
 
@@ -33,11 +36,8 @@
 (setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
       backup-by-copying t
       backup-directory-alist `((".*" . ,(locate-user-emacs-file "backups")))
-      comp-deferred-compilation nil
       create-lockfiles nil
       delete-old-versions t
-      display-time-24hr-format t
-      display-time-default-load-average nil
       enable-recursive-minibuffers t
       frame-inhibit-implied-resize t
       frame-resize-pixelwise t
@@ -119,23 +119,6 @@
   (set (make-local-variable 'face-remapping-alist)
        '((default :height 1.25))))
 
-(defun aim/straight-bootstrap nil
-  (defvar bootstrap-version)		;dynamically bound
-  (let ((bootstrap-file
-	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 5))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage)
-    (straight-use-package 'use-package)))
-
-(require 'color)
-
 ;; https://ruzkuku.com/emacs.d.html#org08dc33e
 (defun zge/reverse-face (face &optional frame)
   (interactive (list (read-face-name "Reverse face" (face-at-point t))))
@@ -160,9 +143,27 @@
   (dolist (face '(mode-line default))
     (zge/reverse-face face)))
 
+(defun aim/straight-bootstrap nil
+  (defvar bootstrap-version)		;dynamically bound
+  (let ((bootstrap-file
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 5))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage)
+    (straight-use-package 'use-package)))
+
+(require 'color)
+
 (defvar use-nix-epkgs (or (string= (system-name) "mba")
 			  (string= (system-name) "x1c")))
 
+(setq use-nix-epkgs nil)
 ;; we either get use-package from:
 ;; - straight
 ;; - nix's epkgs
@@ -171,7 +172,7 @@
     (require 'use-package)
   (error (progn
            (message "uh oh...")
-           (sit-for 3)
+           ;;(sit-for 3)
            (message "last-gasp use-package")
            (add-to-list 'load-path (expand-file-name "~/.emacs.d/use-package"))
            (setq use-nix-epkgs nil)
@@ -181,18 +182,20 @@
   (setq-default straight-vc-git-default-clone-depth 1)
   (aim/straight-bootstrap))
 
-(setq use-package-always-defer nil
-      use-package-always-ensure t
-      use-package-ignore-unknown-keywords t
-      use-package-verbose nil
-      use-package-compute-statistics t)
+(require 'package)
 
-(setq straight-use-package-by-default t
-      straight-repository-branch "develop"
-      straight-check-for-modifications nil
-      straight-disable-native-compile t)
+(setq-default use-package-always-defer nil
+              use-package-always-ensure t
+              use-package-ignore-unknown-keywords t
+              use-package-verbose nil
+              use-package-compute-statistics t)
 
-(setq warning-suppress-log-types '((comp) (use-package)))
+(setq-default straight-use-package-by-default t
+              straight-repository-branch "develop"
+              straight-check-for-modifications nil
+              straight-disable-native-compile t)
+
+(setq-default warning-suppress-log-types '((comp) (use-package)))
 
 (add-hook 'emacs-startup-hook
 	  (lambda ()
@@ -201,125 +204,22 @@
 			     (float-time (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
 
-;; ;;; PACKAGES
+;;; PACKAGES
+
+(use-package flycheck
+  :config
+  (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package guess-offset)
-
 (use-package cc-mode
   :ensure nil
   :config
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
 
 (use-package dumb-jump
-  :config
-  (setq xref-show-definitions-function #'xref-show-definitions-completing-read)
+  :custom
+  (setq-default xref-show-definitions-function #'xref-show-definitions-completing-read)
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate))
-
-(use-package treemacs
-  :ensure t
-  :defer t
-  :init
-  (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
-  :config
-  (progn
-    (setq treemacs-collapse-dirs                   (if treemacs-python-executable 3 0)
-          treemacs-deferred-git-apply-delay        0.5
-          treemacs-directory-name-transformer      #'identity
-          treemacs-display-in-side-window          t
-          treemacs-eldoc-display                   'simple
-          treemacs-file-event-delay                5000
-          treemacs-file-extension-regex            treemacs-last-period-regex-value
-          treemacs-file-follow-delay               0.2
-          treemacs-file-name-transformer           #'identity
-          treemacs-follow-after-init               t
-          treemacs-expand-after-init               t
-          treemacs-find-workspace-method           'find-for-file-or-pick-first
-          treemacs-git-command-pipe                ""
-          treemacs-goto-tag-strategy               'refetch-index
-          treemacs-indentation                     2
-          treemacs-indentation-string              " "
-          treemacs-is-never-other-window           nil
-          treemacs-max-git-entries                 5000
-          treemacs-missing-project-action          'ask
-          treemacs-move-forward-on-expand          nil
-          treemacs-no-png-images                   nil
-          treemacs-no-delete-other-windows         t
-          treemacs-project-follow-cleanup          nil
-          treemacs-persist-file                    (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-          treemacs-position                        'left
-          treemacs-read-string-input               'from-child-frame
-          treemacs-recenter-distance               0.1
-          treemacs-recenter-after-file-follow      nil
-          treemacs-recenter-after-tag-follow       nil
-          treemacs-recenter-after-project-jump     'always
-          treemacs-recenter-after-project-expand   'on-distance
-          treemacs-litter-directories              '("/node_modules" "/.venv" "/.cask")
-          treemacs-show-cursor                     nil
-          treemacs-show-hidden-files               t
-          treemacs-silent-filewatch                nil
-          treemacs-silent-refresh                  nil
-          treemacs-sorting                         'alphabetic-asc
-          treemacs-select-when-already-in-treemacs 'move-back
-          treemacs-space-between-root-nodes        t
-          treemacs-tag-follow-cleanup              t
-          treemacs-tag-follow-delay                1.5
-          treemacs-text-scale                      nil
-          treemacs-user-mode-line-format           nil
-          treemacs-user-header-line-format         nil
-          treemacs-wide-toggle-width               70
-          treemacs-width                           35
-          treemacs-width-increment                 1
-          treemacs-width-is-initially-locked       t
-          treemacs-workspace-switch-cleanup        nil)
-
-    ;; The default width and height of the icons is 22 pixels. If you are
-    ;; using a Hi-DPI display, uncomment this to double the icon size.
-    ;; (treemacs-resize-icons 22)
-
-    (treemacs-follow-mode t)
-    (treemacs-filewatch-mode t)
-    (treemacs-fringe-indicator-mode 'always)
-
-    (pcase (cons (not (null (executable-find "git")))
-                 (not (null treemacs-python-executable)))
-      (`(t . t)
-       (treemacs-git-mode 'deferred))
-      (`(t . _)
-       (treemacs-git-mode 'simple)))
-
-    (treemacs-hide-gitignored-files-mode nil))
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t d"   . treemacs-select-directory)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag)))
-
-(use-package treemacs-projectile
-  :after (treemacs projectile)
-  :ensure t)
-
-;; (use-package treemacs-icons-dired
-;;   :hook (dired-mode . treemacs-icons-dired-enable-once)
-;;   :ensure t)
-
-(use-package treemacs-magit
-  :after (treemacs magit)
-  :ensure t)
-
-(use-package treemacs-persp ;;treemacs-perspective if you use perspective.el vs. persp-mode
-  :after (treemacs persp-mode) ;;or perspective vs. persp-mode
-  :ensure t
-  :config (treemacs-set-scope-type 'Perspectives))
-
-(use-package treemacs-tab-bar ;;treemacs-tab-bar if you use tab-bar-mode
-  :after (treemacs)
-  :ensure t
-  :config (treemacs-set-scope-type 'Tabs))
 
 (use-package cus-edit
   :straight (:type built-in)
@@ -757,7 +657,7 @@
   :commands (company-select-next-or-abort
 	     company-select-previous-or-abort)
   :custom ((company-idle-delay 0)
-	   (company-tooltip-limit 20)
+	   (company-tooltip-limit 25)
 	   (company-minimum-prefix-length 3)
 	   (company-echo-delay 0)
 	   (company-require-match nil)
@@ -767,12 +667,6 @@
 	      ("C-n" . company-select-next-or-abort)
 	      ("C-p" . company-select-previous-or-abort))
   :hook (after-init . global-company-mode))
-
-(use-package flycheck)
-
-(defun efs/lsp-mode-setup ()
-  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
-  (lsp-headerline-breadcrumb-mode))
 
 (setq read-process-output-max (* 8 (* 1024 1024)))
 
@@ -1149,3 +1043,5 @@
 ;; (global-tree-sitter-mode)
 ;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 ;;(setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
+
+(setq exec-path (delete temporary-git-bin-dir exec-path))
