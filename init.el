@@ -15,7 +15,7 @@
 	shell-command-switch "-lc"
         ns-use-thin-smoothing t)
   (and (string= system-name "mba")
-       (setq with-editor-emacsclient-executable "/etc/profiles/per-user/aim/bin/emacsclient"))
+       (setq with-editor-emacsclient-executable "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"))
   (setq frame-title-format nil)
   (global-set-key "\M-`" 'other-frame))
 
@@ -897,7 +897,8 @@
   (atomic-chrome-start-server))
 
 (use-package vterm
-  :if (executable-find "cmake")
+  :if (and (executable-find "cmake")
+           (eq system-type 'linux))
   :config
   (setq vterm-timer-delay 0.1)
   :custom
