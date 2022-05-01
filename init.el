@@ -99,7 +99,7 @@
 (defun aim/fullscreen ()
   "Toggle fullscreen."
   (interactive)
-  (let (f (current-frame (selected-frame)))
+  (let ((f (selected-frame)))
     (set-frame-parameter f 'fullscreen
 			 (if (frame-parameter f 'fullscreen) nil 'fullboth))))
 
