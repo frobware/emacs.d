@@ -160,8 +160,8 @@
   (dolist (face '(mode-line default))
     (zge/reverse-face face)))
 
-(defvar use-nix-epkgs (or (string= system-name "mba")
-			  (string= system-name "x1c")))
+(defvar use-nix-epkgs (or (string= (system-name) "mba")
+			  (string= (system-name) "x1c")))
 
 ;; we either get use-package from:
 ;; - straight
@@ -725,7 +725,7 @@
 	mail-user-agent 'message-user-agent
 	notmuch-wash-wrap-lines-length 80
 	notmuch-tree-show-out t)
-  (unless (string= system-name "spicy")
+  (unless (string= (system-name) "spicy")
     (setq notmuch-command "remote-notmuch.sh"))
   ;;; remote-notmuch should look like:
   ;;;
