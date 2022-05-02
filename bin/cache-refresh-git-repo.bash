@@ -7,6 +7,6 @@ set -eu
 shopt -s globstar
 shopt -s nullglob
 
-for dir in $CACHE_DIR/*/*; do
-    git -C $dir fetch --all --prune
+for dir in $CACHE_DIR/**/*.git; do
+    echo git -C $dir fetch --all --prune
 done
