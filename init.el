@@ -1063,12 +1063,12 @@
 ;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 ;;(setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
 
-(setq exec-path (delete temporary-git-bin-dir exec-path))
+;;(setq exec-path (delete temporary-git-bin-dir exec-path))
 (use-package flycheck
   :demand)
 
-(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (flycheck-verify-setup)

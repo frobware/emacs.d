@@ -8,22 +8,14 @@ set -o pipefail
 
 : "${CACHE_DIR:=$HOME/.cache/git/repositories}"
 
-git_at_github_instead_of() {
-    local url=$1
-    local repo="$(basename "$url")"
-    local baseurl="$(dirname "$url")"
-    baseurl=${url/https:\/\//git@}
-    basedir="$(dirname "${baseurl/\//:}")" # replace <name>/ with <name>:
-    echo "$basedir/$repo"
-}
-
 cached_dir_for_url() {
     local url="$1"
-    local repo="$(basename "$url")"
-    local baseurl="$(dirname "$url")"
-    baseurl=${url/https:\/\//git@}
-    local basedir="$(dirname "${baseurl/\//:}")" # replace <name>/ with <name>:
-    echo "${CACHE_DIR}/$basedir/$repo"
+    local without_proto="${url#*:\/\/}"
+    local without_auth="${without_proto##*@}"
+    [[ $without_auth =~ ^([^:\/]+)(:[[:digit:]]+\/|:|\/)?(.*) ]]
+    local project_host="${BASH_REMATCH[1]}"
+    local project_path="${BASH_REMATCH[3]}"
+    echo "${CACHE_DIR}/${project_host}/${project_path}"
 }
 
 if [[ ! "${1:-}" == "clone" ]]; then
@@ -35,6 +27,7 @@ caching=false
 for argument in "${@:2}"; do
     if [[ "$argument" =~ ^https:// ]]; then
         local_repo_dir=$(cached_dir_for_url "$argument")
+        [[ $local_repo_dir == *.git ]] || local_repo_dir="${local_repo_dir}.git"
         [[ -n "$local_repo_dir" && -d "$local_repo_dir" ]] && caching=true
     fi
 done
@@ -45,11 +38,6 @@ for argument in "${@:2}"; do
             caching=false
             break
             ;;
-        # *git@github.com:*)
-        #     caching=true
-        #     [[ $argument == *.git ]] && argument=${argument%.git}
-        #     folder=$cache/$argument
-        #     ;;
     esac
 done
 
