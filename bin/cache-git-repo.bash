@@ -8,9 +8,9 @@ for url in "$@"; do
     without_proto="${url#*:\/\/}"
     without_auth="${without_proto##*@}"
     [[ $without_auth =~ ^([^:\/]+)(:[[:digit:]]+\/|:|\/)?(.*) ]]
-    PROJECT_HOST="${BASH_REMATCH[1]}"
-    PROJECT_PATH="${BASH_REMATCH[3]}"
-    path="${CACHE_DIR}/${PROJECT_HOST}/$PROJECT_PATH"
+    project_host="${BASH_REMATCH[1]}"
+    project_path="${BASH_REMATCH[3]}"
+    path="${CACHE_DIR}/${project_host}/$project_path"
     [[ $path == *.git ]] || path="${path}.git"
     if [[ ! -d "$path" ]]; then
         project_dir="$(dirname "$path")"
