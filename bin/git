@@ -38,6 +38,10 @@ for argument in "${@:2}"; do
             caching=false
             break
             ;;
+        --recursive)
+            caching=false
+            break
+            ;;
     esac
 done
 
