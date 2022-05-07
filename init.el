@@ -727,7 +727,7 @@
   :commands
   (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client)
   :hook
-  ((python-mode swift-mode rust-mode) . lsp-deferred))
+  ((python-mode swift-mode rust-mode go-mode) . lsp-deferred))
 
 (use-package rust-mode
   :demand
