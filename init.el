@@ -272,6 +272,7 @@
   (setq epa-file-cache-passphrase-for-symmetric-encryption t))
 
 (use-package desktop
+  :if nil
   :straight (:type built-in)
   :demand
   :custom ((desktop-restore-eager 8)
