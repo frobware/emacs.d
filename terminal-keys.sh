@@ -40,9 +40,19 @@ defaults write -app Safari NSUserKeyEquivalents -dict-add 'Copy' '^C'
 defaults write -app Safari NSUserKeyEquivalents -dict-add 'Paste' '^V'
 defaults write -app Safari NSUserKeyEquivalents -dict-add 'Close Tab' '^w'
 
+defaults write -app Safari NSUserKeyEquivalents -dict-add 'Cut' '@X'
+defaults write -app Safari NSUserKeyEquivalents -dict-add 'Copy' '@C'
+defaults write -app Safari NSUserKeyEquivalents -dict-add 'Paste' '@V'
+defaults write -app Safari NSUserKeyEquivalents -dict-add 'Close Tab' '@w'
+
 #$ defaults delete Safari NSUserKeyEquivalents
 
 defaults write -g NSUserKeyEquivalents -dict-add 'Cut' '^X'
 defaults write -g NSUserKeyEquivalents -dict-add 'Copy' '^C'
 defaults write -g NSUserKeyEquivalents -dict-add 'Paste' '^V'
 defaults write -g NSUserKeyEquivalents -dict-add 'Close Tab' '^w'
+
+defaults write -g NSUserKeyEquivalents -dict-add 'Cut' '@X'
+defaults write -g NSUserKeyEquivalents -dict-add 'Copy' '@C'
+defaults write -g NSUserKeyEquivalents -dict-add 'Paste' '@V'
+defaults write -g NSUserKeyEquivalents -dict-add 'Close Tab' '@w'
