@@ -444,7 +444,6 @@
                  "GPG_AGENT_INFO"
                  "LANG"
                  "LC_CTYPE"
-                 "LSP_USE_PLISTS"
                  "NIX_PATH"
                  "NIX_SSL_CERT_FILE"
                  "NO_COLOR"
@@ -684,6 +683,16 @@
 
 (setq read-process-output-max (* 8 (* 1024 1024)))
 
+;; use this when everything breaks
+;; (use-package lsp-mode
+;;   :demand
+;;   :init
+;;   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
+;;   (setq lsp-keymap-prefix "C-c l")
+;;   :hook ((go-mode . lsp-deferred)
+;;          (lsp-mode . lsp-enable-which-key-integration))
+;;   :commands lsp lsp-deferred)
+
 (use-package lsp-mode
   :demand
   :init
@@ -691,13 +700,11 @@
 	lsp-enable-file-watchers nil
 	lsp-enable-on-type-formatting nil
 	lsp-enable-snippet nil
-        lsp-use-plists t
         lsp-idle-delay 0.500)
   :config
   (setq lsp-enable-file-watchers nil
 	lsp-enable-on-type-formatting nil
 	lsp-enable-snippet nil
-        lsp-use-plists t
         lsp-idle-delay 0.500)
   (when (boundp 'read-process-output-max)
     ;; This is to speedup LSP. Increase the amount of data which Emacs
@@ -758,6 +765,7 @@
 	     go-test-current-file
 	     go-test-current-project)
   :hook (;; (before-save . gofmt-before-save)
+         (go-mode . lsp-deferred)
          (go-mode . lsp-go-install-save-hooks)))
 
 (use-package go-add-tags)
