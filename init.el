@@ -225,7 +225,6 @@
 
 (use-package guess-offset)
 (use-package cc-mode
-  :ensure nil
   :config
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
 
@@ -236,15 +235,11 @@
 
 (use-package cus-edit
   :straight (:type built-in)
-  :demand
   :custom
   (custom-file (expand-file-name "custom.el" user-emacs-directory)))
 
-(use-package diminish
-  :demand)
-
-(use-package delight
-  :demand)
+(use-package diminish)
+(use-package delight)
 
 ;; Completely hide visual-line-mode and change auto-fill-mode to " AF".
 (use-package emacs
@@ -253,7 +248,6 @@
 
 (use-package gcmh
   :straight (:type built-in)
-  :demand
   :diminish
   :custom (gcmh-verbose t)
   :config
@@ -265,7 +259,6 @@
   (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo")))
 
 (use-package epa-file
-  :ensure nil
   :straight (:type built-in)
   :after exec-path-from-shell
   :config
@@ -274,7 +267,6 @@
 (use-package desktop
   :if nil
   :straight (:type built-in)
-  :demand
   :custom ((desktop-restore-eager 8)
 	   (desktop-globals-to-save nil)
 	   (desktop-files-not-to-save
@@ -286,7 +278,6 @@
   (desktop-save-mode t))
 
 (use-package savehist
-  :demand
   :custom ((history-delete-duplicates t)
 	   (savehist-save-minibuffer-history t)
 	   (savehist-additional-variables '(kill-ring
@@ -297,7 +288,6 @@
   (savehist-mode t))
 
 (use-package saveplace
-  :demand
   :config
   (save-place-mode t))
 
@@ -412,13 +402,10 @@
 (use-package markdown-mode
   :mode "\\.md\\'")
 
-(use-package pass
-  :demand)
-
+(use-package pass)
 (use-package x509-mode)
 
 (use-package pinentry
-  :demand
   :commands (pinentry-start)
   :config
   (setq epa-pinentry-mode 'loopback) ; prevent GUI input
@@ -489,7 +476,6 @@
 
 (use-package hippie-exp
   :straight (:type built-in)
-  :demand
   :config
   (setq hippie-expand-try-functions-list
 	'(try-expand-dabbrev
@@ -570,7 +556,6 @@
 (use-package git-timemachine)
 
 (use-package git-gutter
-  :demand
   :diminish
   :config
   (setq git-gutter:modified-sign " "
@@ -609,7 +594,6 @@
 (use-package protobuf-mode)
 
 (use-package nixpkgs-fmt
-  :demand
   :custom
   (nixpkgs-fmt-command "nixfmt"))
 
@@ -685,7 +669,6 @@
 
 ;; use this when everything breaks
 ;; (use-package lsp-mode
-;;   :demand
 ;;   :init
 ;;   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
 ;;   (setq lsp-keymap-prefix "C-c l")
@@ -694,7 +677,6 @@
 ;;   :commands lsp lsp-deferred)
 
 (use-package lsp-mode
-  :demand
   :init
   (setq lsp-keymap-prefix "C-c l"
 	lsp-enable-file-watchers nil
@@ -737,7 +719,6 @@
   ((python-mode swift-mode rust-mode go-mode) . lsp-deferred))
 
 (use-package rust-mode
-  :demand
   :mode "\\.rs\\'")
 
 (use-package gotest)
@@ -747,7 +728,6 @@
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (use-package go-mode
-  :demand
   :mode "\\.go\\'"
   :custom
   (go-fontify-function-calls nil)
@@ -874,11 +854,9 @@
   :config
   (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "Xcrun --find sourcekit-lsp"))))
 
-(use-package cargo
-  :demand t)
+(use-package cargo)
 
 (use-package projectile
-  :demand
   :commands
   (projectile-ack
    projectile-ag
@@ -959,7 +937,6 @@
 ;;   :commands (diff-ansi-mode diff-ansi-buffer))
 
 ;; (use-package vterm-toggle
-;;   :demand
 ;;   :config
 ;;   (global-set-key [f2] 'vterm-toggle)
 ;;   (global-set-key [C-f2] 'vterm-toggle-cd)
@@ -975,7 +952,6 @@
 ;; (setq initial-buffer-choice 'vterm)
 
 ;; (use-package centaur-tabs
-;;   :demand
 ;;   :config
 ;;   (setq centaur-tabs-height 128)
 ;;   (setq centaur-tabs-set-icons t)
@@ -1045,4 +1021,3 @@
 
 (setq inhibit-eol-conversion t)
 (setq tramp-verbose 6)                  ;
- 
