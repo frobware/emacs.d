@@ -168,15 +168,15 @@
 ;; - straight
 ;; - nix's epkgs
 ;; - a git clone
-(condition-case nil
-    (require 'use-package)
-  (error (progn
-           (message "uh oh...")
-           ;;(sit-for 3)
-           (message "last-gasp use-package")
-           (add-to-list 'load-path (expand-file-name "~/.emacs.d/use-package"))
-           (setq use-nix-epkgs nil)
-           (require 'use-package))))
+;; (condition-case nil
+;;     (require 'use-package)
+;;   (error (progn
+;;            (message "uh oh...")
+;;            ;;(sit-for 3)
+;;            (message "last-gasp use-package")
+;;            (add-to-list 'load-path (expand-file-name "~/.emacs.d/use-package"))
+;;            (setq use-nix-epkgs nil)
+;;            (require 'use-package))))
 
 (when (not use-nix-epkgs)
   (setq-default straight-vc-git-default-clone-depth 1)
@@ -184,11 +184,11 @@
 
 (require 'package)
 
-(setq-default use-package-always-defer nil
+(setq-default use-package-always-defer t
               use-package-always-ensure t
               use-package-ignore-unknown-keywords t
               use-package-verbose nil
-              use-package-compute-statistics t)
+              use-package-compute-statistics nil)
 
 (setq-default straight-use-package-by-default t
               straight-repository-branch "develop"
@@ -217,13 +217,16 @@
 (defun add-d-to-ediff-mode-map ()
   (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
 
-(add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
+(use-package ediff
+  :config
+  (add hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map))
 
 (use-package flycheck
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode))
 
 (use-package guess-offset)
+
 (use-package cc-mode
   :config
   (define-key c-mode-base-map (kbd "RET") 'newline-and-indent))
@@ -247,7 +250,7 @@
   (visual-line-mode))
 
 (use-package gcmh
-  :straight (:type built-in)
+  ;;:straight (:type built-in)
   :diminish
   :custom (gcmh-verbose t)
   :config
@@ -268,22 +271,22 @@
   :if nil
   :straight (:type built-in)
   :custom ((desktop-restore-eager 8)
-	   (desktop-globals-to-save nil)
-	   (desktop-files-not-to-save
-	    (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
-		    (seq "(ftp)" eol)
-		    (seq ".gpg" eol)
-		    (seq "*" (one-or-more not-newline) "*")))))
+           (desktop-globals-to-save nil)
+           (desktop-files-not-to-save
+            (rx (or (seq bol "/" (zero-or-more (not (any "/" ":"))) ":")
+                    (seq "(ftp)" eol)
+                    (seq ".gpg" eol)
+                    (seq "*" (one-or-more not-newline) "*")))))
   :config
   (desktop-save-mode t))
 
 (use-package savehist
   :custom ((history-delete-duplicates t)
-	   (savehist-save-minibuffer-history t)
-	   (savehist-additional-variables '(kill-ring
-					    compile-command
-					    search-ring))
-	   (savehist-ignored-variables '(yes-or-no-p-history)))
+           (savehist-save-minibuffer-history t)
+           (savehist-additional-variables '(kill-ring
+                                            compile-command
+                                            search-ring))
+           (savehist-ignored-variables '(yes-or-no-p-history)))
   :config
   (savehist-mode t))
 
@@ -296,11 +299,11 @@
   :defer nil
   :load-path (lambda () (expand-file-name "hrs" user-emacs-directory))
   :commands (hrs/reset-font-size
-	     hrs/increase-font-size
-	     hrs/default-font-size)
+             hrs/increase-font-size
+             hrs/default-font-size)
   :bind (("C-)" . hrs/reset-font-size)
-	 ("C-+" . hrs/increase-font-size)
-	 ("C--" . hrs/decrease-font-size)))
+         ("C-+" . hrs/increase-font-size)
+         ("C--" . hrs/decrease-font-size)))
 
 (use-package modus-themes
   :straight (:type built-in)
@@ -379,9 +382,9 @@
           (2 . (rainbow overline 1.1))
           (t . (semibold))))
   :commands (modus-themes-load-themes
-	     modus-themes-load-operandi
-	     modus-themes-load-vivendi
-	     modus-themes-toggle)
+             modus-themes-load-operandi
+             modus-themes-load-vivendi
+             modus-themes-toggle)
   :config
   (modus-themes-load-themes)
   (modus-themes-load-vivendi)
@@ -478,23 +481,23 @@
   :straight (:type built-in)
   :config
   (setq hippie-expand-try-functions-list
-	'(try-expand-dabbrev
-	  try-expand-dabbrev-from-kill
-	  try-expand-dabbrev-all-buffers
-	  try-complete-file-name-partially
-	  try-complete-file-name
-	  try-expand-all-abbrevs
-	  try-expand-list
-	  try-expand-line
-	  try-complete-lisp-symbol-partially
-	  try-complete-lisp-symbol)))
+        '(try-expand-dabbrev
+          try-expand-dabbrev-from-kill
+          try-expand-dabbrev-all-buffers
+          try-complete-file-name-partially
+          try-complete-file-name
+          try-expand-all-abbrevs
+          try-expand-list
+          try-expand-line
+          try-complete-lisp-symbol-partially
+          try-complete-lisp-symbol)))
 
 (use-package ag
   :custom
   (ag-highligh-search t)
   (ag-reuse-buffers t)
-  (ag-reuse-window t)
-  :bind ("M-s a" . ag-project))
+  (ag-reuse-window t))
+;;:bind ("M-s a" . ag-project))
 
 (use-package wgrep
   :custom
@@ -507,7 +510,7 @@
 
 (use-package smex
   :bind (("M-x" . smex)
-	 ("M-X" . smex-major-mode-commands))
+         ("M-X" . smex-major-mode-commands))
   :config
   (smex-initialize))
 
@@ -559,34 +562,33 @@
   :diminish
   :config
   (setq git-gutter:modified-sign " "
-	git-gutter:added-sign " "
-	git-gutter:deleted-sign " "
-	;;git-gutter:lighter " GG"
-	)
-  (global-git-gutter-mode -1))
+        git-gutter:added-sign " "
+        git-gutter:deleted-sign " "
+        ;;git-gutter:lighter " GG")
+        (global-git-gutter-mode -1)))
 
 (use-package copy-as-format
   :config
   (setq copy-as-format-default "slack")
   :bind
   (:map mode-specific-map
-	:prefix-map copy-as-format-prefix-map
-	:prefix "f"
-	("f" . copy-as-format)
-	("a" . copy-as-format-asciidoc)
-	("b" . copy-as-format-bitbucket)
-	("d" . copy-as-format-disqus)
-	("g" . copy-as-format-github)
-	("l" . copy-as-format-gitlab)
-	("c" . copy-as-format-hipchat)
-	("h" . copy-as-format-html)
-	("j" . copy-as-format-jira)
-	("m" . copy-as-format-markdown)
-	("w" . copy-as-format-mediawiki)
-	("o" . copy-as-format-org-mode)
-	("p" . copy-as-format-pod)
-	("r" . copy-as-format-rst)
-	("s" . copy-as-format-slack)))
+        :prefix-map copy-as-format-prefix-map
+        :prefix "f"
+        ("f" . copy-as-format)
+        ("a" . copy-as-format-asciidoc)
+        ("b" . copy-as-format-bitbucket)
+        ("d" . copy-as-format-disqus)
+        ("g" . copy-as-format-github)
+        ("l" . copy-as-format-gitlab)
+        ("c" . copy-as-format-hipchat)
+        ("h" . copy-as-format-html)
+        ("j" . copy-as-format-jira)
+        ("m" . copy-as-format-markdown)
+        ("w" . copy-as-format-mediawiki)
+        ("o" . copy-as-format-org-mode)
+        ("p" . copy-as-format-pod)
+        ("r" . copy-as-format-rst)
+        ("s" . copy-as-format-slack)))
 
 (remove-hook 'xref-after-jump-hook 'xref-pulse-momentarily)
 (remove-hook 'xref-after-return-hook 'xref-pulse-momentarily)
@@ -603,7 +605,7 @@
   (nix-indent-function #'nix-indent-line)
   ;;:hook 'nix-mode #'nixpkgs-fmt-on-save-mode
   :bind (:map nix-mode-map
-	      ("C-c C-j" . aj-toggle-fold)))
+              ("C-c C-j" . aj-toggle-fold)))
 
 ;; not sure if these two should be here
 (use-package dockerfile-mode
@@ -614,14 +616,14 @@
 (use-package notmuch
   :init
   (setq notmuch-search-oldest-first nil
-	mail-user-agent 'message-user-agent
-	notmuch-wash-wrap-lines-length 80
-	notmuch-tree-show-out t)
+        mail-user-agent 'message-user-agent
+        notmuch-wash-wrap-lines-length 80
+        notmuch-tree-show-out t)
   :config
   (setq notmuch-search-oldest-first nil
-	mail-user-agent 'message-user-agent
-	notmuch-wash-wrap-lines-length 80
-	notmuch-tree-show-out t)
+        mail-user-agent 'message-user-agent
+        notmuch-wash-wrap-lines-length 80
+        notmuch-tree-show-out t)
   (unless (string= (system-name) "spicy")
     (setq notmuch-command "remote-notmuch.sh"))
   ;;; remote-notmuch should look like:
@@ -630,39 +632,39 @@
   ;;; printf -v ARGS "%q " "$@"
   ;;; exec ssh notmuch notmuch ${ARGS}
   (setq notmuch-saved-searches
-	'((:key "i" :name "inbox" :query "tag:inbox")
-	  (:key "u" :name "unread" :query "tag:unread")
-	  (:key "g" :name "github/mentions" :query "tag:github/mentions is:unread")
-	  (:key "b" :name "bugs" :query "tag:bugs date:today")
-	  (:key "T" :name "today" :query "date:today and not tag:trash")
-	  (:key "U" :name "unread today" :query "date:today is:unread")
-	  (:key "F" :name "flagged" :query "tag:flagged")
-	  (:key "S" :name "sent" :query "tag:Sent Mail"))))
+        '((:key "i" :name "inbox" :query "tag:inbox")
+          (:key "u" :name "unread" :query "tag:unread")
+          (:key "g" :name "github/mentions" :query "tag:github/mentions is:unread")
+          (:key "b" :name "bugs" :query "tag:bugs date:today")
+          (:key "T" :name "today" :query "date:today and not tag:trash")
+          (:key "U" :name "unread today" :query "date:today is:unread")
+          (:key "F" :name "flagged" :query "tag:flagged")
+          (:key "S" :name "sent" :query "tag:Sent Mail"))))
 
 (use-package langtool
   :config
   (setq langtool-http-server-host "localhost"
-	langtool-http-server-port 8081
-	langtool-default-language "en-GB")
+        langtool-http-server-port 8081
+        langtool-default-language "en-GB")
   :commands (langtool-correct-buffer)
   :bind
   (:map git-commit-mode-map
-	("C-x `" . langtool-correct-buffer)))
+        ("C-x `" . langtool-correct-buffer)))
 
 (use-package company
   :diminish
   :commands (company-select-next-or-abort
-	     company-select-previous-or-abort)
+             company-select-previous-or-abort)
   :custom ((company-idle-delay 0)
-	   (company-tooltip-limit 25)
-	   (company-minimum-prefix-length 3)
-	   (company-echo-delay 0)
-	   (company-require-match nil)
-	   (company-tooltip-align-annotations t) ; Align annotation to the right side.
-	   (company-auto-complete nil))
+           (company-tooltip-limit 25)
+           (company-minimum-prefix-length 3)
+           (company-echo-delay 0)
+           (company-require-match nil)
+           (company-tooltip-align-annotations t) ; Align annotation to the right side.
+           (company-auto-complete nil))
   :bind (:map company-active-map
-	      ("C-n" . company-select-next-or-abort)
-	      ("C-p" . company-select-previous-or-abort))
+              ("C-n" . company-select-next-or-abort)
+              ("C-p" . company-select-previous-or-abort))
   :hook (after-init . global-company-mode))
 
 (setq read-process-output-max (* 8 (* 1024 1024)))
@@ -678,15 +680,11 @@
 
 (use-package lsp-mode
   :init
-  (setq lsp-keymap-prefix "C-c l"
-	lsp-enable-file-watchers nil
-	lsp-enable-on-type-formatting nil
-	lsp-enable-snippet nil
-        lsp-idle-delay 0.500)
+  (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-enable-file-watchers nil
-	lsp-enable-on-type-formatting nil
-	lsp-enable-snippet nil
+        lsp-enable-on-type-formatting t
+        lsp-enable-snippet nil
         lsp-idle-delay 0.500)
   (when (boundp 'read-process-output-max)
     ;; This is to speedup LSP. Increase the amount of data which Emacs
@@ -706,13 +704,13 @@
   (lsp-enable-symbol-highlighting nil)
   (lsp-headerline-breadcrumb-enable nil)
   :bind (("C-c d" . lsp-describe-thing-at-point)
-	 ("C-c e n" . flycheck-next-error)
-	 ("C-c e p" . flycheck-previous-error)
-	 ("C-c e l" . flycheck-list-errors)
-	 ("C-c e r" . lsp-find-references)
-	 ("C-c e R" . lsp-rename)
-	 ("C-c e i" . lsp-find-implementation)
-	 ("C-c e t" . lsp-find-type-definition))
+         ("C-c e n" . flycheck-next-error)
+         ("C-c e p" . flycheck-previous-error)
+         ("C-c e l" . flycheck-list-errors)
+         ("C-c e r" . lsp-find-references)
+         ("C-c e R" . lsp-rename)
+         ("C-c e i" . lsp-find-implementation)
+         ("C-c e t" . lsp-find-type-definition))
   :commands
   (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client)
   :hook
@@ -734,16 +732,16 @@
   (go-fontify-variables nil)
   ;;(gofmt-command "goimports")
   :bind (:map go-mode-map
-	      ("C-c C-n" . go-run)
-	      ("C-c C-c" . go-coverage)
-	      ("C-c ."   . go-test-current-test)
-	      ("C-c f"   . go-test-current-file)
-	      ("C-c a"   . go-test-current-project))
+              ("C-c C-n" . go-run)
+              ("C-c C-c" . go-coverage)
+              ("C-c ."   . go-test-current-test)
+              ("C-c f"   . go-test-current-file)
+              ("C-c a"   . go-test-current-project))
   :commands (go-run
-	     go-coverage
-	     go-test-current-test
-	     go-test-current-file
-	     go-test-current-project)
+             go-coverage
+             go-test-current-test
+             go-test-current-file
+             go-test-current-project)
   :hook (;; (before-save . gofmt-before-save)
          (go-mode . lsp-deferred)
          (go-mode . lsp-go-install-save-hooks)))
@@ -759,7 +757,7 @@
   :config
   (recentf-mode 1)
   (setq recentf-max-menu-items 32
-	recentf-max-saved-items 32)
+        recentf-max-saved-items 32)
   :bind ("C-x C-r" . recentf-open-files))
 
 (use-package lsp-ui
@@ -769,9 +767,9 @@
   ;; (lsp-ui-doc-background ((t (:background nil))))
   ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
   :bind (:map lsp-ui-mode-map
-	      ;; ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-	      ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
-	      ("C-c u" . lsp-ui-imenu))
+              ;; ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+              ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
+              ("C-c u" . lsp-ui-imenu))
   :custom
   (lsp-ui-peek-fontify 'always)
   (lsp-ui-doc-enable t)
@@ -805,7 +803,7 @@
   "Create a new vterm window under of the current one."
   (interactive)
   (let* ((ignore-window-parameters t)
-	 (dedicated-p (window-dedicated-p)))
+         (dedicated-p (window-dedicated-p)))
     (split-window-vertically)
     (other-window 1)
     (vterm default-directory)))
@@ -814,22 +812,23 @@
   :commands (helm-buffers-list helm-mini)
   :config
   (setq helm-imenu-fuzzy-match t
-	helm-recentf-fuzzy-match t
-	helm-semantic-fuzzy-match t
-	helm-buffers-fuzzy-matching t)
+        helm-recentf-fuzzy-match t
+        helm-semantic-fuzzy-match t
+        helm-buffers-fuzzy-matching t)
   (require 'helm-config)
   (helm-mode -1)
   :bind (("C-c h d" . helm-browse-project)
-	 ("C-c h i" . helm-semantic-or-imenu)
-	 ("C-c h o" . helm-occur)
-	 ("C-c h p" . helm-projects-history)
-	 ("C-x C-b" . helm-buffers-list)
-	 ("C-x b" . helm-mini)
-	 ("M-y" . helm-show-kill-ring)))
-(use-package helm-projectile
-  :after helm
-  :config
-  (helm-projectile-on))
+         ("C-c h i" . helm-semantic-or-imenu)
+         ("C-c h o" . helm-occur)
+         ("C-c h p" . helm-projects-history)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b" . helm-mini)
+         ("M-y" . helm-show-kill-ring)))
+
+;; (use-package helm-projectile
+;;   :after helm
+;;   :config
+;;   (helm-projectile-on))
 
 (use-package helm-ls-git
   :commands (helm-ls-git)
@@ -856,56 +855,56 @@
 
 (use-package cargo)
 
-(use-package projectile
-  :commands
-  (projectile-ack
-   projectile-ag
-   projectile-compile-project
-   projectile-dired
-   projectile-find-dir
-   projectile-find-file
-   projectile-find-tag
-   projectile-test-project
-   projectile-grep
-   projectile-invalidate-cache
-   projectile-kill-buffers
-   projectile-multi-occur
-   projectile-project-p
-   projectile-project-root
-   projectile-recentf
-   projectile-regenerate-tags
-   projectile-replace
-   projectile-replace-regexp
-   projectile-run-async-shell-command-in-root
-   projectile-run-shell-command-in-root
-   projectile-switch-project
-   projectile-switch-to-buffer
-   projectile-vc)
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :config
-  (setq-default projectile-completion-system 'helm
-		;; Do not track known projects automatically, instead call projectile-add-known-project
-		projectile-track-known-projects-automatically nil)
-  (projectile-mode)
-  ;; Remove dead projects when Emacs is idle
-  (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
-  (setq projectile-switch-project-action
-	(lambda () (projectile-ibuffer nil)))
-  (setq
-   ;; Custom compilation buffer name function
-   compilation-buffer-name-function (lambda (mode) (concat "*" (downcase mode) ": " (projectile-project-name) "*"))
-   projectile-find-dir-includes-top-level t
-   ;; projectile-switch-project-action #'projectile-commander
-   projectile-create-missing-test-files t
-   projectile-switch-project-action 'helm-projectile
-   projectile-enable-caching t
-   projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-  (def-projectile-commander-method ?s
-    "Open a *shell* buffer for the project"
-    (projectile-run-eshell))
-  (def-projectile-commander-method ?c
-    "Run `compile' in the project"
-    (projectile-compile-project nil)))
+;; (use-package projectile
+;;   :commands
+;;   (projectile-ack
+;;    projectile-ag
+;;    projectile-compile-project
+;;    projectile-dired
+;;    projectile-find-dir
+;;    projectile-find-file
+;;    projectile-find-tag
+;;    projectile-test-project
+;;    projectile-grep
+;;    projectile-invalidate-cache
+;;    projectile-kill-buffers
+;;    projectile-multi-occur
+;;    projectile-project-p
+;;    projectile-project-root
+;;    projectile-recentf
+;;    projectile-regenerate-tags
+;;    projectile-replace
+;;    projectile-replace-regexp
+;;    projectile-run-async-shell-command-in-root
+;;    projectile-run-shell-command-in-root
+;;    projectile-switch-project
+;;    projectile-switch-to-buffer
+;;    projectile-vc)
+;;   :bind-keymap ("C-c p" . projectile-command-map)
+;;   :config
+;;   (setq-default projectile-completion-system 'helm
+;;                 ;; Do not track known projects automatically, instead call projectile-add-known-project
+;;                 projectile-track-known-projects-automatically nil)
+;;   (projectile-mode)
+;;   ;; Remove dead projects when Emacs is idle
+;;   (run-with-idle-timer 10 nil #'projectile-cleanup-known-projects)
+;;   (setq projectile-switch-project-action
+;;         (lambda () (projectile-ibuffer nil)))
+;;   (setq
+;;    ;; Custom compilation buffer name function
+;;    compilation-buffer-name-function (lambda (mode) (concat "*" (downcase mode) ": " (projectile-project-name) "*"))
+;;    projectile-find-dir-includes-top-level t
+;;    ;; projectile-switch-project-action #'projectile-commander
+;;    projectile-create-missing-test-files t
+;;    projectile-switch-project-action 'helm-projectile
+;;    projectile-enable-caching t
+;;    projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
+;;   (def-projectile-commander-method ?s
+;;                                    "Open a *shell* buffer for the project"
+;;                                    (projectile-run-eshell))
+;;   (def-projectile-commander-method ?c
+;;                                    "Run `compile' in the project"
+;;                                    (projectile-compile-project nil)))
 
 ;;; Require confirmation before interactively evaluating code blocks
 ;;; in Org buffers. The default value of this variable is t, meaning
@@ -919,8 +918,8 @@
 
 ;; https://github.com/emacs-lsp/lsp-mode/issues/631#issuecomment-457866187
 (add-hook 'c++-mode-hook
-	  (lambda ()
-	    (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
+          (lambda ()
+            (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
 
 (add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
 
@@ -974,16 +973,16 @@
   (define-key company-active-map (kbd "<backtab>") 'company-select-previous))
 
 (mapcar #'(lambda (x)
-	    (bind-key (kbd (car x)) (cdr x)))
-	'(("<f11>"   . aim/fullscreen)
-	  ("<f2>"    . aim/revert-buffer-now)
-	  ("<f3>"    . whitespace-cleanup)
-	  ("C-x C"   . compile)
-	  ("C-x C-g" . goto-line)
-	  ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
-	  ("C-x g"   . goto-line)
-	  ("C-x m"   . gnus-msg-mail)
-	  ("M-i"     . imenu)))
+            (bind-key (kbd (car x)) (cdr x)))
+        '(("<f11>"   . aim/fullscreen)
+          ("<f2>"    . aim/revert-buffer-now)
+          ("<f3>"    . whitespace-cleanup)
+          ("C-x C"   . compile)
+          ("C-x C-g" . goto-line)
+          ("C-x C-r" . recentf-open-files) ;overrides binding in ffap
+          ("C-x g"   . goto-line)
+          ("C-x m"   . gnus-msg-mail)
+          ("M-i"     . imenu)))
 
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
