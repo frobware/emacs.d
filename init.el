@@ -665,53 +665,6 @@
 
 (setq read-process-output-max (* 8 (* 1024 1024)))
 
-;; use this when everything breaks
-;; (use-package lsp-mode
-;;   :init
-;;   ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-;;   (setq lsp-keymap-prefix "C-c l")
-;;   :hook ((go-mode . lsp-deferred)
-;;          (lsp-mode . lsp-enable-which-key-integration))
-;;   :commands lsp lsp-deferred)
-
-(use-package lsp-mode
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :config
-  (setq lsp-enable-file-watchers nil
-        lsp-enable-on-type-formatting t
-        lsp-enable-snippet nil
-        lsp-idle-delay 0.500)
-  (when (boundp 'read-process-output-max)
-    ;; This is to speedup LSP. Increase the amount of data which Emacs
-    ;; reads from the process. Again the emacs default is too low 4k
-    ;; considering that the some of the language server responses are
-    ;; in 800k - 3M range.
-    (setq-local read-process-output-max (* 4 (* 1024 1024))))
-  (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.direnv$")
-  (lsp-enable-which-key-integration t)
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-tramp-connection "gopls")
-                    :major-modes '(go-mode)
-                    :remote? t
-                    :server-id 'gopls-remote))
-  :custom
-  (lsp-lens-enable nil)
-  (lsp-enable-symbol-highlighting nil)
-  (lsp-headerline-breadcrumb-enable nil)
-  :bind (("C-c d" . lsp-describe-thing-at-point)
-         ("C-c e n" . flymake-goto-next-error)
-         ("C-c e p" . flymake-goto-previous-error)
-         ("C-c e l" . flymake-list-errors)
-         ("C-c e r" . lsp-find-references)
-         ("C-c e R" . lsp-rename)
-         ("C-c e i" . lsp-find-implementation)
-         ("C-c e t" . lsp-find-type-definition))
-  :commands
-  (lsp lsp-deferred ls-rename lsp-find-references lsp-find-implementation lsp-find-type-definition lsp-register-client)
-  :hook
-  ((python-mode swift-mode rust-mode go-mode) . lsp-deferred))
-
 (use-package rust-mode
   :mode "\\.rs\\'")
 
@@ -755,31 +708,6 @@
   (setq recentf-max-menu-items 32
         recentf-max-saved-items 32)
   :bind ("C-x C-r" . recentf-open-files))
-
-(use-package lsp-ui
-  :after lsp-mode
-  :diminish
-  ;; :custom-face
-  ;; (lsp-ui-doc-background ((t (:background nil))))
-  ;; (lsp-ui-doc-header ((t (:inherit (font-lock-string-face italic)))))
-  :bind (:map lsp-ui-mode-map
-              ;; ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-              ;; ([remap xref-find-references] . lsp-ui-peek-find-references)
-              ("C-c u" . lsp-ui-imenu))
-  :custom
-  (lsp-ui-peek-fontify 'always)
-  (lsp-ui-doc-enable t)
-  (lsp-ui-doc-header t)
-  (lsp-ui-doc-include-signature t)
-  (lsp-ui-doc-position 'top)
-  (lsp-ui-doc-border (face-foreground 'default))
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-sideline-ignore-duplicate t)
-  (lsp-ui-sideline-show-code-actions nil)
-  (lsp-ui-doc-use-webkit t)
-  (lsp-ui-sideline-enable nil)
-  (lsp-ui-doc-enable nil)
-  (lsp-eldoc-hook nil))
 
 (use-package atomic-chrome
   :commands (atomic-chrome-start-server)
@@ -830,11 +758,6 @@
   :commands (helm-ls-git)
   :bind
   (("C-c C-l" . helm-ls-git)))
-
-(use-package helm-lsp
-  :after lsp
-  :config
-  (define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
 (use-package executable
   :straight (:type built-in)
@@ -911,11 +834,6 @@
 ;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
 ;; > because (error Can’t find a suitable init function)
 (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-
-;; https://github.com/emacs-lsp/lsp-mode/issues/631#issuecomment-457866187
-(add-hook 'c++-mode-hook
-          (lambda ()
-            (setq flymake-diagnostic-functions (list 'lsp--flymake-backend))))
 
 (add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
 
