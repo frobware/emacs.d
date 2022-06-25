@@ -670,9 +670,9 @@
 
 (use-package gotest)
 
-(defun lsp-go-install-save-hooks ()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
-  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+;; (defun lsp-go-install-save-hooks ()
+;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
+;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (use-package go-mode
   :mode "\\.go\\'"
@@ -692,8 +692,9 @@
              go-test-current-file
              go-test-current-project)
   :hook (;; (before-save . gofmt-before-save)
-         (go-mode . lsp-deferred)
-         (go-mode . lsp-go-install-save-hooks)))
+         ;; (go-mode . lsp-deferred)
+         ;; (go-mode . lsp-go-install-save-hooks)
+         ))
 
 (use-package go-add-tags)
 
@@ -767,10 +768,10 @@
   :mode "\\.swift\\'"
   :if (eq system-type 'darwin))
 
-(use-package lsp-sourcekit
-  :if (eq system-type 'darwin)
-  :config
-  (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "Xcrun --find sourcekit-lsp"))))
+;; (use-package lsp-sourcekit
+;;   :if (eq system-type 'darwin)
+;;   :config
+;;   (setq lsp-sourcekit-executable (string-trim (shell-command-to-string "Xcrun --find sourcekit-lsp"))))
 
 (use-package cargo)
 
@@ -903,70 +904,13 @@
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
 
-;; (setq remote-file-name-inhibit-cache nil)
-;; (setq vc-handled-backends '(Git))
-
-;; (customize-set-variable 'tramp-use-ssh-controlmaster-options t)
-
-;; (add-to-list 'tramp-connection-properties
-;;              (list (regexp-quote "/ssh:mba.int.frobware.com:")
-;;                    "remote-shell" "/bin/bash"))
-
-;; (add-to-list 'tramp-connection-properties
-;;              (list (regexp-quote "/ssh:spicy.int.frobware.com:")
-;;                    "remote-shell" "/bin/bash"))
-
-;; (add-to-list 'tramp-connection-properties
-;;              (list (regexp-quote "/ssh:x1c.int.frobware.com:")
-;;                    "remote-shell" "/bin/bash"))
-
-(customize-set-variable
- 'tramp-ssh-controlmaster-options
- (concat
-  "-o ControlPath=/tmp/ssh-TRAMP-ControlPath-%%r@%%h:%%p "
-  "-o ControlMaster=auto -o ControlPersist=yes"))
-
-;; (customize-set-variable 'lsp-go-gopls-server-args "-logfile=auto -vv -debug=:6060")
-
-;; (customize-set-variable
-;;  'tramp-sh-extra-args '(("/bash\\'" . "-noediting -norc -noprofile -l")
-;;                         ("/zsh\\'" . "-f +Z -V")))
-
-(setq inhibit-eol-conversion t)
-(setq tramp-verbose 6)                  ;
-
-;; (straight-pull-package "melpa")
-;; (straight-use-package 'tree-sitter)
-;; (straight-use-package 'tree-sitter-langs)
-
-;; (require 'tree-sitter)
-;; (require 'tree-sitter-langs)
-
-;;(font-lock-mode -1)
-;;(global-tree-sitter-mode)
-
-;; (use-package eglot
-;;   :diminish
-;;   :demand t
-;;   :config
-;;   (add-hook 'go-mode-hook 'eglot-ensure))
-
 (use-package eglot
   :diminish
   :ensure t
   :commands eglot-ensure
   :hook ((go-mode nix-mode sh-mode) . eglot-ensure))
 
-;; (global-tree-sitter-mode)
-;; (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-;;(setq eglot-ignored-server-capabilites '(:documentHighlightProvider))
+(require 'flymake)
 
-;;(setq exec-path (delete temporary-git-bin-dir exec-path))
-(use-package flycheck
-  :demand)
-
-;; (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
-;; (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
-
-(add-hook 'after-init-hook #'global-flycheck-mode)
-(flycheck-verify-setup)
+(define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
