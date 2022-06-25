@@ -221,10 +221,6 @@
   :config
   (add hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map))
 
-(use-package flycheck
-  :config
-  (add-hook 'after-init-hook #'global-flycheck-mode))
-
 (use-package guess-offset)
 
 (use-package cc-mode
@@ -704,9 +700,9 @@
   (lsp-enable-symbol-highlighting nil)
   (lsp-headerline-breadcrumb-enable nil)
   :bind (("C-c d" . lsp-describe-thing-at-point)
-         ("C-c e n" . flycheck-next-error)
-         ("C-c e p" . flycheck-previous-error)
-         ("C-c e l" . flycheck-list-errors)
+         ("C-c e n" . flymake-goto-next-error)
+         ("C-c e p" . flymake-goto-previous-error)
+         ("C-c e l" . flymake-list-errors)
          ("C-c e r" . lsp-find-references)
          ("C-c e R" . lsp-rename)
          ("C-c e i" . lsp-find-implementation)
