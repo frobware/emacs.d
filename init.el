@@ -525,18 +525,20 @@
   :bind
   ("C-c C-j" . aj-toggle-fold))
 
-(use-package tramp
-  ;; Using the built-in version avoids; Symbol's function definition is void: "tramp-register-crypt-file-name-handler
-  :straight (:type built-in)
-  :config
-  (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path) ;makes remote login use -l
-  :custom
-  (tramp-backup-directory-alist backup-directory-alist)
-  (tramp-default-method "ssh")
-  (tramp-default-proxies-alist nil)
-  ;; shell prompt additions for NixOS
-  (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
+;; (use-package tramp
+;;   ;; Using the built-in version avoids; Symbol's function definition is void: "tramp-register-crypt-file-name-handler
+;;   :straight (:type built-in)
+;;   :config
+;;   (put 'temporary-file-directory 'standard-value `(,temporary-file-directory))
+;;   (add-to-list 'tramp-remote-path 'tramp-own-remote-path) ;makes remote login use -l
+;;   :custom
+;;   (tramp-backup-directory-alist backup-directory-alist)
+;;   (tramp-default-method "ssh")
+;;   (tramp-default-proxies-alist nil)
+;;   ;; shell prompt additions for NixOS
+;;   (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(\e\\[[0-9;]*[a-zA-Z] *\\)*"))
+
+(require 'tramp)
 
 (use-package magit
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
@@ -894,10 +896,10 @@
           ("C-x m"   . gnus-msg-mail)
           ("M-i"     . imenu)))
 
-(setq vc-ignore-dir-regexp
-      (format "\\(%s\\)\\|\\(%s\\)"
-              vc-ignore-dir-regexp
-              tramp-file-name-regexp))
+;; (setq vc-ignore-dir-regexp
+;;       (format "\\(%s\\)\\|\\(%s\\)"
+;;               vc-ignore-dir-regexp
+;;               tramp-file-name-regexp))
 
 (use-package eglot
   :diminish
