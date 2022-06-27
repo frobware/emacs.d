@@ -828,11 +828,6 @@
 ;;; confirmation is required for any code block evaluation.
 (setq org-confirm-babel-evaluate nil)
 
-;; The buffer *Flymake log* tends to fill up with things like:
-;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
-;; > because (error Can’t find a suitable init function)
-(remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-
 (add-hook 'minibuffer-setup-hook 'aim/minibuffer-setup)
 
 (use-package direnv
@@ -911,3 +906,9 @@
 
 (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
+
+;; The buffer *Flymake log* tends to fill up with things like:
+;; > Warning [flymake init.el]: Disabling backend flymake-proc-legacy-flymake
+;; > because (error Can’t find a suitable init function)
+(remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
