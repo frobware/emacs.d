@@ -206,6 +206,9 @@
 
 ;;; PACKAGES
 
+(use-package archive-rpm
+  :demand)
+
 ;; Pressing d will copy both A and B to buffer C.
 (defun ediff-copy-both-to-C ()
   (interactive)
