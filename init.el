@@ -857,18 +857,6 @@
 
 ;; (setq initial-buffer-choice 'vterm)
 
-;; (use-package centaur-tabs
-;;   :config
-;;   (setq centaur-tabs-height 128)
-;;   (setq centaur-tabs-set-icons t)
-;;   (setq centaur-tabs-style "bar")
-;;   (centaur-tabs-mode t)
-;;   (centaur-tabs-headline-match)
-;;   :commands (centaur-tabs-forward centaur-tabs-backwardax)
-;;   :bind
-;;   ("C-<prior>" . centaur-tabs-backward)
-;;   ("C-<next>" . centaur-tabs-forward))
-
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "M-n") nil)
   (define-key company-active-map (kbd "M-p") nil)
