@@ -220,10 +220,6 @@
 (defun add-d-to-ediff-mode-map () (define-key ediff-mode-map "d" 'ediff-copy-both-to-C))
 (add-hook 'ediff-keymap-setup-hook 'add-d-to-ediff-mode-map)
 
-(use-package ediff
-  :config
-  :hook (ediff-keymap-setup . add-d-to-ediff-mode-map))
-
 (use-package guess-offset)
 
 (use-package cc-mode
