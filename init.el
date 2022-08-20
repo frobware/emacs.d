@@ -2,6 +2,7 @@
 
 (let ((pos (memq 'mode-line-modes mode-line-format)))
   (setcdr pos (cons (system-name) (cdr pos))))
+;; Edit as root: /sudo:root@spicy:/etc/ssh/sshd_config
 
 ;; (setq native-comp-async-jobs-number 8)
 ;; (native-compile-async "~/.emacs.d/straight" 'recursively)
