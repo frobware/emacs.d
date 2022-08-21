@@ -902,11 +902,6 @@
 (use-package server
   :demand)
 
-(use-package clipetty
-   :ensure t
-   :bind ("M-w" . clipetty-kill-ring-save)
-   :hook (after-init . global-clipetty-mode))
-
 (defun enable-terminal-emacs-clipboard nil
   "Futz for terminal clipboard access."
   (interactive)
