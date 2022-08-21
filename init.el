@@ -417,13 +417,9 @@
   :mode "\\.lua\\'")
 
 (use-package clipetty
-  :diminish
-  ;; You can invoke Clipetty explicitly from a key binding to copy a
-  ;; region to the clipboard rather than using either the local or
-  ;; global minor modes. To that end, Clipetty has a function called
-  ;; clipetty-kill-ring-save which I like to bind to M-w like so:
-  ;; :bind ("M-w" . clipetty-kill-ring-save))
-  :config (global-clipetty-mode))
+   :ensure t
+   :bind ("M-w" . clipetty-kill-ring-save)
+   :hook (after-init . global-clipetty-mode))
 
 (use-package exec-path-from-shell
   :if (and (eq system-type 'darwin)
@@ -905,6 +901,11 @@
 
 (use-package server
   :demand)
+
+(use-package clipetty
+   :ensure t
+   :bind ("M-w" . clipetty-kill-ring-save)
+   :hook (after-init . global-clipetty-mode))
 
 (defun enable-terminal-emacs-clipboard nil
   "Futz for terminal clipboard access."
