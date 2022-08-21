@@ -914,7 +914,7 @@
       "Paste into a terminal Emacs."
       (if window-system
           (error "Trying to paste into GUI emacs.")
-        (let ((paste-data (s-trim (shell-command-to-string "clipboard-paste"))))
+        (let ((paste-data (shell-command-to-string "clipboard-paste")))
           ;; When running via emacsclient, paste into the current buffer.  Without
           ;; this, we would paste into the server buffer.
           (with-current-buffer (window-buffer)
