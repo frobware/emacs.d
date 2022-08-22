@@ -902,37 +902,40 @@
 (use-package server
   :demand)
 
-(defun enable-terminal-emacs-clipboard nil
-  "Futz for terminal clipboard access."
+(defun my:copy-from-terminal (text)
+  "Store text in the clipboard from a terminal Emacs."
+  (if window-system
+      (error "Trying to copy text in GUI emacs.")
+    (with-temp-buffer
+      (insert text)
+      (call-process-region (point-min) (point-max) "clipboard-copy"))))
+
+(defun my:buffer-substring-terminal-filter (beg end &optional delete)
+  "A filter that uses the default filter but also adds text to clipboard."
+  (let ((result (buffer-substring--filter beg end delete)))
+    ;; Only copy sizable entries to avoid unnecessary system calls.
+    (when (> (length result) 4)
+      (my:copy-from-terminal result))
+    result))
+
+(defun my:paste-from-emacs-client ()
+  "Paste into a terminal Emacs."
+  (if window-system
+      (error "Trying to paste into GUI emacs.")
+    (let ((paste-data (shell-command-to-string "clipboard-paste")))
+      ;; When running via emacsclient, paste into the current buffer.
+      ;; Without this, we would paste into the server buffer.
+      (with-current-buffer (window-buffer)
+        (insert paste-data))
+      ;; Add to kill-ring
+      (kill-new paste-data))))
+
+(defun enable-terminal-clipboard nil
   (interactive)
-  (unless window-system
-    (defun my:paste-from-emacs-client ()
-      "Paste into a terminal Emacs."
-      (if window-system
-          (error "Trying to paste into GUI emacs.")
-        (let ((paste-data (shell-command-to-string "clipboard-paste")))
-          ;; When running via emacsclient, paste into the current buffer.  Without
-          ;; this, we would paste into the server buffer.
-          (with-current-buffer (window-buffer)
-            (insert paste-data))
-          ;; Add to kill-ring
-          (kill-new paste-data))))
+  (when (string= (daemonp) "tmux")
+    (unless window-system
+      (global-clipetty-mode)
+      (setq-default filter-buffer-substring-function
+                    #'my:buffer-substring-terminal-filter))))
 
-    (defun my:copy-from-terminal (text)
-      "Store text in the clipboard from a terminal Emacs."
-      (if window-system
-          (error "Trying to copy text in GUI emacs.")
-        (with-temp-buffer
-          (insert text)
-          (call-process-region (point-min) (point-max) "clipboard-copy"))))
-
-    (defun my:buffer-substring-terminal-filter (beg end &optional delete)
-      "A filter that uses the default filter but also adds text to clipboard."
-      (let ((result (buffer-substring--filter beg end delete)))
-        ;; Only copy sizable entries to avoid unnecessary system calls.
-        (when (> (length result) 4)
-          (my:copy-from-terminal result))
-        result))
-
-    (setq-default filter-buffer-substring-function
-                  #'my:buffer-substring-terminal-filter)))
+(add-hook 'emacs-startup-hook #'enable-terminal-clipboard)
