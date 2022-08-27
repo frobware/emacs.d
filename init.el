@@ -929,4 +929,47 @@
       (setq-default filter-buffer-substring-function
                     #'my:buffer-substring-terminal-filter))))
 
+(use-package dbus
+  :defer nil)
+
+(defun set-modus-theme-from-gtk ()
+  "Mirror current GTK/Gnome desktop color theme."
+  (let ((color-scheme (call-process-string "gsettings"
+                                           "get"
+                                           "org.gnome.desktop.interface"
+                                           "color-scheme")))
+    (if (string-match "dark" color-scheme)
+        (modus-themes-load-vivendi)
+      (modus-themes-load-operandi))))
+
+(defun call-process-string (program &rest args)
+  "Invoke PROGRAM with ARGS and return the output as a string."
+  (with-temp-buffer
+    (apply #'call-process program nil t nil args)
+    (buffer-string)))
+
+(defun gtk-theme-changed (path _ _)
+  "DBus handler to detect when the desktop theme has changed."
+  (when (string-equal path "/org/gnome/desktop/interface/color-scheme")
+    (set-modus-theme-from-gtk)))
+
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (when (display-graphic-p)
+              (dbus-register-signal
+               :session
+               "ca.desrt.dconf"
+               "/ca/desrt/dconf/Writer/user"
+               "ca.desrt.dconf.Writer"
+               "Notify"
+               #'gtk-theme-changed))
+            (set-modus-theme-from-gtk)))
+
+;; I'd love to know what triggers the warning about max-specpdl-size
+;; exceeded when we go below 7000; eglot? go-mode? magit? a combo?
+(add-hook 'after-init-hook
+          (lambda ()
+            (setq max-specpdl-size 7000)
+            (setq max-lisp-eval-depth 5000)))
+
 (add-hook 'emacs-startup-hook #'enable-terminal-clipboard)
