@@ -555,15 +555,6 @@
 
 (use-package git-timemachine)
 
-(use-package git-gutter
-  :diminish
-  :config
-  (setq git-gutter:modified-sign " "
-        git-gutter:added-sign " "
-        git-gutter:deleted-sign " "
-        ;;git-gutter:lighter " GG")
-        (global-git-gutter-mode -1)))
-
 (use-package copy-as-format
   :config
   (setq copy-as-format-default "slack")
