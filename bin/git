@@ -3,6 +3,12 @@
 # A modified version of:
 # https://unix.stackexchange.com/questions/650912/is-it-possible-to-parse-a-commands-arguments-automatically/650927#650927
 
+: "${REAL_GIT:=/etc/profiles/per-user/aim/bin/git}"
+
+if [[ -x /usr/bin/git ]]; then
+    REAL_GIT=/usr/bin/git
+fi
+
 set -eu
 set -o pipefail
 
@@ -19,7 +25,7 @@ cached_dir_for_url() {
 }
 
 if [[ ! "${1:-}" == "clone" ]]; then
-    exec /usr/bin/git "$@"
+    exec "$REAL_GIT" "$@"
 fi
 
 caching=false
@@ -47,8 +53,8 @@ done
 
 if $caching; then
     echo "****INFO**** cloning from cache $local_repo_dir"
-    echo /usr/bin/git clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}"
-    exec /usr/bin/git clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}"
+    echo "$REAL_GIT" clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}"
+    exec "$REAL_GIT" clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}"
 else
-    exec /usr/bin/git "$@"
+    exec "$REAL_GIT" "$@"
 fi
