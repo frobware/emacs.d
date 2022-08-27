@@ -950,7 +950,8 @@
                     #'my:buffer-substring-terminal-filter))))
 
 (use-package dbus
-  :defer nil)
+  :commands
+  (dbus-register-signal))
 
 (defun set-modus-theme-from-gtk ()
   "Mirror current GTK/Gnome desktop color theme."
@@ -973,16 +974,17 @@
   (when (string-equal path "/org/gnome/desktop/interface/color-scheme")
     (set-modus-theme-from-gtk)))
 
+(when (string-equal system-type "gnu/linux")
+  (dbus-register-signal
+   :session
+   "ca.desrt.dconf"
+   "/ca/desrt/dconf/Writer/user"
+   "ca.desrt.dconf.Writer"
+   "Notify"
+   #'gtk-theme-changed))
+
 (add-hook 'after-make-frame-functions
           (lambda (frame)
-            (when (display-graphic-p)
-              (dbus-register-signal
-               :session
-               "ca.desrt.dconf"
-               "/ca/desrt/dconf/Writer/user"
-               "ca.desrt.dconf.Writer"
-               "Notify"
-               #'gtk-theme-changed))
             (set-modus-theme-from-gtk)))
 
 ;; I'd love to know what triggers the warning about max-specpdl-size
