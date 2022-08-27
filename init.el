@@ -2,6 +2,13 @@
 
 (let ((pos (memq 'mode-line-modes mode-line-format)))
   (setcdr pos (cons (system-name) (cdr pos))))
+;; (defun aim/watch-max-specpdl-size (symbol newval op where)
+;;   (message "max-specpdl-size newval=%s" newval))
+;; (add-variable-watcher 'max-specpdl-size 'aim/watch-max-specpdl-size)
+
+;; (defun aim/watch-max-lisp-eval-depth (symbol newval op where)
+;;   (message "max-lisp-eval-depth newval=%s" newval))
+;; (add-variable-watcher 'max-lisp-eval-depth 'aim/watch-max-lisp-eval-depth)
 ;; Edit as root: /sudo:root@spicy:/etc/ssh/sshd_config
 
 ;; (setq native-comp-async-jobs-number 8)
