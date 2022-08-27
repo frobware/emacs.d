@@ -305,9 +305,7 @@
          ("C--" . hrs/decrease-font-size)))
 
 (use-package modus-themes
-  :straight (:type built-in)
   :defer nil
-  :load-path (lambda () (expand-file-name "modus-themes" user-emacs-directory))
   :init
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs nil
