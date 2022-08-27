@@ -689,7 +689,8 @@
               ("C-c e n"   . flymake-goto-next-error)
               ("C-c e p"   . flymake-goto-prev-error)
               ("C-c e R"   . eglot-rename))
-  :commands (flymake-goto-next-error
+  :commands (company-complete
+             flymake-goto-next-error
              flymake-goto-prev-error
              flymake-show-buffer-diagnostics
              flymake-show-project-diagnostics
