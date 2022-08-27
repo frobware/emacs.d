@@ -578,6 +578,7 @@
         ("r" . copy-as-format-rst)
         ("s" . copy-as-format-slack)))
 
+(require 'xref)
 (remove-hook 'xref-after-jump-hook 'xref-pulse-momentarily)
 (remove-hook 'xref-after-return-hook 'xref-pulse-momentarily)
 
@@ -672,16 +673,26 @@
   (go-fontify-function-calls nil)
   (go-fontify-variables nil)
   :bind (:map go-mode-map
-              ("C-c C-n" . go-run)
-              ("C-c C-c" . go-coverage)
-              ("C-c ."   . go-test-current-test)
-              ("C-c f"   . go-test-current-file)
-              ("C-c a"   . go-test-current-project))
-  :commands (go-run
+              ("C-c C-n"   . go-run)
+              ("C-c C-c"   . go-coverage)
+              ("C-c ."     . go-test-current-test)
+              ("C-c f"     . go-test-current-file)
+              ("C-c a"     . go-test-current-project)
+              ("C-c <tab>" . company-complete)
+              ("C-c e l"   . flymake-show-buffer-diagnostics)
+              ("C-c e L"   . flymake-show-project-diagnostics)
+              ("C-c e n"   . flymake-goto-next-error)
+              ("C-c e p"   . flymake-goto-prev-error)
+              ("C-c e R"   . eglot-rename))
+  :commands (flymake-goto-next-error
+             flymake-goto-prev-error
+             flymake-show-buffer-diagnostics
+             flymake-show-project-diagnostics
              go-coverage
-             go-test-current-test
+             go-run
              go-test-current-file
-             go-test-current-project))
+             go-test-current-project
+             go-test-current-test))
 
 (use-package go-add-tags)
 
@@ -874,14 +885,18 @@
 ;;               vc-ignore-dir-regexp
 ;;               tramp-file-name-regexp))
 
+(use-package flymake
+  :defer nil)
+
 (use-package eglot
   :diminish
   :ensure t
+  :config
+  (setq eglot-extend-to-xref t)
   :commands eglot-ensure
-  :hook ((go-mode nix-mode sh-mode) . eglot-ensure))
+  :hook ((go-mode nix-mode) . eglot-ensure))
 
 (require 'flymake)
-
 (define-key flymake-mode-map (kbd "M-n") 'flymake-goto-next-error)
 (define-key flymake-mode-map (kbd "M-p") 'flymake-goto-prev-error)
 
