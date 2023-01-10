@@ -21,6 +21,6 @@ for url in "$@"; do
     if [[ ! -d "$path" ]]; then
         project_dir="$(dirname "$path")"
         echo mkdir -p "${project_dir}"
-        echo ${REAL_GIT} -C "${project_dir}" clone --bare "${url} ${url##*/}.git"
+        echo ${REAL_GIT} -C "${project_dir}" clone --bare "${url} ${url##*/}"
     fi
 done
