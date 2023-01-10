@@ -52,8 +52,9 @@ for argument in "${@:2}"; do
 done
 
 if $caching; then
-    echo "****INFO**** cloning from cache $local_repo_dir"
-    echo "$REAL_GIT" clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}"
+    logfile=/tmp/git-clone.log
+    echo "****INFO**** cloning from cache $local_repo_dir" | tee -a "$logfile"
+    echo "$REAL_GIT" clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}" | tee -a "$logfile"
     exec "$REAL_GIT" clone --reference-if-able "$local_repo_dir" --dissociate "${@:2}"
 else
     exec "$REAL_GIT" "$@"
