@@ -1,4 +1,1 @@
-emacs.d
-=======
-
-Emacs setup. Strike 3.1428571428.
+Everything moved to https://github.com/frobware/nix-config
